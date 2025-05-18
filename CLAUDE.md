@@ -208,3 +208,31 @@ RequirementsVillage/
 
 - **Deployment:** While Docker support is provided, the application is designed to run seamlessly on any environment supporting .NET 8.0.
 - **Extensibility:** The modular architecture allows for easy addition of new features, such as integration with external APIs or advanced analytics.
+
+## 🎨 Visual References
+
+These mockups demonstrate the intended tone, layout, and visual style of Requirements Village. All images are stored in `./assets/claude/`.
+
+---
+
+### 🧩 UI Mockup
+
+A professional, SaaS-style interface mockup showing the project list screen layout and component arrangement:
+
+![UI Mockup](./assets/claude/ui-mockup.png)
+
+---
+
+### 🪦 Landing Page Mockup
+
+Full-screen Gothic landing page concept featuring a project burial scene with overlaid branding. This sets the tone of polished irreverence and light existential despair:
+
+![Landing Page Mockup](./assets/claude/landing-page-mockup.png)
+
+---
+
+### 🗿 Icon Mockup
+
+A realistic app icon concept showing a gravestone with a project folder symbol — suitable for branding, headers, or favicon use:
+
+![Icon Mockup](./assets/claude/icon-mockup.png)
