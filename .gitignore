@@ -1,0 +1,67 @@
+# --- Rider / JetBrains IDE ---
+.idea/
+.idea_modules/
+*.sln.iml
+
+# --- Build artifacts ---
+bin/
+obj/
+TestResults/
+*.user
+*.suo
+*.vsp
+*.pdb
+*.mdb
+*.cache
+*.log
+*.tlog
+*.VSCodeCounter/
+
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# --- Linux ---
+*~
+.nfs*
+
+# --- dotnet ---
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.db-shm
+*.db-wal
+*.db-journal
+*.db
+*.bak
+
+# --- Tools ---
+.vscode/
+launchSettings.json
+*.swp
+*.swo
+
+# --- Claude AI output or artifacts (if any) ---
+claude_output/
+claude_temp/
+
+# --- Node or frontend junk (in case you add Tailwind, etc.) ---
+node_modules/
+dist/
+build/
+.env
+.env.*
+
+# --- Logs ---
+*.log
+
+# --- Others ---
+*.ncrunch*
+_ReSharper.*
+*.resharper
+*.dotCover
+*.coverage
+*.nunit.xml
+*.TestResult.xml
