@@ -4,17 +4,50 @@
 
 *Where project ideas get laid to rest.*
 
-Requirements Village is a Blazor Server application for organizing software project ideas — especially the ones you may never finish. It provides a structured home for your someday/maybe/wishlist projects and lets you define tech stacks, components, and deployment plans for each one.
+Requirements Village is a full-stack application for organizing software project ideas — especially the ones you may never finish. It provides a structured home for your someday/maybe/wishlist projects and lets you define tech stacks, components, and deployment plans for each one.
 
 ---
 
 ## 🧰 Tech Stack
 
-- **Frontend:** Blazor Server (.NET 8)
-- **Backend:** ASP.NET Core
-- **Authentication:** ASP.NET Core Identity
-- **Data Layer:** Entity Framework Core (Code-First)
+- **Frontend:** SvelteKit
+- **Backend:** C# Minimal API
+- **Authentication:** ASP.NET Core Identity  
+- **Data Layer:** Entity Framework Core
 - **Database:** SQLite
-- **Testing:** xUnit + FluentAssertions
-- **Language:** C# (record-heavy, immutable, functional-first style)
-- **Containerization:** Optional Docker support
+
+---
+
+## 📂 Project Structure
+
+```
+RequirementsVillage/
+├── client/          # SvelteKit frontend application
+└── api/             # C# Minimal API backend
+```
+
+Each project contains its own README and setup instructions.
+
+---
+
+## 🚀 Getting Started
+
+### Client (Frontend)
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+The frontend will be available at `http://localhost:5173`
+
+### API (Backend)
+
+*Coming soon - C# Minimal API setup*
+
+---
+
+## 🎨 Visual Design
+
+The application features a Gothic aesthetic with polished irreverence, as demonstrated in the mockups found in `./assets/claude/`. The design balances professional SaaS functionality with a playful "project graveyard" theme.
