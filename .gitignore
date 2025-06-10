@@ -53,6 +53,7 @@ dist/
 build/
 .env
 .env.*
+.svelte-kit/
 
 # --- Logs ---
 *.log

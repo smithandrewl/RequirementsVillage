@@ -6,6 +6,9 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+	
+	// Vite injected globals
+	const __APP_VERSION__: string;
 }
 
 export {};

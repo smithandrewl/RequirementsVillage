@@ -1,5 +1,38 @@
 <script lang="ts">
-	import ThemeSelector from '$lib/components/ThemeSelector.svelte';
+	import DashboardLayout from '$lib/components/DashboardLayout.svelte';
+	import ProjectCard from '$lib/components/ProjectCard.svelte';
+	
+	let activeTab: 'Someday' | 'Current' | 'Archive' = 'Someday';
+	
+	// Sample project data matching the mockup
+	const projects = [
+		{
+			title: 'Task Manager',
+			description: 'A web-based task tracking application',
+			techStack: ['ASP.NET Core', 'React'],
+			status: 'Someday' as const
+		},
+		{
+			title: 'Expense Tracker', 
+			description: 'An application for monitoring personal expenses',
+			techStack: ['Angular', 'Firebase'],
+			status: 'Current' as const
+		},
+		{
+			title: 'Weather App',
+			description: 'A weather forecasting application',
+			techStack: ['Vue.js', 'OpenWeather'],
+			status: 'Someday' as const
+		},
+		{
+			title: 'Blog Platform',
+			description: 'A simple platform for creating and managing blogs',
+			techStack: ['Node.js', 'MongoDB'],
+			status: 'Archive' as const
+		}
+	];
+	
+	$: filteredProjects = projects.filter(project => project.status === activeTab);
 </script>
 
 <svelte:head>
@@ -7,37 +40,43 @@
 	<meta name="description" content="Your project ideas dashboard" />
 </svelte:head>
 
-<div class="min-h-screen bg-base-200">
-	<!-- Header -->
-	<div class="navbar bg-base-100 shadow-lg">
-		<div class="flex-1">
-			<a href="/" class="btn btn-ghost text-xl font-bold text-primary">Requirements Village</a>
-		</div>
-		<div class="flex-none">
-			<ThemeSelector />
+<DashboardLayout>
+	<!-- Tab navigation -->
+	<div class="mb-6">
+		<div class="tabs tabs-bordered">
+			{#each ['Someday', 'Current', 'Archive'] as tab}
+				<button 
+					class="tab tab-lg {activeTab === tab ? 'tab-active' : ''}"
+					on:click={() => activeTab = tab}
+				>
+					{tab}
+				</button>
+			{/each}
 		</div>
 	</div>
-
-	<!-- Main content -->
-	<div class="container mx-auto px-4 py-8">
-		<div class="hero bg-base-100 rounded-lg shadow-xl">
-			<div class="hero-content text-center py-16">
-				<div class="max-w-md">
-					<h1 class="text-4xl font-bold text-primary mb-4">Welcome to the Village</h1>
-					<p class="text-lg text-base-content/70 mb-6">
-						Your digital cemetery for project ideas is ready. Soon you'll be able to catalog, organize, and reflect on all those projects that may never see the light of day.
-					</p>
-					<div class="space-y-4">
-						<div class="alert alert-info">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-							</svg>
-							<span>Dashboard features coming soon...</span>
-						</div>
-						<a href="/" class="btn btn-primary">Back to Landing</a>
-					</div>
-				</div>
+	
+	<!-- Projects grid -->
+	{#if filteredProjects.length > 0}
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{#each filteredProjects as project}
+				<ProjectCard 
+					title={project.title}
+					description={project.description}
+					techStack={project.techStack}
+					bind:status={project.status}
+				/>
+			{/each}
+		</div>
+	{:else}
+		<div class="text-center py-12">
+			<div class="text-base-content/60 mb-4">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto mb-4">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-4.5V6.375a1.125 1.125 0 0 0-1.125-1.125H6.75a1.125 1.125 0 0 0-1.125 1.125v7.875B-2.25 0 0 0 4.5 16.5H13.5a1.125 1.125 0 0 0 1.125-1.125V14.25" />
+				</svg>
 			</div>
+			<h3 class="text-lg font-medium text-base-content mb-2">No projects in {activeTab}</h3>
+			<p class="text-base-content/60 mb-4">Get started by creating your first project idea.</p>
+			<button class="btn btn-primary">Add Project</button>
 		</div>
-	</div>
-</div>
+	{/if}
+</DashboardLayout>
