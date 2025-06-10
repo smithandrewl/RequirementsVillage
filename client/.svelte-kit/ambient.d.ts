@@ -30,7 +30,6 @@ declare module '$env/static/private' {
 	export const CAML_LD_LIBRARY_PATH: string;
 	export const npm_package_devDependencies_prettier: string;
 	export const TERM_PROGRAM: string;
-	export const CLAUDE_CODE_ENTRYPOINT: string;
 	export const npm_package_devDependencies_typescript_eslint: string;
 	export const npm_package_devDependencies_eslint_plugin_svelte: string;
 	export const NODE: string;
@@ -50,13 +49,11 @@ declare module '$env/static/private' {
 	export const npm_package_scripts_dev: string;
 	export const TERM_SESSION_ID: string;
 	export const OPAM_SWITCH_PREFIX: string;
-	export const VIPSHOME: string;
 	export const npm_package_devDependencies__sveltejs_kit: string;
 	export const npm_package_private: string;
 	export const npm_config_registry: string;
 	export const ZSH: string;
 	export const OCAML_TOPLEVEL_PATH: string;
-	export const GIT_EDITOR: string;
 	export const npm_package_readmeFilename: string;
 	export const npm_package_devDependencies_globals: string;
 	export const USER: string;
@@ -80,7 +77,6 @@ declare module '$env/static/private' {
 	export const PWD: string;
 	export const npm_package_devDependencies_tailwindcss: string;
 	export const npm_package_scripts_preview: string;
-	export const OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: string;
 	export const npm_lifecycle_event: string;
 	export const LANG: string;
 	export const npm_package_devDependencies__sveltejs_vite_plugin_svelte: string;
@@ -112,7 +108,6 @@ declare module '$env/static/private' {
 	export const YARN_WRAP_OUTPUT: string;
 	export const npm_package_scripts_format: string;
 	export const npm_lifecycle_script: string;
-	export const COREPACK_ENABLE_AUTO_PIN: string;
 	export const NVM_BIN: string;
 	export const npm_config_version_git_sign: string;
 	export const npm_config_ignore_scripts: string;
@@ -124,7 +119,6 @@ declare module '$env/static/private' {
 	export const npm_config_init_version: string;
 	export const npm_config_ignore_optional: string;
 	export const SECURITYSESSIONID: string;
-	export const CLAUDECODE: string;
 	export const npm_package_scripts_check: string;
 	export const npm_node_execpath: string;
 	export const npm_package_devDependencies__testing_library_jest_dom: string;
@@ -166,7 +160,6 @@ declare module '$env/dynamic/private' {
 		CAML_LD_LIBRARY_PATH: string;
 		npm_package_devDependencies_prettier: string;
 		TERM_PROGRAM: string;
-		CLAUDE_CODE_ENTRYPOINT: string;
 		npm_package_devDependencies_typescript_eslint: string;
 		npm_package_devDependencies_eslint_plugin_svelte: string;
 		NODE: string;
@@ -186,13 +179,11 @@ declare module '$env/dynamic/private' {
 		npm_package_scripts_dev: string;
 		TERM_SESSION_ID: string;
 		OPAM_SWITCH_PREFIX: string;
-		VIPSHOME: string;
 		npm_package_devDependencies__sveltejs_kit: string;
 		npm_package_private: string;
 		npm_config_registry: string;
 		ZSH: string;
 		OCAML_TOPLEVEL_PATH: string;
-		GIT_EDITOR: string;
 		npm_package_readmeFilename: string;
 		npm_package_devDependencies_globals: string;
 		USER: string;
@@ -216,7 +207,6 @@ declare module '$env/dynamic/private' {
 		PWD: string;
 		npm_package_devDependencies_tailwindcss: string;
 		npm_package_scripts_preview: string;
-		OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE: string;
 		npm_lifecycle_event: string;
 		LANG: string;
 		npm_package_devDependencies__sveltejs_vite_plugin_svelte: string;
@@ -248,7 +238,6 @@ declare module '$env/dynamic/private' {
 		YARN_WRAP_OUTPUT: string;
 		npm_package_scripts_format: string;
 		npm_lifecycle_script: string;
-		COREPACK_ENABLE_AUTO_PIN: string;
 		NVM_BIN: string;
 		npm_config_version_git_sign: string;
 		npm_config_ignore_scripts: string;
@@ -260,7 +249,6 @@ declare module '$env/dynamic/private' {
 		npm_config_init_version: string;
 		npm_config_ignore_optional: string;
 		SECURITYSESSIONID: string;
-		CLAUDECODE: string;
 		npm_package_scripts_check: string;
 		npm_node_execpath: string;
 		npm_package_devDependencies__testing_library_jest_dom: string;
