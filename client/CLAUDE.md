@@ -54,3 +54,52 @@ npm run lint           # ESLint + Prettier
 - ESLint + Prettier for code formatting
 - Component props should be typed
 - Use `lang="ts"` in all script blocks
+
+## 🎨 Code Formatting Guidelines
+
+### General Formatting
+- **Indentation:** 2 spaces for all web files
+- **Quotes:** Single quotes for TypeScript/JavaScript strings
+- **Semicolons:** Always required for TS/JS statements
+- **Line Length:** 80 characters maximum (hard limit)
+- **Exception:** Long URLs and string attributes are exempt from 80-column limit and should not be wrapped
+
+### Import Organization
+- Group imports by type with blank lines between groups:
+  ```typescript
+  // Third-party libraries (separate group per library)
+  import { writable } from 'svelte/store';
+  
+  import type { ComponentProps } from 'svelte';
+  
+  // Local imports
+  import MyComponent from '$lib/components/MyComponent.svelte';
+  ```
+
+### Svelte Components & HTML
+- **File Naming:** Follow idiomatic conventions (PascalCase recommended)
+- **HTML Attributes:** If more than 2 attributes, place each on its own line with aligned equals signs:
+  ```svelte
+  <!-- 2 or fewer attributes - single line -->
+  <button class="btn" type="submit">Click</button>
+  
+  <!-- 3+ attributes - multi-line with aligned formatting -->
+  <button
+    class     = "btn btn-primary"
+    type      = "submit"
+    disabled  = { loading     }
+    on:click  = { handleClick }
+  >
+    Submit
+  </button>
+  ```
+- **Attribute Alignment Rules:**
+  - Each tag's attributes are aligned independently
+  - Alignment is based on the longest attribute name in that tag
+  - Lone attributes (like `crossorigin`) don't affect the `=` alignment of other attributes
+  - Closing braces `}` should align consistently within the same attribute block
+- **Section Order:** Follow idiomatic Svelte conventions for `<script>`, `<style>`, and HTML placement
+
+### Status
+- **✅ Applied:** All formatting guidelines have been applied to the entire codebase
+- **📁 Scope:** All `.svelte`, `.ts`, and `.html` files in the client folder

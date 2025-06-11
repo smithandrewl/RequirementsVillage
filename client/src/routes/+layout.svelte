@@ -1,7 +1,7 @@
 <script lang="ts">
-	import '../app.css';
+  import '../app.css';
 </script>
 
 <main class="h-full">
-	<slot />
+  <slot />
 </main>

@@ -1,52 +1,63 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import ThemeSelector from '$lib/components/ThemeSelector.svelte';
+  import { onMount } from 'svelte';
+  
+  import ThemeSelector from '$lib/components/ThemeSelector.svelte';
 
-	let mounted = false;
+  let mounted = false;
 
-	onMount(() => {
-		mounted = true;
-	});
+  onMount(() => {
+    mounted = true;
+  });
 </script>
 
 <svelte:head>
 	<title>Requirements Village</title>
-	<meta name="description" content="Where project ideas get laid to rest" />
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="description" content="Where project ideas get laid to rest" />
+  <link
+    rel  = "preconnect"
+    href = "https://fonts.googleapis.com"
+  >
+  <link
+    rel  = "preconnect"
+    href = "https://fonts.gstatic.com"
+    crossorigin
+  >
+  <link
+    href = "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Crimson+Text:wght@400;600&display=swap"
+    rel  = "stylesheet"
+  >
 </svelte:head>
 
 <style>
-	.gothic-bg {
-		background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #1a1a1a 50%, #2d2d2d 75%, #1a1a1a 100%);
-		background-size: 400% 400%;
-		animation: subtleShift 20s ease-in-out infinite;
-	}
+  .gothic-bg {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #1a1a1a 50%, #2d2d2d 75%, #1a1a1a 100%);
+    background-size: 400% 400%;
+    animation: subtleShift 20s ease-in-out infinite;
+  }
 	
-	@keyframes subtleShift {
-		0%, 100% { background-position: 0% 50%; }
-		50% { background-position: 100% 50%; }
-	}
+  @keyframes subtleShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
 	
-	.title-font {
-		font-family: 'Cinzel', serif;
-	}
+  .title-font {
+    font-family: 'Cinzel', serif;
+  }
 	
-	.body-font {
-		font-family: 'Crimson Text', serif;
-	}
+  .body-font {
+    font-family: 'Crimson Text', serif;
+  }
 	
-	.gothic-shadow {
-		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-	}
+  .gothic-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  }
 	
-	.paper-texture {
-		background-image: 
-			radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-			radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
-			radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.05) 0%, transparent 50%);
-	}
+  .paper-texture {
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.05) 0%, transparent 50%);
+  }
 </style>
 
 <div class="min-h-screen gothic-bg paper-texture relative overflow-hidden">
