@@ -10,7 +10,7 @@ This is the frontend client for Requirements Village, built with SvelteKit, Tail
 - **Language:** TypeScript (no JavaScript files)
 - **Styling:** Tailwind CSS + DaisyUI
 - **Testing:** Vitest (unit) + Playwright (integration)
-- **Code Quality:** ESLint + Prettier
+- **Code Quality:** ESLint only (NO prettier - we despise prettier)
 
 ## 📁 Key Files & Structure
 
@@ -32,7 +32,7 @@ npm run dev              # Development server
 npm run build           # Production build
 npm test               # Run all tests
 npm run check          # TypeScript checking
-npm run lint           # ESLint + Prettier
+npm run lint           # ESLint only (NO prettier)
 ```
 
 ## 🎨 Styling Guidelines
@@ -51,7 +51,7 @@ npm run lint           # ESLint + Prettier
 ## 📝 Code Standards
 
 - TypeScript everywhere (no .js files)
-- ESLint + Prettier for code formatting
+- ESLint only for code linting (NO prettier - prettier is banned)
 - Component props should be typed
 - Use `lang="ts"` in all script blocks
 

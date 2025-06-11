@@ -37,7 +37,7 @@ Each project has its own `CLAUDE.md` file with specific details.
 - Tailwind CSS + DaisyUI styling
 - Unit testing with Vitest
 - Integration testing with Playwright
-- ESLint + Prettier configuration
+- ESLint configuration (NO prettier)
 - Hello World page demonstrating tech stack
 
 ### 🔲 API (Backend)
