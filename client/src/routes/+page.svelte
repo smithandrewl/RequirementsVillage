@@ -67,7 +67,7 @@
 		<ThemeSelector />
 	</div>
 
-	
+
 	<!-- Main hero content -->
 	<div class="hero min-h-screen relative z-10">
 		<div class="hero-content text-center">
