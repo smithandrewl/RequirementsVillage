@@ -10,10 +10,6 @@
     'Archive': 'badge-neutral'
   };
 
-  function handleStatusChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    status = target.value as typeof status;
-  }
 </script>
 
 <div class="card bg-base-100 shadow-sm border border-base-300 hover:shadow-md transition-shadow duration-200">

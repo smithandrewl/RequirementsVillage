@@ -10,8 +10,7 @@ test('index page has expected description', async ({ page }) => {
 	await expect(page.getByText('Where project ideas get laid to rest')).toBeVisible();
 });
 
-test('hello world card is displayed', async ({ page }) => {
+test('get started button is displayed', async ({ page }) => {
 	await page.goto('/');
-	await expect(page.getByText('Hello World!')).toBeVisible();
-	await expect(page.getByText('SvelteKit + Tailwind CSS + DaisyUI is working perfectly')).toBeVisible();
+	await expect(page.getByRole('link', { name: 'GET STARTED' })).toBeVisible();
 });

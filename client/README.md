@@ -10,7 +10,7 @@ The frontend application for Requirements Village built with SvelteKit, Tailwind
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS + DaisyUI
 - **Testing:** Vitest (unit) + Playwright (integration)
-- **Code Quality:** ESLint + Prettier
+- **Code Quality:** ESLint only (NO prettier)
 
 ## Development
 
@@ -49,9 +49,8 @@ npm run test:integration
 # Type checking
 npm run check
 
-# Linting and formatting
+# Linting
 npm run lint
-npm run format
 ```
 
 ### Project Structure
@@ -74,5 +73,5 @@ src/
 - ✅ Tailwind CSS + DaisyUI components
 - ✅ Unit testing with Vitest
 - ✅ Integration testing with Playwright
-- ✅ ESLint + Prettier configured
+- ✅ ESLint configured (NO prettier - prettier is banned)
 - ✅ Responsive design ready

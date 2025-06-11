@@ -16,7 +16,7 @@
       title:       'Expense Tracker',
       description: 'An application for monitoring personal expenses',
       techStack:   ['Angular', 'Firebase'],
-      status:      ' Current' as const
+      status:      'Current' as const
     },
     {
       title:       'Weather App',
