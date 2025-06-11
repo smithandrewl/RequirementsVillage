@@ -5,10 +5,10 @@
   let currentTheme = 'requirements-village';
 
   const themes = [
-    { value: 'requirements-village', label: 'Requirements Village' },
+    { value: 'requirements-village',      label: 'Requirements Village'      },
     { value: 'requirements-village-dark', label: 'Requirements Village Dark' },
-    { value: 'light', label: 'Light' },
-    { value: 'dark', label: 'Dark' }
+    { value: 'light',                     label: 'Light'                     },
+    { value: 'dark',                      label: 'Dark'                      }
   ];
 
   function setTheme(theme: string) {

@@ -3,15 +3,15 @@
 
   interface NavItem {
     label: string;
-    href: string;
-    icon: string;
+    href:  string;
+    icon:  string;
   }
 
   const navItems: NavItem[] = [
     { label: 'Dashboard', href: '/dashboard', icon: '📊' },
-    { label: 'Projects', href: '/projects', icon: '📁' },
-    { label: 'Archive', href: '/archive', icon: '📦' },
-    { label: 'Settings', href: '/settings', icon: '⚙️' }
+    { label: 'Projects',  href: '/projects',  icon: '📁' },
+    { label: 'Archive',   href: '/archive',   icon: '📦' },
+    { label: 'Settings',  href: '/settings',  icon: '⚙️' }
   ];
 
   // Access the version injected by Vite at build time
@@ -37,8 +37,8 @@
           <a
             href  = {item.href}
             class = "flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200 {
-              $page.url.pathname === item.href 
-                ? 'bg-primary text-primary-content' 
+              $page.url.pathname === item.href
+                ? 'bg-primary text-primary-content'
                 : 'text-neutral-content hover:bg-neutral-focus hover:text-white'
             }"
           >

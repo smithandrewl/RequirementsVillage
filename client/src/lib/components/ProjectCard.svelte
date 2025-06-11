@@ -1,8 +1,8 @@
 <script lang="ts">
-  export let title: string;
+  export let title:       string;
   export let description: string;
-  export let techStack: string[] = [];
-  export let status: 'Someday' | 'Current' | 'Archive' = 'Someday';
+  export let techStack:   string[] = [];
+  export let status:      'Someday' | 'Current' | 'Archive' = 'Someday';
 
   const statusColors = {
     'Someday': 'badge-secondary',

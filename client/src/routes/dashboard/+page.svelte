@@ -7,22 +7,22 @@
   // Sample project data matching the mockup
   const projects = [
     {
-      title: 'Task Manager',
+      title:       'Task Manager',
       description: 'A web-based task tracking application',
-      techStack: ['ASP.NET Core', 'React'],
-      status: 'Someday' as const
+      techStack:   ['ASP.NET Core', 'React'],
+      status:      'Someday' as const
     },
     {
-      title: 'Expense Tracker',
+      title:       'Expense Tracker',
       description: 'An application for monitoring personal expenses',
-      techStack: ['Angular', 'Firebase'],
-      status: 'Current' as const
+      techStack:   ['Angular', 'Firebase'],
+      status:      ' Current' as const
     },
     {
-      title: 'Weather App',
+      title:       'Weather App',
       description: 'A weather forecasting application',
-      techStack: ['Vue.js', 'OpenWeather'],
-      status: 'Someday' as const
+      techStack:   ['Vue.js', 'OpenWeather'],
+      status:      'Someday' as const
     },
     {
       title: 'Blog Platform',
@@ -32,7 +32,7 @@
     }
   ];
 
-  $: filteredProjects = projects.filter(project => 
+  $: filteredProjects = projects.filter(project =>
     project.status === activeTab
   );
 </script>

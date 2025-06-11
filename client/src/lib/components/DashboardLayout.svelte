@@ -2,7 +2,7 @@
   import Sidebar from './Sidebar.svelte';
   import ThemeSelector from './ThemeSelector.svelte';
 
-  export let title: string = 'Requirements Village';
+  export let title:    string = 'Requirements Village';
   export let subtitle: string = 'Where project ideas get laid to rest';
 </script>
 

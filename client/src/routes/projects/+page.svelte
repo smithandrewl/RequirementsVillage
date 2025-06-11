@@ -4,7 +4,11 @@
 
 <svelte:head>
   <title>Projects - Requirements Village</title>
-  <meta name="description" content="Manage your project ideas" />
+
+	<meta
+		name="description"
+		content="Manage your project ideas"
+	/>
 </svelte:head>
 
 <DashboardLayout
