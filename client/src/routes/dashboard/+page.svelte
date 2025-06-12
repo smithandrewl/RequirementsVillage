@@ -2,7 +2,7 @@
   import DashboardLayout from '$lib/components/DashboardLayout.svelte';
   import ProjectCard from '$lib/components/ProjectCard.svelte';
 
-  let activeTab: 'Someday' | 'Current' | 'Archive' = 'Someday';
+  let selectedStatus: 'All' | 'Someday' | 'Current' | 'Archive';
 
   // Sample project data matching the mockup
   const projects = [
@@ -32,9 +32,17 @@
     }
   ];
 
-  $: filteredProjects = projects.filter(project =>
-    project.status === activeTab
-  );
+	let filteredProjects = [];
+
+  $: {
+		if (selectedStatus === 'All') {
+			filteredProjects = projects;
+		} else {
+			filteredProjects = projects.filter(project =>
+				project.status === selectedStatus
+			);
+		}
+	}
 </script>
 
 <svelte:head>
@@ -43,31 +51,24 @@
 </svelte:head>
 
 <DashboardLayout>
-  <!-- Tab navigation -->
-  <div class="mb-6">
-    <div class="tabs tabs-bordered">
-      {#each ['Someday', 'Current', 'Archive'] as tab}
-        <button
-          class="tab tab-lg {activeTab === tab ? 'tab-active' : ''}"
-          on:click={() => activeTab = tab}
-        >
-          {tab}
-        </button>
-      {/each}
-    </div>
-  </div>
+
+	<select bind:value={selectedStatus}>
+		<option value="All">All</option>
+		<option value="Current">Current</option>
+		<option value="Someday">Someday</option>
+		<option value="Archive">Archived</option>
+	</select>
 
   <!-- Projects grid -->
   {#if filteredProjects.length > 0}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {#each filteredProjects as project}
-        <ProjectCard
-          title          = {project.title}
-          description    = {project.description}
-          techStack      = {project.techStack}
-          bind:status    = {project.status}
-        />
-      {/each}
+
+			{#each filteredProjects as project}
+				<ProjectCard
+					title={project.title}
+					description={project.description}
+				/>
+			{/each}
     </div>
   {:else}
     <div class="text-center py-12">
@@ -88,7 +89,7 @@
         </svg>
       </div>
       <h3 class="text-lg font-medium text-base-content mb-2">
-        No projects in {activeTab}
+        No projects
       </h3>
       <p class="text-base-content/60 mb-4">
         Get started by creating your first project idea.
