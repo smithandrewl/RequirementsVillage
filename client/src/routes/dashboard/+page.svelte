@@ -52,13 +52,14 @@
 
 <DashboardLayout>
 
-	<select bind:value={selectedStatus} class="select select-bordered w-full max-w-xs mb-6">
-		<option value="All">All</option>
-		<option value="Current">Current</option>
-		<option value="Someday">Someday</option>
-		<option value="Archive">Archived</option>
-	</select>
-
+	<div class="flex flex-wrap items-center justify-between mb-6 gap-4">
+		<select bind:value={selectedStatus} class="select select-bordered max-w-xs">
+			<option value="All">All</option>
+			<option value="Current">Current</option>
+			<option value="Someday">Someday</option>
+			<option value="Archive">Archived</option>
+		</select>
+	</div>
   <!-- Projects grid -->
   {#if filteredProjects.length > 0}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
