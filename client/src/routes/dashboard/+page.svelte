@@ -68,6 +68,7 @@
 				<ProjectCard
 					title={project.title}
 					description={project.description}
+					status={project.status}
 				/>
 			{/each}
     </div>

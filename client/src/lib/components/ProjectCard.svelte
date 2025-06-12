@@ -2,7 +2,7 @@
   export let title:       string;
   export let description: string;
   export let techStack:   string[] = [];
-  export let status:      'Someday' | 'Current' | 'Archive' = 'Someday';
+  export let status:      'Someday' | 'Current' | 'Archive';
 
   const statusColors = {
     'Someday': 'badge-secondary',
@@ -19,7 +19,8 @@
       <h3 class="card-title text-lg font-semibold text-base-content">
         {title}
       </h3>
-      <button class="btn btn-ghost btn-sm btn-square opacity-60 hover:opacity-100 transition-opacity">
+			<!-- Hidden for now, eventual edit button -->
+      <button class="hidden btn btn-ghost btn-sm btn-square opacity-60 hover:opacity-100 transition-opacity">
         <svg
           xmlns        = "http://www.w3.org/2000/svg"
           fill         = "none"
@@ -51,60 +52,7 @@
       </div>
     {/if}
 
-    <!-- Status dropdown -->
-    <div class="card-actions justify-end">
-      <div class="dropdown dropdown-end">
-        <div
-          tabindex = "0"
-          role     = "button"
-          class    = "btn btn-sm {statusColors[status]} gap-2"
-        >
-          {status}
-          <svg
-            xmlns        = "http://www.w3.org/2000/svg"
-            fill         = "none"
-            viewBox      = "0 0 24 24"
-            stroke-width = "1.5"
-            stroke       = "currentColor"
-            class        = "w-3 h-3"
-          >
-            <path
-              stroke-linecap  = "round"
-              stroke-linejoin = "round"
-              d               = "m19.5 8.25-7.5 7.5-7.5-7.5"
-            />
-          </svg>
-        </div>
-        <ul
-          tabindex = "0"
-          class    = "dropdown-content menu bg-base-100 rounded-box z-[1] w-32 p-2 shadow-lg border border-base-300"
-        >
-          <li>
-            <button
-              class    = "btn btn-ghost btn-sm justify-start"
-              on:click = {() => status = 'Someday'}
-            >
-              Someday
-            </button>
-          </li>
-          <li>
-            <button
-              class    = "btn btn-ghost btn-sm justify-start"
-              on:click = {() => status = 'Current'}
-            >
-              Current
-            </button>
-          </li>
-          <li>
-            <button
-              class    = "btn btn-ghost btn-sm justify-start"
-              on:click = {() => status = 'Archive'}
-            >
-              Archive
-            </button>
-          </li>
-        </ul>
-      </div>
-    </div>
+		<div class="badge badge-outline">{status}</div>
+
   </div>
 </div>
