@@ -1,3 +1,4 @@
+.svelte-kit/
 # --- Rider / JetBrains IDE ---
 .idea/
 .idea_modules/
