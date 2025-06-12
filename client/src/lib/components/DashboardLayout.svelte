@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Sidebar from './Sidebar.svelte';
   import ThemeSelector from './ThemeSelector.svelte';
 
   export let title:    string = 'Requirements Village';
@@ -7,8 +6,6 @@
 </script>
 
 <div class="flex h-screen bg-base-200">
-  <!-- Sidebar -->
-  <Sidebar />
 
   <!-- Main content area -->
   <div class="flex-1 flex flex-col overflow-hidden">
