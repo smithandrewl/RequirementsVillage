@@ -52,7 +52,7 @@
 
 <DashboardLayout>
 
-	<select bind:value={selectedStatus}>
+	<select bind:value={selectedStatus} class="select select-bordered w-full max-w-xs mb-6">
 		<option value="All">All</option>
 		<option value="Current">Current</option>
 		<option value="Someday">Someday</option>
