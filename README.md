@@ -44,7 +44,13 @@ The frontend will be available at `http://localhost:5173`
 
 ### API (Backend)
 
-*Coming soon - C# Minimal API setup*
+```bash
+cd api/RequirementsVillage.Api
+dotnet restore
+dotnet run
+```
+
+The API will be available at `https://localhost:7139` (or check console output for exact port)
 
 ---
 
