@@ -34,18 +34,168 @@ dotnet build                # Build project
 - `GET /` - API identification
 - `GET /api/health` - Health check with timestamp
 
-## 🚀 Planned Architecture
+## 🏗️ Architecture Overview
 
-- **Functional C#** with Result/Option discriminated unions
-- **Exhaustive pattern matching** for error handling
-- **Immutable data structures** where possible
-- **Clean separation** of concerns
+This API follows a **layered architecture** with clean separation of concerns and dependency injection throughout. The architecture emphasizes business rule enforcement, type safety through Result types, and functional programming patterns.
+
+### 🎯 Core Principles
+
+- **Business Logic Protection:** Domain services enforce business rules and prevent misuse of the persistence layer
+- **Railway Oriented Programming (ROP):** Use discriminated unions and Result types for predictable error handling
+- **Immutable Data:** Models are immutable records where possible
+- **Dependency Injection:** All services injected via interfaces for testability and flexibility
+- **Single Responsibility:** Each layer has a focused purpose
+
+### 📁 Project Structure
+
+```
+Api/
+├── Program.cs              # Main entry point + DI setup
+├── Endpoints/              # Endpoint groups (ProjectEndpoints.cs, etc.)
+├── Extensions/             # Service registration extensions
+├── Middleware/             # Custom middleware (if needed)
+└── Api.csproj
+
+Domain/
+├── Interfaces/
+│   └── IProjectService.cs  # Domain service interfaces
+├── Services/
+│   └── ProjectService.cs   # Business logic services
+└── Domain.csproj
+
+Models/
+├── Project.cs              # Immutable records (shared by API and EF)
+├── Category.cs
+├── User.cs
+└── Models.csproj
+
+Persistence/
+├── Interfaces/
+│   └── IProjectRepository.cs  # Repository interfaces
+├── Repositories/
+│   └── ProjectRepository.cs   # CRUD implementations
+├── Data/                      # DbContext and configurations
+└── Persistence.csproj
+
+Tests/
+└── Tests.csproj
+
+RequirementsVillage.sln
+```
+
+### 🔄 Data Flow
+
+```
+API Endpoints → Domain Services → Repository Interfaces → Repository Implementations → Database
+     ↑              ↑                     ↑                        ↑
+   Minimal API   Business Rules    Interface Contracts        CRUD Operations
+```
+
+### 🎭 Layer Responsibilities
+
+#### **Api Layer**
+- **Purpose:** HTTP endpoints and request/response handling
+- **Contains:** Minimal API endpoints organized by feature
+- **Dependencies:** Domain service interfaces only
+- **Pattern:** Endpoint handlers pattern match on Result types from Domain services
+
+#### **Domain Layer** 
+- **Purpose:** Business logic and rule enforcement
+- **Contains:** Services that validate business rules and coordinate data operations
+- **Dependencies:** Models + Persistence interfaces
+- **Error Handling:** Returns Result<TSuccess, TError> types using Railway Oriented Programming
+- **Rule Enforcement:** Prevents misuse of persistence layer through validation
+
+#### **Models Layer**
+- **Purpose:** Shared data structures
+- **Contains:** Immutable records used by both API serialization and Entity Framework
+- **Dependencies:** None (pure data)
+- **Note:** Single model set (no DTOs unless specifically needed)
+
+#### **Persistence Layer**
+- **Purpose:** Data access and CRUD operations
+- **Contains:** Repository implementations, DbContext, and EF configurations
+- **Dependencies:** Models only
+- **Pattern:** Simple CRUD operations with no business logic
+
+### 🏷️ Naming Conventions
+
+#### **Services & Interfaces**
+- **Domain Services:** `ProjectService`, `CategoryService`, `UserService`
+- **Domain Interfaces:** `IProjectService`, `ICategoryService`, `IUserService`  
+- **Repositories:** `ProjectRepository`, `CategoryRepository`, `UserRepository`
+- **Repository Interfaces:** `IProjectRepository`, `ICategoryRepository`, `IUserRepository`
+
+#### **Models**
+- **Models:** `Project`, `Category`, `User` (used for both API and database)
+- **Result Types:** `Result<Project, Error>`, `Result<List<Project>, Error>`
+
+#### **Endpoints**
+- **Endpoint Classes:** `ProjectEndpoints`, `CategoryEndpoints`, `UserEndpoints`
+- **Methods:** `MapProjectEndpoints()`, `GetAllProjects()`, `CreateProject()`
+
+### 🚂 Railway Oriented Programming
+
+#### **Why Railway Oriented Programming**
+1. **Compile-time Safety:** Forgetting to handle errors causes compilation errors
+2. **Explicit Contracts:** Method signatures show what can fail
+3. **Type System Integration:** Failures are part of the type system
+4. **Composable:** Chain operations without nested error checking
+5. **Predictable Flow:** Success and failure paths are explicit
+
+#### **Usage Pattern**
+```csharp
+// Domain Service
+public async Task<Result<Project, Error>> GetProjectAsync(int id)
+{
+    var project = await _repository.GetByIdAsync(id);
+    return project is null 
+        ? Error.NotFound($"Project {id} not found")
+        : Result.Success(project);
+}
+
+// API Endpoint
+app.MapGet("/api/projects/{id}", async (int id, IProjectService service) => 
+{
+    var result = await service.GetProjectAsync(id);
+    return result.IsSuccess 
+        ? Results.Ok(result.Value)
+        : Results.NotFound(result.Error.Message);
+});
+```
+
+### 🔌 Dependency Injection Setup
+
+#### **Service Lifetimes**
+- **Domain Services:** Scoped (per request)
+- **Repositories:** Scoped (per request)  
+- **DbContext:** Scoped (per request)
+
+#### **Registration Pattern**
+```csharp
+// In Program.cs or Extensions
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+```
 
 ## 📝 Development Notes
 
+### **Current State**
 - CORS configured for frontend development (localhost:5173)
-- Minimal dependencies for now - will expand incrementally
+- Basic hello-world endpoints implemented
+- Ready for architectural implementation
+
+### **Implementation Strategy**
+- Start with single project, refactor to multi-project structure
+- Implement Result types early for consistent error handling
+- Add business services incrementally with proper validation
 - Database and authentication features planned for later commits
+
+### **Key Dependencies (Planned)**
+- Entity Framework Core for data access
+- ASP.NET Core Identity for authentication
+- Result library (ErrorOr, OneOf, or custom implementation)
+- SQLite for local development
 
 ## 🎨 Code Formatting Guidelines
 
