@@ -40,8 +40,11 @@ Each project has its own `CLAUDE.md` file with specific details.
 - ESLint configuration (NO prettier)
 - Hello World page demonstrating tech stack
 
-### 🔲 API (Backend)
-- Coming soon - C# Minimal API setup
+### ✅ API (Backend)
+- .NET 8 Minimal API with C# 
+- Basic health check endpoint
+- CORS configured for frontend development
+- Visual Studio solution with single project structure
 
 ---
 
