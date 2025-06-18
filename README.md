@@ -22,8 +22,9 @@ Requirements Village is a full-stack application for organizing software project
 
 ```
 RequirementsVillage/
-├── client/          # SvelteKit frontend application
-└── api/             # C# Minimal API backend
+├── RequirementsVillage.Api/    # C# Minimal API backend  
+├── client/                     # SvelteKit frontend (static SPA)
+└── RequirementsVillage.sln     # Rider solution file
 ```
 
 Each project contains its own README and setup instructions.
@@ -35,7 +36,7 @@ Each project contains its own README and setup instructions.
 ### Client (Frontend)
 
 ```bash
-cd client
+cd RequirementsVillage/client
 npm install
 npm run dev
 ```
@@ -45,9 +46,9 @@ The frontend will be available at `http://localhost:5173`
 ### API (Backend)
 
 ```bash
-cd api/RequirementsVillage.Api
+cd RequirementsVillage
 dotnet restore
-dotnet run
+dotnet run --project RequirementsVillage.Api
 ```
 
 The API will be available at `https://localhost:7139` (or check console output for exact port)
