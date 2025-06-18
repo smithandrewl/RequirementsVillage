@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequirementsVillage.Api", "RequirementsVillage.Api\RequirementsVillage.Api.csproj", "{33D2C4A1-044A-4BE1-8F09-DE6984D97DBD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequirementsVillage.Client", "RequirementsVillage.Client\RequirementsVillage.Client.csproj", "{A5D8A1B6-9D7C-4F8B-9E9D-8C3D4B5E6F7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

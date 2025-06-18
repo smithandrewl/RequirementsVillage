@@ -22,8 +22,9 @@
 
 ```
 RequirementsVillage/
-├── client/          # SvelteKit frontend
-└── api/             # C# Minimal API backend
+├── RequirementsVillage.Api/    # C# Minimal API backend
+├── client/                     # SvelteKit frontend (static SPA)
+└── RequirementsVillage.sln     # Rider solution file
 ```
 
 Each project has its own `CLAUDE.md` file with specific details.
@@ -52,12 +53,13 @@ Each project has its own `CLAUDE.md` file with specific details.
 
 ### Client
 ```bash
-cd client
+cd RequirementsVillage/client
 npm install
 npm run dev        # Development server
 npm test          # Run all tests  
 npm run check     # TypeScript checking
 npm run lint      # Code linting
+npm run build     # Build static output to wwwroot
 ```
 
 ---

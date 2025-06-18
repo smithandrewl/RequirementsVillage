@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.Build.NoTargets/3.7.0">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <DefaultItemExcludes>$(DefaultItemExcludes);node_modules\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <!-- Include all content files -->
+  <ItemGroup>
+    <Content Include="**/*" Exclude="node_modules/**;bin/**;obj/**;.svelte-kit/**;build/**;dist/**" />
+  </ItemGroup>
+
+  <!-- This project doesn't build with MSBuild, it's just for IDE support -->
+  <Target Name="Build">
+    <Message Text="This is a frontend project. Use npm commands to build." />
+  </Target>
+</Project>
