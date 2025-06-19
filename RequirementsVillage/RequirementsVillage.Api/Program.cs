@@ -1,4 +1,10 @@
+using RequirementsVillage.Api.Endpoints;
+using RequirementsVillage.Api.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services
+builder.Services.AddDomainServices();
 
 var app = builder.Build();
 
@@ -11,6 +17,8 @@ app.MapGet("/api/health", () => new {
     Status    = "Healthy", 
     Timestamp = DateTime.UtcNow 
 });
+
+app.MapProjectEndpoints();
 
 // SPA fallback - must be last
 app.MapFallbackToFile("index.html");
