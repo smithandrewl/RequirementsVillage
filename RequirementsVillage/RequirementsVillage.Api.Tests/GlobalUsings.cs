@@ -1,0 +1,15 @@
+global using Xunit;
+global using FluentAssertions;
+global using Moq;
+global using Microsoft.AspNetCore.Mvc.Testing;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.AspNetCore.Hosting;
+global using System.Net;
+global using System.Net.Http.Json;
+global using RequirementsVillage.Models;
+global using RequirementsVillage.Domain.Interfaces;
+global using RequirementsVillage.Persistence.Interfaces;
+global using LanguageExt;
+global using static LanguageExt.Prelude;
+global using RequirementsVillage.Api.Tests.Infrastructure;
