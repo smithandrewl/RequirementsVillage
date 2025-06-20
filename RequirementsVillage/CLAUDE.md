@@ -13,7 +13,7 @@ This is the unified solution for Requirements Village, combining a .NET 9 Minima
 - **Database:** SQLite (planned)
 - **ORM:** Entity Framework Core (planned)
 - **Authentication:** ASP.NET Core Identity (planned)
-- **Testing:** xUnit + FluentAssertions (planned)
+- **Testing:** xUnit + FluentAssertions + Moq
 
 ### Frontend
 - **Framework:** SvelteKit (static SPA)
@@ -43,6 +43,9 @@ RequirementsVillage/
 ├── RequirementsVillage.Persistence/ # Data access layer
 │   ├── Interfaces/               # Repository interfaces
 │   └── Repositories/             # Repository implementations
+├── RequirementsVillage.Api.Tests/ # API integration tests
+│   ├── Infrastructure/           # Test setup and factories
+│   └── Endpoints/                # Endpoint test classes
 └── RequirementsVillage.sln       # Visual Studio/Rider solution
 ```
 
@@ -76,7 +79,7 @@ dotnet run --project RequirementsVillage.Api
 # Backend
 dotnet restore              # Restore .NET packages
 dotnet build                # Build .NET project
-dotnet test                 # Run .NET tests (when added)
+dotnet test                 # Run .NET tests
 
 # Frontend
 npm install                 # Install Node packages
@@ -140,8 +143,13 @@ Persistence/
 ├── Data/                      # DbContext and configurations
 └── Persistence.csproj
 
-Tests/
-└── Tests.csproj
+Api.Tests/
+├── Infrastructure/
+│   └── TestWebApplicationFactory.cs  # Test setup and factories
+├── Endpoints/
+│   ├── HealthCheckTests.cs          # Health check endpoint tests
+│   └── ProjectEndpointsTests.cs     # Project endpoint tests
+└── Api.Tests.csproj
 
 RequirementsVillage.sln
 ```
@@ -256,14 +264,15 @@ builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 ## 📝 Development Notes
 
 ### **Current State**
-- Unified Rider solution with multiple projects (Api, Domain, Models, Persistence)
+- Unified Rider solution with multiple projects (Api, Domain, Models, Persistence, Api.Tests)
 - Layered architecture implemented with clean separation of concerns
 - LanguageExt integrated for functional programming patterns
 - Basic API endpoint working with hardcoded data
+- API integration tests using WebApplicationFactory pattern
 - SvelteKit configured as static SPA (no SSR)
 - API serves both static files and backend endpoints
 - Client builds to wwwroot directory
-- Ready for test project creation and feature development
+- Tests verify health check and project endpoints functionality
 
 ### **Development Workflow**
 1. **For frontend development:** Run both `dotnet run` and `npm run dev` simultaneously
