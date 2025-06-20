@@ -17,12 +17,14 @@ public class ProjectEndpointsTests : IClassFixture<TestWebApplicationFactory<Pro
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         
-        var projects = await response.Content.ReadFromJsonAsync<List<Project>>();
-        projects.Should().NotBeNull();
-        projects.Should().HaveCount(2);
+        var projectsList = await response.Content.ReadFromJsonAsync<List<Project>>();
+        projectsList.Should().NotBeNull();
         
-        (projects is [{ Name: "Task Management System" }, _]).Should().BeTrue();
-        (projects is [_, { Name: "Weather Widget" }]).Should().BeTrue();
+        var projects = toSeq(projectsList!);
+        projects.Count.Should().Be(2);
+        
+        projects.Head.Name.Should().Be("Task Management System");
+        projects.Skip(1).Head.Name.Should().Be("Weather Widget");
     }
 
     [Fact]
@@ -33,15 +35,20 @@ public class ProjectEndpointsTests : IClassFixture<TestWebApplicationFactory<Pro
         // Assert
         response.EnsureSuccessStatusCode();
         
-        var projects = await response.Content.ReadFromJsonAsync<List<Project>>();
-        projects.Should().NotBeNull();
+        var projectsList = await response.Content.ReadFromJsonAsync<List<Project>>();
+        projectsList.Should().NotBeNull();
         
-        var firstProject = projects![0];
-        firstProject.Id.Should().NotBeEmpty();
-        firstProject.Name.Should().NotBeNullOrWhiteSpace();
-        firstProject.Description.Should().NotBeNullOrWhiteSpace();
-        firstProject.Category.Should().NotBeNullOrWhiteSpace();
-        firstProject.CreatedAt.Should().BeBefore(DateTime.UtcNow);
-        firstProject.UpdatedAt.Should().BeBefore(DateTime.UtcNow);
+        var projects = toSeq(projectsList!);
+        projects.HeadOrNone().Match(
+            Some: project => {
+                project.Id.Should().NotBeEmpty();
+                project.Name.Should().NotBeNullOrWhiteSpace();
+                project.Description.Should().NotBeNullOrWhiteSpace();
+                project.Category.Should().NotBeNullOrWhiteSpace();
+                project.CreatedAt.Should().BeBefore(DateTime.UtcNow);
+                project.UpdatedAt.Should().BeBefore(DateTime.UtcNow);
+            },
+            None: () => throw new InvalidOperationException("Expected at least one project")
+        );
     }
 }
