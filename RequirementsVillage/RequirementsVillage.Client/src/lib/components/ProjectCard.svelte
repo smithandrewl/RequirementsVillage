@@ -4,15 +4,51 @@
   export let status:      'Someday' | 'Current' | 'Archive';
 </script>
 
-<div class="card bg-base-100 shadow-sm border border-base-300 hover:shadow-md transition-shadow duration-200">
+<div 
+  class="
+    card 
+    bg-base-100 
+    shadow-sm 
+    border 
+    border-base-300 
+    hover:shadow-md 
+    transition-shadow 
+    duration-200
+  "
+>
   <div class="card-body p-6">
     <!-- Header with title and edit button -->
-    <div class="flex justify-between items-start mb-3">
-      <h3 class="card-title text-lg font-semibold text-base-content">
+    <div 
+      class="
+        flex 
+        justify-between 
+        items-start 
+        mb-3
+    "
+  >
+      <h3 
+        class="
+          card-title 
+          text-lg
+          font-semibold
+          text-base-content
+        "
+      >
         {title}
       </h3>
 			<!-- Hidden for now, eventual edit button -->
-      <button class="hidden btn btn-ghost btn-sm btn-square opacity-60 hover:opacity-100 transition-opacity">
+      <button 
+        class="
+          hidden 
+          btn 
+          btn-ghost 
+          btn-sm 
+          btn-square 
+          opacity-60 
+          hover:opacity-100 
+          transition-opacity
+        "
+      >
         <svg
           xmlns        = "http://www.w3.org/2000/svg"
           fill         = "none"
@@ -31,7 +67,14 @@
     </div>
 
     <!-- Description -->
-    <p class="text-base-content/70 text-sm mb-4 leading-relaxed">
+    <p 
+      class="
+        text-base-content/70 
+        text-sm 
+        mb-4 
+        leading-relaxed
+      "
+    >
       {description}
     </p>
 

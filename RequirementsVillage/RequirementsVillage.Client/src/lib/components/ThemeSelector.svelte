@@ -11,8 +11,10 @@
 
   function setTheme(theme: string) {
     currentTheme = theme;
+    
     if (browser) {
       document.documentElement.setAttribute('data-theme', theme);
+      
       localStorage.setItem('theme', theme);
     }
   }
@@ -37,7 +39,16 @@
   </div>
   <ul
     tabindex = "0"
-    class    = "dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+    class = "
+      dropdown-content 
+      menu 
+      bg-base-100 
+      rounded-box 
+      z-[1] 
+      w-52 
+      p-2 
+      shadow
+    "
   >
     {#each themes as theme}
       <li>
