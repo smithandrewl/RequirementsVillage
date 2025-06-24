@@ -7,7 +7,9 @@ This is the frontend client for Requirements Village, built with SvelteKit, Tail
 ## 🧰 Tech Stack
 
 - **Framework:** SvelteKit
-- **Language:** TypeScript (no JavaScript files)
+- **Language:** TypeScript (functional style with fp-ts - no JavaScript files)
+- **Functional Library:** fp-ts for Either/Option and Railway Oriented Programming
+- **Pattern Matching:** ts-pattern for exhaustive discriminated union matching
 - **Styling:** Tailwind CSS + DaisyUI
 - **Testing:** Vitest (unit) + Playwright (integration)
 - **Code Quality:** ESLint only (NO prettier - we despise prettier)
@@ -54,6 +56,10 @@ npm run lint           # ESLint only (NO prettier)
 - ESLint only for code linting (NO prettier - prettier is banned)
 - Component props should be typed
 - Use `lang="ts"` in all script blocks
+- **Functional Programming:** Use fp-ts Either/Option types throughout
+- **No Exceptions:** All async operations return TaskEither types
+- **Exhaustive Matching:** All discriminated unions must use ts-pattern with .exhaustive()
+- **Type Safety:** Eliminate stringly-typed programming with proper discriminated unions
 
 ## 🎨 Code Formatting Guidelines
 

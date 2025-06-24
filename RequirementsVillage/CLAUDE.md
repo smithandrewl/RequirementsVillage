@@ -17,7 +17,9 @@ This is the unified solution for Requirements Village, combining a .NET 9 Minima
 
 ### Frontend
 - **Framework:** SvelteKit (static SPA)
-- **Language:** TypeScript
+- **Language:** TypeScript (functional style with fp-ts)
+- **Functional Library:** fp-ts for Either/Option and Railway Oriented Programming
+- **Pattern Matching:** ts-pattern for exhaustive discriminated union matching
 - **Styling:** Tailwind CSS + DaisyUI
 - **Build:** Vite
 - **Testing:** Vitest + Playwright
@@ -107,10 +109,13 @@ This API follows a **layered architecture** with clean separation of concerns an
 ### 🎯 Core Principles
 
 - **Business Logic Protection:** Domain services enforce business rules and prevent misuse of the persistence layer
-- **Railway Oriented Programming (ROP):** Use discriminated unions and Result types for predictable error handling
+- **Railway Oriented Programming (ROP):** Use discriminated unions and Either types for predictable error handling on both client and server
+- **No Exceptions:** All exceptions caught and converted to Either/Result types - code never throws
+- **Exhaustive Matching:** All discriminated unions require exhaustive pattern matching with compiler enforcement
 - **Immutable Data:** Models are immutable records where possible
 - **Dependency Injection:** All services injected via interfaces for testability and flexibility
-- **Single Responsibility:** Each layer has a focused purpose
+- **Type Safety:** Eliminate stringly-typed programming with proper discriminated unions
+- **Unified Patterns:** Client and server use identical functional patterns (Either, Option, pattern matching)
 
 ### 📁 Project Structure
 
@@ -219,32 +224,131 @@ Using LanguageExt's `Either<L, R>` type where:
 - `L` (Left) represents the error case
 - `R` (Right) represents the success case
 
-#### **Usage Pattern**
+#### **Server-Side Usage Pattern**
 ```csharp
-// Domain Service
-public async Task<Either<Error, Seq<Project>>> GetAllProjectsAsync() {
+// Discriminated union for domain errors with data
+public abstract record ProjectError {
+    public sealed record NotFound(
+        Guid   ProjectId, 
+        string SearchContext
+    ) : ProjectError;
+    
+    public sealed record ValidationFailed(
+        string Field, 
+        string Reason, 
+        object AttemptedValue
+    ) : ProjectError;
+    
+    public sealed record DatabaseError(
+        string    Operation, 
+        string    TableName, 
+        Exception InnerException
+    ) : ProjectError;
+    
+    public sealed record UnknownError(
+        string Message
+    ) : ProjectError;
+}
+
+// Domain Service - all exceptions become Either types
+public async Task<Either<ProjectError, Seq<Project>>> GetAllProjectsAsync() {
     try {
         var projects = await _repository.GetAllAsync();
-        return Right<Error, Seq<Project>>(projects);
+        return Right<ProjectError, Seq<Project>>(projects);
+    }
+    catch (SqlException ex) {
+        return Left<ProjectError, Seq<Project>>(
+            new ProjectError.DatabaseError("SELECT", "Projects", ex)
+        );
     }
     catch (Exception ex) {
-        return Left<Error, Seq<Project>>(
-            Error.New($"Failed to retrieve projects: {ex.Message}")
+        return Left<ProjectError, Seq<Project>>(
+            new ProjectError.UnknownError(ex.Message)
         );
     }
 }
 
-// API Endpoint with pattern matching
-private static async Task<IResult> GetAllProjects(
-    IProjectService service
-) {
+// API Endpoint with exhaustive pattern matching
+private static async Task<IResult> GetAllProjects(IProjectService service) {
     var result = await service.GetAllProjectsAsync();
     
     return result.Match(
-        Left:  error => Results.Problem(error.Message),
+        Left: error => error switch {
+            ProjectError.NotFound(var id, var context) => 
+                Results.NotFound($"Project {id} not found in {context}"),
+            ProjectError.ValidationFailed(var field, var reason, var value) => 
+                Results.BadRequest($"{field} validation failed: {reason}"),
+            ProjectError.DatabaseError(var op, var table, var ex) => 
+                Results.Problem($"Database error in {op} on {table}"),
+            ProjectError.UnknownError(var msg) => 
+                Results.StatusCode(500),
+            _ => throw new ArgumentOutOfRangeException() // Compiler enforced
+        },
         Right: projects => Results.Ok(projects)
     );
 }
+```
+
+#### **Client-Side Usage Pattern**
+```typescript
+// Matching discriminated union with data
+type ProjectError = 
+    | { 
+        readonly _tag: 'NotFound'; 
+        readonly projectId: string; 
+        readonly searchContext: string 
+    }
+    | { 
+        readonly _tag: 'ValidationFailed'; 
+        readonly field: string; 
+        readonly reason: string; 
+        readonly attemptedValue: unknown 
+    }
+    | { 
+        readonly _tag: 'DatabaseError'; 
+        readonly operation: string; 
+        readonly tableName: string; 
+        readonly innerError: string 
+    }
+    | { 
+        readonly _tag: 'NetworkError'; 
+        readonly message: string 
+    }
+    | { 
+        readonly _tag: 'UnknownError'; 
+        readonly message: string 
+    }
+
+// All network calls return Either types
+const getProjects = (): TaskEither<ProjectError, Project[]> =>
+    tryCatch(
+        () => fetch('/api/projects').then(r => r.json()),
+        (error) => ({ 
+            _tag: 'NetworkError', 
+            message: String(error) 
+        } as const)
+    )
+
+// Component with exhaustive error handling using pattern matching
+const handleResult = (result: Either<ProjectError, Project[]>) =>
+    match(result)
+        .with({ _tag: 'Left' }, ({ left: error }) => 
+            match(error)
+                .with({ _tag: 'NotFound' }, ({ projectId, searchContext }) => 
+                    showNotFound(projectId, searchContext))
+                .with({ _tag: 'ValidationFailed' }, ({ field, reason, attemptedValue }) => 
+                    showValidation(field, reason, attemptedValue))
+                .with({ _tag: 'DatabaseError' }, ({ operation, tableName, innerError }) => 
+                    showServerError(operation, tableName))
+                .with({ _tag: 'NetworkError' }, ({ message }) => 
+                    showNetworkError(message))
+                .with({ _tag: 'UnknownError' }, ({ message }) => 
+                    showGenericError(message))
+                .exhaustive() // Compiler enforced - missing cases cause errors
+        )
+        .with({ _tag: 'Right' }, ({ right: projects }) => 
+            showProjects(projects))
+        .exhaustive()
 ```
 
 ### 🔌 Dependency Injection Setup
