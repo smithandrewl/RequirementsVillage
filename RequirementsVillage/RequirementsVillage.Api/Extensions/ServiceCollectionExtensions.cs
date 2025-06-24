@@ -1,4 +1,4 @@
-using RequirementsVillage.Domain.Interfaces;
+using RequirementsVillage.Domain;
 using RequirementsVillage.Domain.Services;
 using RequirementsVillage.Persistence.Interfaces;
 using RequirementsVillage.Persistence.Repositories;

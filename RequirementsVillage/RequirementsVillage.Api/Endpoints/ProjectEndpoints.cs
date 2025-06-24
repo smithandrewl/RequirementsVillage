@@ -1,4 +1,4 @@
-using RequirementsVillage.Domain.Interfaces;
+using RequirementsVillage.Domain;
 
 namespace RequirementsVillage.Api.Endpoints;
 

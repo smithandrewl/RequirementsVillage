@@ -8,7 +8,7 @@ global using Microsoft.AspNetCore.Hosting;
 global using System.Net;
 global using System.Net.Http.Json;
 global using RequirementsVillage.Models;
-global using RequirementsVillage.Domain.Interfaces;
+global using RequirementsVillage.Domain;
 global using RequirementsVillage.Persistence.Interfaces;
 global using LanguageExt;
 global using static LanguageExt.Prelude;

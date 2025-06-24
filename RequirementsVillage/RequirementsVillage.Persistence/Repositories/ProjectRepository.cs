@@ -6,7 +6,7 @@ namespace RequirementsVillage.Persistence.Repositories;
 public class ProjectRepository : IProjectRepository {
     public Task<Seq<Project>> GetAllAsync() {
         var projects = Seq(
-            new Project(
+            new Models.Project(
                 Id:          Guid.Parse("550e8400-e29b-41d4-a716-446655440000"),
                 Name:        "Task Management System",
                 Description: "A comprehensive task tracking application",
