@@ -7,21 +7,40 @@ open Thoth.Json
 open RequirementsVillage.FSharp.Client.Types
 
 
+let private statusDecoder: Decoder<ProjectStatus> =
+    Decode.string
+    |> Decode.andThen (fun s ->
+        match s with
+        | "idea" -> Decode.succeed Idea
+        | "inProgress" -> Decode.succeed InProgress
+        | "completed" -> Decode.succeed Completed
+        | "abandoned" -> Decode.succeed Abandoned
+        | "onHold" -> Decode.succeed OnHold
+        | _ -> Decode.fail (sprintf "Unknown status: %s" s)
+    )
+
+let private categoryDecoder: Decoder<ProjectCategory> =
+    Decode.string
+    |> Decode.andThen (fun s ->
+        match s with
+        | "webApp" -> Decode.succeed WebApp
+        | "mobileApp" -> Decode.succeed MobileApp
+        | "library" -> Decode.succeed Library
+        | "tool" -> Decode.succeed Tool
+        | "game" -> Decode.succeed Game
+        | other -> Decode.succeed (Other other)
+    )
+
 let private projectDecoder: Decoder<Project> =
     Decode.object (fun get ->
         {
             Id = get.Required.Field "id" Decode.guid
-            Title = get.Required.Field "name" Decode.string
+            Name = get.Required.Field "name" Decode.string
             Description = get.Required.Field "description" Decode.string
-            TechStack = get.Optional.Field "techStack" (Decode.list Decode.string) |> Option.defaultValue []
-            Status = 
-                get.Required.Field "status" Decode.string
-                |> fun s ->
-                    match s.ToLower() with
-                    | "in progress" -> Current
-                    | "abandoned" -> Archive
-                    | "someday" -> Someday
-                    | _ -> Someday
+            Category = get.Required.Field "category" categoryDecoder
+            Status = get.Required.Field "status" statusDecoder
+            CreatedAt = get.Required.Field "createdAt" Decode.datetime
+            UpdatedAt = get.Required.Field "updatedAt" Decode.datetime
         }
     )
 

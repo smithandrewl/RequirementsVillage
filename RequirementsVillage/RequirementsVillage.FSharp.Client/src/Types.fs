@@ -3,16 +3,28 @@ module RequirementsVillage.FSharp.Client.Types
 open System
 
 type ProjectStatus =
-    | Someday
-    | Current
-    | Archive
+    | Idea
+    | InProgress
+    | Completed
+    | Abandoned
+    | OnHold
+
+type ProjectCategory =
+    | WebApp
+    | MobileApp
+    | Library
+    | Tool
+    | Game
+    | Other of string
 
 type Project = {
     Id: Guid
-    Title: string
+    Name: string
     Description: string
-    TechStack: string list
+    Category: ProjectCategory
     Status: ProjectStatus
+    CreatedAt: DateTime
+    UpdatedAt: DateTime
 }
 
 type Theme =

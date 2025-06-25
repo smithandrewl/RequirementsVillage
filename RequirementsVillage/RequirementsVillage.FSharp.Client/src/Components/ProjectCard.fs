@@ -31,7 +31,7 @@ let view (project: Project) =
                                 style.marginBottom 0
                                 style.fontWeight 600
                             ]
-                            prop.text project.Title
+                            prop.text project.Name
                         ]
                     ]
                 ]
@@ -44,17 +44,42 @@ let view (project: Project) =
                     ]
                     prop.text project.Description
                 ]
-                Bulma.tag [
-                    match project.Status with
-                    | Someday -> color.isInfo
-                    | Current -> color.isSuccess  
-                    | Archive -> color.isLight
-                    prop.text (
-                        match project.Status with
-                        | Someday -> "Someday"
-                        | Current -> "Current"
-                        | Archive -> "Archived"
-                    )
+                Html.div [
+                    prop.style [
+                        style.display.flex
+                        style.gap (length.rem 0.5)
+                        style.flexWrap.wrap
+                    ]
+                    prop.children [
+                        Bulma.tag [
+                            match project.Status with
+                            | Idea -> color.isInfo
+                            | InProgress -> color.isSuccess  
+                            | Completed -> color.isPrimary
+                            | Abandoned -> color.isDark
+                            | OnHold -> color.isWarning
+                            prop.text (
+                                match project.Status with
+                                | Idea -> "Idea"
+                                | InProgress -> "In Progress"
+                                | Completed -> "Completed"
+                                | Abandoned -> "Abandoned"
+                                | OnHold -> "On Hold"
+                            )
+                        ]
+                        Bulma.tag [
+                            color.isLight
+                            prop.text (
+                                match project.Category with
+                                | WebApp -> "Web App"
+                                | MobileApp -> "Mobile App"
+                                | Library -> "Library"
+                                | Tool -> "Tool"
+                                | Game -> "Game"
+                                | Other s -> s
+                            )
+                        ]
+                    ]
                 ]
             ]
         ]

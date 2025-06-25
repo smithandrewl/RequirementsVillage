@@ -22,17 +22,21 @@ let view (model: Model) (dispatch: Msg -> unit) =
                         let filter = 
                             match value with
                             | "All" -> None
-                            | "Current" -> Some Current
-                            | "Someday" -> Some Someday
-                            | "Archive" -> Some Archive
+                            | "Idea" -> Some Idea
+                            | "InProgress" -> Some InProgress
+                            | "Completed" -> Some Completed
+                            | "Abandoned" -> Some Abandoned
+                            | "OnHold" -> Some OnHold
                             | _ -> None
                         dispatch (FilterByStatus filter)
                     )
                     prop.children [
                         Html.option [ prop.value "All"; prop.text "All" ]
-                        Html.option [ prop.value "Current"; prop.text "Current" ]
-                        Html.option [ prop.value "Someday"; prop.text "Someday" ]
-                        Html.option [ prop.value "Archive"; prop.text "Archived" ]
+                        Html.option [ prop.value "Idea"; prop.text "Ideas" ]
+                        Html.option [ prop.value "InProgress"; prop.text "In Progress" ]
+                        Html.option [ prop.value "Completed"; prop.text "Completed" ]
+                        Html.option [ prop.value "Abandoned"; prop.text "Abandoned" ]
+                        Html.option [ prop.value "OnHold"; prop.text "On Hold" ]
                     ]
                 ]
             ]
