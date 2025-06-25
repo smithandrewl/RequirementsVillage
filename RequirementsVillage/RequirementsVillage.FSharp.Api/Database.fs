@@ -8,64 +8,66 @@ open RequirementsVillage.FSharp.Api.Models
 
 // Repository interface for dependency injection
 type IProjectRepository =
-  abstract member GetAllAsync: 
+  abstract member GetAllAsync:
     unit -> Async<Result<Project list, ProjectError>>
-  abstract member GetByIdAsync: 
+  abstract member GetByIdAsync:
     Guid -> Async<Result<Project option, ProjectError>>
-  abstract member CreateAsync: 
+  abstract member CreateAsync:
     Project -> Async<Result<unit, ProjectError>>
-  abstract member UpdateAsync: 
+  abstract member UpdateAsync:
     Project -> Async<Result<unit, ProjectError>>
-  abstract member DeleteAsync: 
+  abstract member DeleteAsync:
     Guid -> Async<Result<unit, ProjectError>>
 
 // Dapper type handlers for F# discriminated unions
 module DapperTypeHandlers =
   type ProjectStatusHandler() =
     inherit SqlMapper.TypeHandler<ProjectStatus>()
-    
+
     override _.SetValue(param, value) =
       let stringValue =
         match value with
-        | Idea -> "idea"
+        | Idea       -> "idea"
         | InProgress -> "inProgress"
-        | Completed -> "completed"
-        | Abandoned -> "abandoned"
-        | OnHold -> "onHold"
+        | Completed  -> "completed"
+        | Abandoned  -> "abandoned"
+        | OnHold     -> "onHold"
+
       param.Value <- stringValue
-      
+
     override _.Parse(value) =
       match value :?> string with
-      | "idea" -> Idea
+      | "idea"       -> Idea
       | "inProgress" -> InProgress
-      | "completed" -> Completed
-      | "abandoned" -> Abandoned
-      | "onHold" -> OnHold
-      | s -> failwithf "Unknown ProjectStatus: %s" s
-  
+      | "completed"  -> Completed
+      | "abandoned"  -> Abandoned
+      | "onHold"     -> OnHold
+      | s            -> failwithf "Unknown ProjectStatus: %s" s
+
   type ProjectCategoryHandler() =
     inherit SqlMapper.TypeHandler<ProjectCategory>()
-    
+
     override _.SetValue(param, value) =
       let stringValue =
         match value with
-        | WebApp -> "webApp"
+        | WebApp    -> "webApp"
         | MobileApp -> "mobileApp"
-        | Library -> "library"
-        | Tool -> "tool"
-        | Game -> "game"
-        | Other s -> s
+        | Library   -> "library"
+        | Tool      -> "tool"
+        | Game      -> "game"
+        | Other s   -> s
+
       param.Value <- stringValue
-      
+
     override _.Parse(value) =
       match value :?> string with
-      | "webApp" -> WebApp
+      | "webApp"    -> WebApp
       | "mobileApp" -> MobileApp
-      | "library" -> Library
-      | "tool" -> Tool
-      | "game" -> Game
-      | s -> Other s
-  
+      | "library"   -> Library
+      | "tool"      -> Tool
+      | "game"      -> Game
+      | s           -> Other s
+
   let registerHandlers() =
     SqlMapper.AddTypeHandler(ProjectStatusHandler())
     SqlMapper.AddTypeHandler(ProjectCategoryHandler())
@@ -73,64 +75,93 @@ module DapperTypeHandlers =
 // SQL queries as raw strings
 module Queries =
   let selectAll = """
-    SELECT Id, Name, Description, Category, Status, 
-           CreatedAt, UpdatedAt
-    FROM Projects
-    ORDER BY UpdatedAt DESC
+    SELECT
+      Id,
+      Name,
+      Description,
+      Category,
+      Status,
+      CreatedAt,
+      UpdatedAt
+    FROM
+      Projects
+    ORDER BY
+      UpdatedAt DESC
   """
-  
+
   let selectById = """
-    SELECT Id, Name, Description, Category, Status, 
-           CreatedAt, UpdatedAt
-    FROM Projects
-    WHERE Id = @Id
+    SELECT
+      Id,
+      Name,
+      Description,
+      Category,
+      Status,
+      CreatedAt,
+      UpdatedAt
+    FROM
+      Projects
+    WHERE
+      Id = @Id
   """
-  
+
   let insert = """
-    INSERT INTO Projects (Id, Name, Description, Category, 
-                         Status, CreatedAt, UpdatedAt)
-    VALUES (@Id, @Name, @Description, @Category, @Status, 
-            @CreatedAt, @UpdatedAt)
+    INSERT INTO Projects (
+      Id,
+      Name,
+      Description,
+      Category,
+      Status,
+      CreatedAt,
+      UpdatedAt
+    )
+    VALUES (
+      @Id,
+      @Name,
+      @Description,
+      @Category,
+      @Status,
+      @CreatedAt,
+      @UpdatedAt
+    )
   """
-  
+
   let update = """
-    UPDATE Projects
-    SET Name = @Name,
-        Description = @Description,
-        Category = @Category,
-        Status = @Status,
-        UpdatedAt = @UpdatedAt
-    WHERE Id = @Id
+    UPDATE
+      Projects
+    SET
+      Name        = @Name,
+      Description = @Description,
+      Category    = @Category,
+      Status      = @Status,
+      UpdatedAt   = @UpdatedAt
+    WHERE
+      Id = @Id
   """
-  
+
   let delete = """
     DELETE FROM Projects
     WHERE Id = @Id
   """
-  
+
   let createTable = """
     CREATE TABLE IF NOT EXISTS Projects (
-      Id TEXT PRIMARY KEY,
-      Name TEXT NOT NULL,
+      Id          TEXT PRIMARY KEY,
+      Name        TEXT NOT NULL,
       Description TEXT NOT NULL,
-      Category TEXT NOT NULL,
-      Status TEXT NOT NULL,
-      CreatedAt TEXT NOT NULL,
-      UpdatedAt TEXT NOT NULL
+      Category    TEXT NOT NULL,
+      Status      TEXT NOT NULL,
+      CreatedAt   TEXT NOT NULL,
+      UpdatedAt   TEXT NOT NULL
     )
   """
 
-// Concrete repository implementation using Dapper
 type ProjectRepository(connectionString: string) =
-  
-  // Initialize type handlers
   do DapperTypeHandlers.registerHandlers()
-  
+
   let createConnection() = new SqliteConnection(connectionString)
-  
-  // Helper to execute with error handling
-  let executeAsync (operation: string) 
-    (action: IDbConnection -> Async<'T>) 
+
+  let executeAsync (operation: string)
+    (action: IDbConnection -> Async<'T>)
     : Async<Result<'T, ProjectError>> =
     async {
       try
@@ -143,43 +174,43 @@ type ProjectRepository(connectionString: string) =
       | ex ->
         return Error (UnknownError ex.Message)
     }
-  
+
   // Initialize database
   member _.InitializeAsync() =
     executeAsync "CREATE_TABLE" (fun conn ->
       async {
         conn.Open()
-        let! _ = 
-          conn.ExecuteAsync(Queries.createTable) 
+        let! _ =
+          conn.ExecuteAsync(Queries.createTable)
           |> Async.AwaitTask
         return ()
       })
-  
+
   interface IProjectRepository with
     member _.GetAllAsync() =
       executeAsync "SELECT_ALL" (fun conn ->
         async {
           conn.Open()
-          let! results = 
-            conn.QueryAsync<Project>(Queries.selectAll) 
+          let! results =
+            conn.QueryAsync<Project>(Queries.selectAll)
             |> Async.AwaitTask
           return results |> Seq.toList
         })
-    
+
     member _.GetByIdAsync(id: Guid) =
       executeAsync "SELECT_BY_ID" (fun conn ->
         async {
           conn.Open()
           let parameters = {| Id = id.ToString() |}
-          let! result = 
+          let! result =
             conn.QuerySingleOrDefaultAsync<Project>(
               Queries.selectById, parameters
             ) |> Async.AwaitTask
-          return 
+          return
             if isNull (box result) then None
             else Some result
         })
-    
+
     member _.CreateAsync(project: Project) =
       executeAsync "INSERT" (fun conn ->
         async {
@@ -193,12 +224,12 @@ type ProjectRepository(connectionString: string) =
             CreatedAt = project.CreatedAt
             UpdatedAt = project.UpdatedAt
           |}
-          let! _ = 
-            conn.ExecuteAsync(Queries.insert, parameters) 
+          let! _ =
+            conn.ExecuteAsync(Queries.insert, parameters)
             |> Async.AwaitTask
           return ()
         })
-    
+
     member _.UpdateAsync(project: Project) =
       executeAsync "UPDATE" (fun conn ->
         async {
@@ -211,24 +242,24 @@ type ProjectRepository(connectionString: string) =
             Status = project.Status
             UpdatedAt = project.UpdatedAt
           |}
-          let! rowsAffected = 
-            conn.ExecuteAsync(Queries.update, parameters) 
+          let! rowsAffected =
+            conn.ExecuteAsync(Queries.update, parameters)
             |> Async.AwaitTask
           if rowsAffected = 0 then
-            return! async { 
-              return raise (Exception("Project not found")) 
+            return! async {
+              return raise (Exception("Project not found"))
             }
           else
             return ()
         })
-    
+
     member _.DeleteAsync(id: Guid) =
       executeAsync "DELETE" (fun conn ->
         async {
           conn.Open()
           let parameters = {| Id = id.ToString() |}
-          let! _ = 
-            conn.ExecuteAsync(Queries.delete, parameters) 
+          let! _ =
+            conn.ExecuteAsync(Queries.delete, parameters)
             |> Async.AwaitTask
           return ()
         })
@@ -243,16 +274,16 @@ type InMemoryProjectRepository() =
       Status = Idea
       CreatedAt = DateTime.UtcNow.AddDays(-30.0)
       UpdatedAt = DateTime.UtcNow.AddDays(-2.0) }
-    
+
     { Id = Guid.Parse("6ba7b810-9dad-11d1-80b4-00c04fd430c8")
       Name = "Expense Tracker"
-      Description = 
+      Description =
         "An application for monitoring personal expenses"
       Category = WebApp
       Status = InProgress
       CreatedAt = DateTime.UtcNow.AddDays(-15.0)
       UpdatedAt = DateTime.UtcNow.AddDays(-1.0) }
-    
+
     { Id = Guid.Parse("7ba7b810-9dad-11d1-80b4-00c04fd430c8")
       Name = "Weather App"
       Description = "A weather forecasting application"
@@ -260,37 +291,37 @@ type InMemoryProjectRepository() =
       Status = Idea
       CreatedAt = DateTime.UtcNow.AddDays(-60.0)
       UpdatedAt = DateTime.UtcNow.AddDays(-45.0) }
-    
+
     { Id = Guid.Parse("8ba7b810-9dad-11d1-80b4-00c04fd430c8")
       Name = "Blog Platform"
-      Description = 
+      Description =
         "A simple platform for creating and managing blogs"
       Category = WebApp
       Status = Abandoned
       CreatedAt = DateTime.UtcNow.AddDays(-120.0)
       UpdatedAt = DateTime.UtcNow.AddDays(-100.0) }
   ]
-  
+
   interface IProjectRepository with
     member _.GetAllAsync() =
       async { return Ok projects }
-    
+
     member _.GetByIdAsync(id: Guid) =
       async {
-        let project = 
+        let project =
           projects |> List.tryFind (fun p -> p.Id = id)
         return Ok project
       }
-    
+
     member _.CreateAsync(project: Project) =
       async {
         projects <- project :: projects
         return Ok ()
       }
-    
+
     member _.UpdateAsync(project: Project) =
       async {
-        match projects 
+        match projects
           |> List.tryFindIndex (fun p -> p.Id = project.Id) with
         | Some idx ->
           projects <- projects |> List.updateAt idx project
@@ -300,7 +331,7 @@ type InMemoryProjectRepository() =
             NotFound(project.Id, "InMemoryRepository")
           )
       }
-    
+
     member _.DeleteAsync(id: Guid) =
       async {
         projects <- projects |> List.filter (fun p -> p.Id <> id)

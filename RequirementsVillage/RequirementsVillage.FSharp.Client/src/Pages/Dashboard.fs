@@ -9,48 +9,48 @@ let view (model: Model) (dispatch: Msg -> unit) =
   let filteredProjects =
     match model.FilteredStatus with
     | None -> model.Projects
-    | Some status -> 
+    | Some status ->
       model.Projects |> List.filter (fun p -> p.Status = status)
-  
+
   Html.div [
     Html.div [
-      prop.className 
+      prop.className
         "is-flex is-flex-wrap-wrap is-align-items-center is-justify-content-space-between"
       prop.style [ style.marginBottom (length.rem 1.5) ]
       prop.children [
         Bulma.select [
           prop.onChange (fun (e: Browser.Types.Event) ->
-            let value = 
+            let value =
               (e.target :?> Browser.Types.HTMLSelectElement).value
-            let filter = 
+            let filter =
               match value with
-              | "All" -> None
-              | "Idea" -> Some Idea
+              | "All"        -> None
+              | "Idea"       -> Some Idea
               | "InProgress" -> Some InProgress
-              | "Completed" -> Some Completed
-              | "Abandoned" -> Some Abandoned
-              | "OnHold" -> Some OnHold
-              | _ -> None
+              | "Completed"  -> Some Completed
+              | "Abandoned"  -> Some Abandoned
+              | "OnHold"     -> Some OnHold
+              | _            -> None
             dispatch (FilterByStatus filter)
           )
           prop.children [
             Html.option [ prop.value "All"; prop.text "All" ]
             Html.option [ prop.value "Idea"; prop.text "Ideas" ]
-            Html.option [ 
-              prop.value "InProgress"; prop.text "In Progress" 
+            Html.option [
+              prop.value "InProgress"; prop.text "In Progress"
             ]
-            Html.option [ 
-              prop.value "Completed"; prop.text "Completed" 
+            Html.option [
+              prop.value "Completed"; prop.text "Completed"
             ]
-            Html.option [ 
-              prop.value "Abandoned"; prop.text "Abandoned" 
+            Html.option [
+              prop.value "Abandoned"; prop.text "Abandoned"
             ]
             Html.option [ prop.value "OnHold"; prop.text "On Hold" ]
           ]
         ]
       ]
     ]
-    
+
     if model.IsLoading then
       Bulma.progress [
         progress.isSmall
@@ -80,7 +80,7 @@ let view (model: Model) (dispatch: Msg -> unit) =
           Html.p [
             prop.className "has-text-grey"
             prop.style [ style.marginBottom (length.rem 1) ]
-            prop.text 
+            prop.text
               "Get started by creating your first project idea."
           ]
           Bulma.button.a [

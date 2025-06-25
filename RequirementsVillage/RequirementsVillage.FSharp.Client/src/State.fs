@@ -10,16 +10,16 @@ let init () : Model * Cmd<Msg> =
     | null -> Light
     | "requirements-village-dark" -> Dark
     | _ -> Light
-  
+
   let initialModel = {
-    CurrentPage = Landing
-    CurrentTheme = savedTheme
-    Projects = []
+    CurrentPage    = Landing
+    CurrentTheme   = savedTheme
+    Projects       = []
     FilteredStatus = None
-    IsLoading = false
-    Error = None
+    IsLoading      = false
+    Error          = None
   }
-  
+
   initialModel, Cmd.none
 
 let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
@@ -27,14 +27,14 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
   | NavigateTo page ->
     let cmd =
       match page with
-      | Dashboard when List.isEmpty model.Projects -> 
+      | Dashboard when List.isEmpty model.Projects ->
         Cmd.ofMsg LoadProjects
       | _ -> Cmd.none
     { model with CurrentPage = page }, cmd
-  
+
   | SetTheme theme ->
     { model with CurrentTheme = theme }, Cmd.none
-  
+
   | LoadProjects ->
     let loadCmd =
       Cmd.OfPromise.perform
@@ -42,27 +42,27 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
         ()
         ProjectsLoaded
     { model with IsLoading = true }, loadCmd
-  
+
   | ProjectsLoaded (Ok projects) ->
-    { model with 
+    { model with
       Projects = projects
       IsLoading = false
-      Error = None 
+      Error = None
     }, Cmd.none
-  
+
   | ProjectsLoaded (Error error) ->
     let errorMsg =
       match error with
-      | NetworkError msg -> $"Network error: {msg}"
-      | DecodingError msg -> $"Data error: {msg}"
+      | NetworkError msg        -> $"Network error: {msg}"
+      | DecodingError msg       -> $"Data error: {msg}"
       | ServerError (code, msg) -> $"Server error ({code}): {msg}"
-    { model with 
+    { model with
       IsLoading = false
-      Error = Some errorMsg 
+      Error = Some errorMsg
     }, Cmd.none
-  
+
   | FilterByStatus status ->
     { model with FilteredStatus = status }, Cmd.none
-  
+
   | ClearError ->
     { model with Error = None }, Cmd.none

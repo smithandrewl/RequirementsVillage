@@ -10,9 +10,8 @@ open RequirementsVillage.FSharp.Client.Components
 
 let view (model: Model) (dispatch: Msg -> unit) =
   match model.CurrentPage with
-  | Landing -> 
-    Landing.view dispatch
-  | Dashboard -> 
+  | Landing ->
+  | Dashboard ->
     Layout.view model dispatch (Dashboard.view model dispatch)
 
 Program.mkProgram init update view

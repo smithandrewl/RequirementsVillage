@@ -9,10 +9,10 @@ let view (project: Project) =
     prop.style [
       style.marginBottom (length.rem 1)
       style.border (1, borderStyle.solid, "#e5e5e5")
-      style.transitionDuration 
+      style.transitionDuration
         (System.TimeSpan.FromMilliseconds 200.0)
     ]
-    prop.onMouseEnter (fun _ -> 
+    prop.onMouseEnter (fun _ ->
       // Would handle hover state in real app
       ()
     )
@@ -55,7 +55,7 @@ let view (project: Project) =
             Bulma.tag [
               match project.Status with
               | Idea -> color.isInfo
-              | InProgress -> color.isSuccess  
+              | InProgress -> color.isSuccess
               | Completed -> color.isPrimary
               | Abandoned -> color.isDark
               | OnHold -> color.isWarning
@@ -72,12 +72,12 @@ let view (project: Project) =
               color.isLight
               prop.text (
                 match project.Category with
-                | WebApp -> "Web App"
+                | WebApp    -> "Web App"
                 | MobileApp -> "Mobile App"
-                | Library -> "Library"
-                | Tool -> "Tool"
-                | Game -> "Game"
-                | Other s -> s
+                | Library   -> "Library"
+                | Tool      -> "Tool"
+                | Game      -> "Game"
+                | Other s   -> s
               )
             ]
           ]

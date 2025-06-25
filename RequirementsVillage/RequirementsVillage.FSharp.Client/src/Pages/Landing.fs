@@ -8,8 +8,8 @@ let view (dispatch: Msg -> unit) =
   Bulma.hero [
     hero.isFullHeight
     prop.style [
-      style.backgroundImage "url('/landing-page-splash.png')"
-      style.backgroundSize "cover"
+      style.backgroundImage    "url('/landing-page-splash.png')"
+      style.backgroundSize     "cover"
       style.backgroundPosition "center top"
       style.backgroundRepeat.noRepeat
     ]
@@ -52,13 +52,13 @@ let view (dispatch: Msg -> unit) =
                 Bulma.button.a [
                   color.isPrimary
                   button.isLarge
-                  prop.onClick (fun _ -> 
+                  prop.onClick (fun _ ->
                     dispatch (NavigateTo Dashboard)
                   )
                   prop.style [
-                    style.paddingLeft (length.rem 3)
-                    style.paddingRight (length.rem 3)
-                    style.letterSpacing (length.px 1)
+                    style.paddingLeft   (length.rem 3)
+                    style.paddingRight  (length.rem 3)
+                    style.letterSpacing (length.px  1)
                   ]
                   prop.text "GET STARTED"
                 ]
