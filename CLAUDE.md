@@ -10,11 +10,11 @@
 
 ## 🧰 Tech Stack
 
-- **Frontend:** SvelteKit + TypeScript + Tailwind CSS + DaisyUI
-- **Backend:** C# Minimal API
-- **Data Access:** Entity Framework Core
-- **Authentication:** ASP.NET Core Identity
-- **Database:** SQLite
+- **Frontend:** F# + Fable + Elmish + Feliz + Tailwind CSS + DaisyUI
+- **Backend:** F# + Giraffe + ASP.NET Core
+- **Data Access:** Dapper with SQLite (implemented but using in-memory storage)
+- **Authentication:** ASP.NET Core Identity (not yet implemented)
+- **Database:** SQLite (code ready, not yet connected)
 
 ---
 
@@ -22,59 +22,131 @@
 
 ```
 RequirementsVillage/
-├── RequirementsVillage.Api/    # C# Minimal API backend
-├── client/                     # SvelteKit frontend (static SPA)
-└── RequirementsVillage.sln     # Rider solution file
+├── RequirementsVillage.FSharp.Api/     # F# Giraffe API backend
+│   ├── Program.fs                      # Main entry point
+│   ├── Endpoints.fs                    # API route handlers
+│   ├── Models.fs                       # Domain models
+│   ├── Database.fs                     # Repository implementations
+│   ├── Services.fs                     # Business logic
+│   └── wwwroot/                        # Static client files (built)
+├── RequirementsVillage.FSharp.Client/  # F# Fable frontend (SPA)
+│   ├── src/
+│   │   ├── App.fs                      # Main app entry
+│   │   ├── State.fs                    # Elmish state management
+│   │   ├── Types.fs                    # Shared types
+│   │   ├── Api/                        # API client modules
+│   │   ├── Components/                 # UI components
+│   │   └── Pages/                      # Page components
+│   ├── webpack.config.js               # Webpack configuration
+│   └── package.json                    # Node dependencies
+└── RequirementsVillage.sln             # .NET solution file
 ```
-
-Each project has its own `CLAUDE.md` file with specific details.
 
 ---
 
-## 🚀 Development Status
+## 🚀 Current Implementation Status
 
-### ✅ Client (Frontend)
-- SvelteKit project with TypeScript
+### ✅ Implemented Features
+
+#### Backend
+- Full CRUD API for projects (GET, POST, PUT, PATCH, DELETE)
+- Health check endpoint
+- Repository pattern with interface
+- In-memory data storage (with sample projects)
+- SQLite/Dapper repository (implemented but not connected)
+- CORS configuration for development
+- Static file serving for SPA
+- F# discriminated unions for error handling
+- JSON serialization with F# type support
+
+#### Frontend
+- Landing page with gothic theme
+- Dashboard with project cards
+- Theme selector (light/dark mode)
+- API integration for fetching projects
+- Elmish Model-View-Update architecture
+- Type-safe HTML with Feliz
+- Webpack build with hot reload
 - Tailwind CSS + DaisyUI styling
-- Unit testing with Vitest
-- Integration testing with Playwright
-- ESLint configuration (NO prettier)
-- Hello World page demonstrating tech stack
 
-### ✅ API (Backend)
-- .NET 8 Minimal API with C# 
-- Basic health check endpoint
-- CORS configured for frontend development
-- Visual Studio solution with single project structure
+### ❌ Not Yet Implemented
+
+- User authentication and authorization
+- Database persistence (SQLite connection)
+- User registration and login
+- Project ownership and access control
+- Tags and advanced filtering
+- Search functionality
+- Export functionality
+- Test projects
 
 ---
 
 ## 🛠️ Development Commands
 
-### Client
+### Full Development (both API and Client)
 ```bash
-cd RequirementsVillage/client
+# Terminal 1: Run the API
+cd RequirementsVillage/RequirementsVillage.FSharp.Api
+dotnet run
+
+# Terminal 2: Run client with hot reload
+cd RequirementsVillage/RequirementsVillage.FSharp.Client
 npm install
-npm run dev        # Development server
-npm test          # Run all tests  
-npm run check     # TypeScript checking
-npm run lint      # Code linting
-npm run build     # Build static output to wwwroot
+npm start
+```
+
+- API: http://localhost:5000
+- Client dev server: http://localhost:8080
+
+### Production Build
+```bash
+# Build client
+cd RequirementsVillage/RequirementsVillage.FSharp.Client
+npm run build
+
+# Run API (serves both API and static files)
+cd RequirementsVillage/RequirementsVillage.FSharp.Api
+dotnet run --configuration Release
 ```
 
 ---
 
-## 🧭 Project Features
+## 🌐 API Endpoints
+
+### Projects
+- `GET /api/projects` - Get all projects
+- `GET /api/projects/{id}` - Get specific project
+- `POST /api/projects` - Create new project
+- `PUT /api/projects/{id}` - Update project
+- `PATCH /api/projects/{id}/status` - Update project status
+- `DELETE /api/projects/{id}` - Delete project
+
+### System
+- `GET /api/health` - Health check with timestamp
+
+---
+
+## 🧭 Planned Features
 
 - **User Management:**
   - Account registration and login
   - Password reset functionality
+  - User profiles
 
-- **Project Idea Management:**
-  - Create, edit, and delete project ideas
-  - Categorize ideas (e.g., "Someday", "In Progress", "Completed")
-  - Assign tags and notes to each idea
-  - Search and filter functionality
+- **Enhanced Project Management:**
+  - Project ownership
+  - Tags and categories
+  - Advanced search and filtering
+  - Project templates
+  - Export to various formats
+
+- **Technical Improvements:**
+  - Switch from in-memory to SQLite persistence
+  - Add comprehensive test coverage
+  - Implement Fable.Remoting for type-safe RPC
+  - Add application logging
+  - Deploy to production hosting
 
 ## 🎨 Visual References
 
@@ -103,3 +175,34 @@ Full-screen Gothic landing page concept featuring a project burial scene with ov
 A realistic app icon concept showing a gravestone with a project folder symbol — suitable for branding, headers, or favicon use:
 
 ![Icon Mockup](./assets/claude/icon-mockup.png)
+
+---
+
+## 🏗️ Architecture Notes
+
+### Frontend Architecture
+- **Elmish**: Model-View-Update pattern for predictable state management
+- **Feliz**: Type-safe React bindings and HTML DSL
+- **Pattern Matching**: Exhaustive handling of all application states
+- **Async Commands**: Side effects handled through Elmish commands
+
+### Backend Architecture
+- **Giraffe**: Functional HTTP handlers composed with fish operators (>=>)
+- **Repository Pattern**: Clean separation between data access and business logic
+- **Result Types**: All operations return Result<'Success, 'Error>
+- **Dependency Injection**: Services registered in ASP.NET Core DI container
+
+### Code Style
+- **Indentation**: 2 spaces for all F# and JavaScript files
+- **Line Length**: 80 characters maximum (hard wrap)
+- **F# Conventions**: 
+  - Prefer immutable data structures
+  - Use pattern matching over if/else
+  - Leverage type inference
+  - Organize code with modules
+
+### Current Configuration
+- **Data Storage**: In-memory repository with sample data
+- **Frontend Build**: Webpack outputs to API's wwwroot folder
+- **CORS**: Enabled for localhost:8080 in development
+- **JSON**: Custom F# converters for discriminated unions
