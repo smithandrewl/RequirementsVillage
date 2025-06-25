@@ -201,6 +201,89 @@ A realistic app icon concept showing a gravestone with a project folder symbol â
   - Leverage type inference
   - Organize code with modules
 
+### Formatting Preferences
+
+#### Record Types
+Align field names and types with spacing:
+```fsharp
+type Project = {
+  Id:          Guid
+  Name:        string
+  Description: string
+  Category:    ProjectCategory
+  Status:      ProjectStatus
+  CreatedAt:   DateTime
+  UpdatedAt:   DateTime
+}
+```
+
+#### Discriminated Unions
+Simple cases on single lines, complex cases with aligned fields:
+```fsharp
+type ProjectError =
+  | NotFound of
+      projectId:     Guid
+    * searchContext: string
+  | ValidationFailed of
+      field:         string
+    * reason:        string
+    * attemptedValue: obj
+  | UnknownError of message: string
+```
+
+#### SQL Queries
+Use triple-quoted strings with aligned columns and keywords:
+```fsharp
+let selectAll = """
+  SELECT
+    Id,
+    Name,
+    Description,
+    Category,
+    Status,
+    CreatedAt,
+    UpdatedAt
+  FROM
+    Projects
+  ORDER BY
+    UpdatedAt DESC
+"""
+
+let update = """
+  UPDATE
+    Projects
+  SET
+    Name        = @Name,
+    Description = @Description,
+    Category    = @Category,
+    Status      = @Status,
+    UpdatedAt   = @UpdatedAt
+  WHERE
+    Id = @Id
+"""
+```
+
+#### Pattern Matching
+Align match cases and use consistent spacing:
+```fsharp
+match status with
+| Idea       -> "idea"
+| InProgress -> "inProgress"
+| Completed  -> "completed"
+| Abandoned  -> "abandoned"
+| OnHold     -> "onHold"
+```
+
+#### Function Parameters
+For multiple parameters, align on separate lines:
+```fsharp
+member _.CreateProjectAsync(
+  name:        string,
+  description: string,
+  category:    ProjectCategory
+) =
+```
+
 ### Current Configuration
 - **Data Storage**: In-memory repository with sample data
 - **Frontend Build**: Webpack outputs to API's wwwroot folder
