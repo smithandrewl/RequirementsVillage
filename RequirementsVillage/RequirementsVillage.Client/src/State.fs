@@ -11,6 +11,13 @@ let init () : Model * Cmd<Msg> =
     | "requirements-village-dark" -> Dark
     | _ -> Light
 
+  // Apply the theme to DOM on startup
+  let themeValue = 
+    match savedTheme with
+    | Light -> "requirements-village"
+    | Dark -> "requirements-village-dark"
+  document.documentElement.setAttribute("data-theme", themeValue)
+
   let initialModel = {
     CurrentPage    = Landing
     CurrentTheme   = savedTheme

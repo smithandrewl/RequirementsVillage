@@ -15,6 +15,52 @@
         .body-font {
             font-family: 'Crimson Text', serif;
         }
+        
+        /* Light Theme (Default) */
+        html[data-theme="requirements-village"] {
+            --background-color: #ffffff;
+            --text-color: #363636;
+            --header-background: #ffffff;
+            --border-color: #e5e5e5;
+            --card-background: #ffffff;
+            --card-shadow: rgba(10, 10, 10, 0.1);
+        }
+        
+        /* Dark Theme */
+        html[data-theme="requirements-village-dark"] {
+            --background-color: #1a1a1a;
+            --text-color: #f5f5f5;
+            --header-background: #2d2d2d;
+            --border-color: #404040;
+            --card-background: #2d2d2d;
+            --card-shadow: rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Apply theme variables */
+        html[data-theme="requirements-village-dark"] body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        
+        html[data-theme="requirements-village-dark"] .has-background-white {
+            background-color: var(--header-background) !important;
+        }
+        
+        html[data-theme="requirements-village-dark"] .title,
+        html[data-theme="requirements-village-dark"] .subtitle {
+            color: var(--text-color) !important;
+        }
+        
+        html[data-theme="requirements-village-dark"] .card {
+            background-color: var(--card-background) !important;
+            color: var(--text-color) !important;
+        }
+        
+        html[data-theme="requirements-village-dark"] .button {
+            background-color: var(--card-background) !important;
+            color: var(--text-color) !important;
+            border-color: var(--border-color) !important;
+        }
     </style>
 </head>
 <body>
