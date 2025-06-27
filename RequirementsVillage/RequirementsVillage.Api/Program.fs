@@ -1,4 +1,4 @@
-module RequirementsVillage.FSharp.Api.Program
+module RequirementsVillage.Api.Program
 
 open System
 open System.IO
@@ -9,10 +9,10 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Giraffe
-open RequirementsVillage.FSharp.Api.Models
-open RequirementsVillage.FSharp.Api.Persistence
-open RequirementsVillage.FSharp.Api.Services
-open RequirementsVillage.FSharp.Api.Endpoints
+open RequirementsVillage.Api.Models
+open RequirementsVillage.Api.Persistence
+open RequirementsVillage.Api.Services
+open RequirementsVillage.Api.Endpoints
 open FSharp.SystemTextJson
 
 // Configure services

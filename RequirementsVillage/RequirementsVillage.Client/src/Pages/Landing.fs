@@ -1,8 +1,8 @@
-module RequirementsVillage.FSharp.Client.Pages.Landing
+module RequirementsVillage.Client.Pages.Landing
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.FSharp.Client.Types
+open RequirementsVillage.Client.Types
 
 let view (dispatch: Msg -> unit) =
   Bulma.hero [

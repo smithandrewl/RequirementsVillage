@@ -1,10 +1,10 @@
-namespace RequirementsVillage.FSharp.Api.Persistence
+namespace RequirementsVillage.Api.Persistence
 
 open System
 open System.Data
 open Dapper
 open Microsoft.Data.Sqlite
-open RequirementsVillage.FSharp.Api.Models
+open RequirementsVillage.Api.Models
 
 // Repository interface for dependency injection
 type IProjectRepository =

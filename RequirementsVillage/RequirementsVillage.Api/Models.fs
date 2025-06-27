@@ -1,4 +1,4 @@
-namespace RequirementsVillage.FSharp.Api.Models
+namespace RequirementsVillage.Api.Models
 
 open System
 

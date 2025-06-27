@@ -1,10 +1,10 @@
-module RequirementsVillage.FSharp.Client.Api.Projects
+module RequirementsVillage.Client.Api.Projects
 
 open Fable.Core
 open Fable.Core.JsInterop
 open Fetch
 open Thoth.Json
-open RequirementsVillage.FSharp.Client.Types
+open RequirementsVillage.Client.Types
 
 let private statusDecoder: Decoder<ProjectStatus> =
   Decode.string

@@ -1,7 +1,7 @@
-module RequirementsVillage.FSharp.Client.State
+module RequirementsVillage.Client.State
 
 open Elmish
-open RequirementsVillage.FSharp.Client.Types
+open RequirementsVillage.Client.Types
 open Browser.Dom
 
 let init () : Model * Cmd<Msg> =
@@ -38,16 +38,16 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
   | LoadProjects ->
     let loadCmd =
       Cmd.OfPromise.perform
-        RequirementsVillage.FSharp.Client.Api.Projects.getProjects
+        RequirementsVillage.Client.Api.Projects.getProjects
         ()
         ProjectsLoaded
     { model with IsLoading = true }, loadCmd
 
   | ProjectsLoaded (Ok projects) ->
     { model with
-      Projects = projects
-      IsLoading = false
-      Error = None
+        Projects = projects
+        IsLoading = false
+        Error = None
     }, Cmd.none
 
   | ProjectsLoaded (Error error) ->
@@ -57,8 +57,8 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
       | DecodingError msg       -> $"Data error: {msg}"
       | ServerError (code, msg) -> $"Server error ({code}): {msg}"
     { model with
-      IsLoading = false
-      Error = Some errorMsg
+        IsLoading = false
+        Error = Some errorMsg
     }, Cmd.none
 
   | FilterByStatus status ->

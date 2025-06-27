@@ -1,8 +1,8 @@
-module RequirementsVillage.FSharp.Client.Components.ProjectCard
+module RequirementsVillage.Client.Components.ProjectCard
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.FSharp.Client.Types
+open RequirementsVillage.Client.Types
 
 let view (project: Project) =
   Bulma.card [

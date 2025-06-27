@@ -1,16 +1,17 @@
-module RequirementsVillage.FSharp.Client.App
+module RequirementsVillage.Client.App
 
 open Elmish
 open Elmish.React
 open Feliz
-open RequirementsVillage.FSharp.Client.Types
-open RequirementsVillage.FSharp.Client.State
-open RequirementsVillage.FSharp.Client.Pages
-open RequirementsVillage.FSharp.Client.Components
+open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.State
+open RequirementsVillage.Client.Pages
+open RequirementsVillage.Client.Components
 
 let view (model: Model) (dispatch: Msg -> unit) =
   match model.CurrentPage with
   | Landing ->
+    Landing.view dispatch
   | Dashboard ->
     Layout.view model dispatch (Dashboard.view model dispatch)
 

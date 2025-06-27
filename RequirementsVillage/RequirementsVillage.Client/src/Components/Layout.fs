@@ -1,9 +1,9 @@
-module RequirementsVillage.FSharp.Client.Components.Layout
+module RequirementsVillage.Client.Components.Layout
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.FSharp.Client.Types
-open RequirementsVillage.FSharp.Client.Components
+open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Components
 
 let view (model: Model) (dispatch: Msg -> unit) 
   (content: ReactElement) =

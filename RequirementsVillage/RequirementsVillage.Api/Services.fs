@@ -1,8 +1,8 @@
-namespace RequirementsVillage.FSharp.Api.Services
+namespace RequirementsVillage.Api.Services
 
 open System
-open RequirementsVillage.FSharp.Api.Models
-open RequirementsVillage.FSharp.Api.Persistence
+open RequirementsVillage.Api.Models
+open RequirementsVillage.Api.Persistence
 
 // Service interface for dependency injection
 type IProjectService =

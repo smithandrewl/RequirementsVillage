@@ -1,9 +1,9 @@
-module RequirementsVillage.FSharp.Client.Pages.Dashboard
+module RequirementsVillage.Client.Pages.Dashboard
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.FSharp.Client.Types
-open RequirementsVillage.FSharp.Client.Components
+open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Components
 
 let view (model: Model) (dispatch: Msg -> unit) =
   let filteredProjects =

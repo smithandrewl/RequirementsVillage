@@ -26,7 +26,4 @@
     <PackageReference Include="Fable.Fetch" Version="2.6.0" />
     <PackageReference Include="Thoth.Json" Version="10.4.1" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RequirementsVillage.Models\RequirementsVillage.Models.csproj" />
-  </ItemGroup>
 </Project>

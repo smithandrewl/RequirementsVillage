@@ -1,8 +1,8 @@
-module RequirementsVillage.FSharp.Client.Components.ThemeSelector
+module RequirementsVillage.Client.Components.ThemeSelector
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.FSharp.Client.Types
+open RequirementsVillage.Client.Types
 open Browser.Dom
 
 let view (currentTheme: Theme) (dispatch: Msg -> unit) =

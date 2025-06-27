@@ -1,11 +1,11 @@
-module RequirementsVillage.FSharp.Api.Endpoints
+module RequirementsVillage.Api.Endpoints
 
 open System
 open Microsoft.AspNetCore.Http
 open Giraffe
 open FSharp.Control.Tasks
-open RequirementsVillage.FSharp.Api.Models
-open RequirementsVillage.FSharp.Api.Services
+open RequirementsVillage.Api.Models
+open RequirementsVillage.Api.Services
 
 // Request/Response DTOs
 type CreateProjectRequest = {

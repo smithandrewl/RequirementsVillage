@@ -1,4 +1,4 @@
-module RequirementsVillage.FSharp.Client.Types
+module RequirementsVillage.Client.Types
 
 open System
 
