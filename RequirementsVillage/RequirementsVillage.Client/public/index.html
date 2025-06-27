@@ -16,50 +16,141 @@
             font-family: 'Crimson Text', serif;
         }
         
-        /* Light Theme (Default) */
+        /* Light Theme (matches UI mockup exactly) */
         html[data-theme="requirements-village"] {
-            --background-color: #ffffff;
-            --text-color: #363636;
+            --page-background: #f5f5f5;
             --header-background: #ffffff;
-            --border-color: #e5e5e5;
             --card-background: #ffffff;
-            --card-shadow: rgba(10, 10, 10, 0.1);
+            --sidebar-background: #3a3a3a;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border-color: #e0e0e0;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+            --accent-burgundy: #8b4d47;
+            --accent-green: #4a7c59;
+            --accent-teal: #4a7c7c;
+            --accent-purple: #7a6b83;
+            --button-primary: #9b8db3;
         }
         
-        /* Dark Theme */
+        /* Dark Theme (Landing page colors) */
         html[data-theme="requirements-village-dark"] {
-            --background-color: #1a1a1a;
-            --text-color: #f5f5f5;
+            --page-background: #1a1a1a;
             --header-background: #2d2d2d;
-            --border-color: #404040;
             --card-background: #2d2d2d;
-            --card-shadow: rgba(0, 0, 0, 0.3);
+            --sidebar-background: #1a1a1a;
+            --text-primary: #b8bcc8;
+            --text-secondary: #8a8e9a;
+            --text-muted: #6c7080;
+            --border-color: #404040;
+            --shadow-light: rgba(0, 0, 0, 0.3);
+            --shadow-medium: rgba(0, 0, 0, 0.5);
+            --accent-burgundy: #a85d57;
+            --accent-green: #5a8c69;
+            --accent-teal: #5a8c8c;
+            --accent-purple: #8a7b93;
+            --button-primary: #ab9dc3;
         }
         
-        /* Apply theme variables */
+        /* Apply light theme styles */
+        html[data-theme="requirements-village"] body {
+            background-color: var(--page-background);
+            color: var(--text-primary);
+        }
+        
+        /* Apply dark theme styles */
         html[data-theme="requirements-village-dark"] body {
-            background-color: var(--background-color);
-            color: var(--text-color);
+            background-color: var(--page-background);
+            color: var(--text-primary);
         }
         
+        /* Header styling for both themes */
+        html[data-theme="requirements-village"] .has-background-white,
         html[data-theme="requirements-village-dark"] .has-background-white {
             background-color: var(--header-background) !important;
+            border-color: var(--border-color) !important;
         }
         
-        html[data-theme="requirements-village-dark"] .title,
-        html[data-theme="requirements-village-dark"] .subtitle {
-            color: var(--text-color) !important;
+        /* Text colors - but not for landing page titles */
+        html[data-theme="requirements-village"] .title:not(.title-font),
+        html[data-theme="requirements-village-dark"] .title:not(.title-font) {
+            color: var(--text-primary) !important;
         }
         
+        html[data-theme="requirements-village"] .subtitle:not(.body-font),
+        html[data-theme="requirements-village-dark"] .subtitle:not(.body-font) {
+            color: var(--text-secondary) !important;
+        }
+        
+        html[data-theme="requirements-village"] .has-text-grey,
+        html[data-theme="requirements-village-dark"] .has-text-grey {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Card styling */
+        html[data-theme="requirements-village"] .card,
         html[data-theme="requirements-village-dark"] .card {
             background-color: var(--card-background) !important;
-            color: var(--text-color) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--border-color) !important;
+            box-shadow: 0 2px 8px var(--shadow-light) !important;
         }
         
+        /* Button styling */
+        html[data-theme="requirements-village"] .button,
         html[data-theme="requirements-village-dark"] .button {
             background-color: var(--card-background) !important;
-            color: var(--text-color) !important;
+            color: var(--text-primary) !important;
             border-color: var(--border-color) !important;
+        }
+        
+        html[data-theme="requirements-village"] .button:hover,
+        html[data-theme="requirements-village-dark"] .button:hover {
+            background-color: var(--page-background) !important;
+        }
+        
+        /* Primary button styling - frosted glass white from landing page */
+        html[data-theme="requirements-village"] .button.is-primary,
+        html[data-theme="requirements-village-dark"] .button.is-primary {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1)) !important;
+            color: #e4dcba !important;
+            border: none !important;
+            backdrop-filter: blur(15px) !important;
+            -webkit-backdrop-filter: blur(15px) !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        html[data-theme="requirements-village"] .button.is-primary:hover,
+        html[data-theme="requirements-village-dark"] .button.is-primary:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2)) !important;
+            border: none !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        /* Status badge colors matching mockup */
+        .status-current {
+            background-color: var(--accent-green) !important;
+            color: white !important;
+        }
+        
+        .status-archive {
+            background-color: var(--accent-purple) !important;
+            color: white !important;
+        }
+        
+        .status-someday {
+            background-color: var(--accent-teal) !important;
+            color: white !important;
+        }
+        
+        /* Active navigation item - burgundy */
+        .nav-active {
+            background-color: var(--accent-burgundy) !important;
+            color: white !important;
         }
     </style>
 </head>

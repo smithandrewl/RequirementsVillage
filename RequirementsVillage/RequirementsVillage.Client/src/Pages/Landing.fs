@@ -22,7 +22,7 @@ let view (dispatch: Msg -> unit) =
               prop.className "title title-font"
               prop.style [
                 style.fontSize (length.rem 6)
-                style.color "white"
+                style.color "#e4dcba"
                 style.custom(
                   "textShadow", "2px 2px 4px rgba(0, 0, 0, 0.8)"
                 )
@@ -38,7 +38,7 @@ let view (dispatch: Msg -> unit) =
               prop.className "subtitle body-font"
               prop.style [
                 style.fontSize (length.rem 1.5)
-                style.color "#e5e5e5"
+                style.color "#e4dcba"
                 style.custom(
                   "textShadow", "2px 2px 4px rgba(0, 0, 0, 0.8)"
                 )
