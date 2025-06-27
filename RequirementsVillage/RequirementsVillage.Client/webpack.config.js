@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const outputDir = path.join(__dirname, '../RequirementsVillage.Api/wwwroot');
 
@@ -12,9 +13,15 @@ module.exports = {
     clean: true
   },
   devServer: {
-    static: {
-      directory: outputDir,
-    },
+    static: [
+      {
+        directory: outputDir,
+      },
+      {
+        directory: path.join(__dirname, 'public'),
+        publicPath: '/',
+      }
+    ],
     port: 8080,
     hot: true,
     proxy: [
@@ -29,6 +36,17 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
       filename: 'index.html'
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'public',
+          to: '.',
+          globOptions: {
+            ignore: ['**/index.html']
+          }
+        }
+      ]
     })
   ],
   resolve: {
