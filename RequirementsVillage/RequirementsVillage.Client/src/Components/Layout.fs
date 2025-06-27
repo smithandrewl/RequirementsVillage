@@ -34,13 +34,17 @@ let view (model: Model) (dispatch: Msg -> unit)
                     Html.h1 [
                       prop.className "title is-4"
                       prop.style [ 
-                        style.marginBottom (length.rem 0.25) 
+                        style.marginBottom (length.rem 0.2)
+                        style.lineHeight 1.2
                       ]
                       prop.text "Requirements Village"
                     ]
                     Html.p [
                       prop.className "subtitle is-6 has-text-grey"
-                      prop.style [ style.marginBottom 0 ]
+                      prop.style [ 
+                        style.marginBottom 0
+                        style.marginTop 0
+                      ]
                       prop.text "Where project ideas get laid to rest"
                     ]
                   ]
