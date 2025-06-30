@@ -10,7 +10,7 @@
 
 ## 🧰 Tech Stack
 
-- **Frontend:** F# + Fable + Elmish + Feliz + Tailwind CSS + DaisyUI
+- **Frontend:** F# + Fable + Elmish + Feliz + Feliz.Bulma + Bulma CSS
 - **Backend:** F# + Giraffe + ASP.NET Core
 - **Data Access:** Dapper with SQLite (implemented but using in-memory storage)
 - **Authentication:** ASP.NET Core Identity (not yet implemented)
@@ -67,7 +67,7 @@ RequirementsVillage/
 - Elmish Model-View-Update architecture
 - Type-safe HTML with Feliz
 - Webpack build with hot reload
-- Tailwind CSS + DaisyUI styling
+- Bulma CSS + Feliz.Bulma type-safe styling
 
 ### ❌ Not Yet Implemented
 
