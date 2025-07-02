@@ -4,6 +4,70 @@ open Feliz
 open Feliz.Bulma
 open RequirementsVillage.Client.Types
 
+// Private helper functions
+let private statusToColor = function
+  | Idea       -> color.isInfo
+  | InProgress -> color.isSuccess
+  | Completed  -> color.isPrimary
+  | Abandoned  -> color.isDark
+  | OnHold     -> color.isWarning
+
+// Public reusable components
+let StatusBadge status =
+  Bulma.tag [
+    statusToColor status
+    prop.text (ProjectStatus.toDisplayText status)
+  ]
+
+let CategoryBadge category =
+  Bulma.tag [
+    color.isLight
+    prop.text (ProjectCategory.toDisplayText category)
+  ]
+
+let TagContainer children =
+  Html.div [
+    prop.style [
+      style.display.flex
+      style.gap (length.rem 0.5)
+      style.flexWrap.wrap
+    ]
+    prop.children children
+  ]
+
+// Private card-specific components
+let private ProjectHeader name =
+  Html.div [
+    prop.style [
+      style.display.flex
+      style.justifyContent.spaceBetween
+      style.alignItems.flexStart
+      style.marginBottom (length.rem 0.75)
+    ]
+    prop.children [
+      Html.h3 [
+        prop.className "title is-5"
+        prop.style [
+          style.marginBottom 0
+          style.fontWeight 600
+        ]
+        prop.text name
+      ]
+    ]
+  ]
+
+let private ProjectDescription description =
+  Html.p [
+    prop.className "has-text-grey"
+    prop.style [
+      style.fontSize (length.rem 0.875)
+      style.marginBottom (length.rem 1)
+      style.lineHeight 1.5
+    ]
+    prop.text description
+  ]
+
+// Main component
 let view (project: Project) =
   Bulma.card [
     prop.style [
@@ -18,69 +82,11 @@ let view (project: Project) =
     )
     prop.children [
       Bulma.cardContent [
-        Html.div [
-          prop.style [
-            style.display.flex
-            style.justifyContent.spaceBetween
-            style.alignItems.flexStart
-            style.marginBottom (length.rem 0.75)
-          ]
-          prop.children [
-            Html.h3 [
-              prop.className "title is-5"
-              prop.style [
-                style.marginBottom 0
-                style.fontWeight 600
-              ]
-              prop.text project.Name
-            ]
-          ]
-        ]
-        Html.p [
-          prop.className "has-text-grey"
-          prop.style [
-            style.fontSize (length.rem 0.875)
-            style.marginBottom (length.rem 1)
-            style.lineHeight 1.5
-          ]
-          prop.text project.Description
-        ]
-        Html.div [
-          prop.style [
-            style.display.flex
-            style.gap (length.rem 0.5)
-            style.flexWrap.wrap
-          ]
-          prop.children [
-            Bulma.tag [
-              match project.Status with
-              | Idea -> color.isInfo
-              | InProgress -> color.isSuccess
-              | Completed -> color.isPrimary
-              | Abandoned -> color.isDark
-              | OnHold -> color.isWarning
-              prop.text (
-                match project.Status with
-                | Idea -> "Idea"
-                | InProgress -> "In Progress"
-                | Completed -> "Completed"
-                | Abandoned -> "Abandoned"
-                | OnHold -> "On Hold"
-              )
-            ]
-            Bulma.tag [
-              color.isLight
-              prop.text (
-                match project.Category with
-                | WebApp    -> "Web App"
-                | MobileApp -> "Mobile App"
-                | Library   -> "Library"
-                | Tool      -> "Tool"
-                | Game      -> "Game"
-                | Other s   -> s
-              )
-            ]
-          ]
+        ProjectHeader project.Name
+        ProjectDescription project.Description
+        TagContainer [
+          StatusBadge project.Status
+          CategoryBadge project.Category
         ]
       ]
     ]
