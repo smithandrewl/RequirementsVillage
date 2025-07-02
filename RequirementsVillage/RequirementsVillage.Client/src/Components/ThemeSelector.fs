@@ -5,12 +5,34 @@ open Feliz.Bulma
 open RequirementsVillage.Client.Types
 open Browser.Dom
 
+let private themeToValue = function
+  | Light -> "requirements-village"
+  | Dark  -> "requirements-village-dark"
+
+let private handleThemeClick theme dispatch =
+  dispatch (SetTheme theme)
+
+  let themeValue = themeToValue theme
+
+  window.localStorage.setItem("theme", themeValue)
+
+  document.documentElement.setAttribute("data-theme", themeValue)
+
+let private createThemeItem currentTheme dispatch (theme, label: string) =
+  Bulma.dropdownItem.a [
+    if theme = currentTheme then
+      prop.className "is-active"
+
+    prop.onClick (fun _ -> handleThemeClick theme dispatch)
+    prop.text label
+  ]
+
 let view (currentTheme: Theme) (dispatch: Msg -> unit) =
   let themes = [
     Light, "Light"
     Dark, "Dark"
   ]
-  
+
   Bulma.dropdown [
     dropdown.isRight
     dropdown.isHoverable
@@ -25,25 +47,9 @@ let view (currentTheme: Theme) (dispatch: Msg -> unit) =
         ]
       ]
       Bulma.dropdownMenu [
-        Bulma.dropdownContent [
-          for (theme, label) in themes do
-            Bulma.dropdownItem.a [
-              if theme = currentTheme then
-                prop.className "is-active"
-              prop.onClick (fun _ -> 
-                dispatch (SetTheme theme)
-                let themeValue = 
-                  match theme with
-                  | Light -> "requirements-village"
-                  | Dark -> "requirements-village-dark"
-                window.localStorage.setItem("theme", themeValue)
-                document.documentElement.setAttribute(
-                  "data-theme", themeValue
-                )
-              )
-              prop.text label
-            ]
-        ]
+        Bulma.dropdownContent (
+          themes |> List.map (createThemeItem currentTheme dispatch)
+        )
       ]
     ]
   ]
