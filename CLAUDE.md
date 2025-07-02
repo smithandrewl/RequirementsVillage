@@ -22,14 +22,14 @@
 
 ```
 RequirementsVillage/
-├── RequirementsVillage.FSharp.Api/     # F# Giraffe API backend
+├── RequirementsVillage.Api/     # F# Giraffe API backend
 │   ├── Program.fs                      # Main entry point
 │   ├── Endpoints.fs                    # API route handlers
 │   ├── Models.fs                       # Domain models
 │   ├── Database.fs                     # Repository implementations
 │   ├── Services.fs                     # Business logic
 │   └── wwwroot/                        # Static client files (built)
-├── RequirementsVillage.FSharp.Client/  # F# Fable frontend (SPA)
+├── RequirementsVillage.Client/  # F# Fable frontend (SPA)
 │   ├── src/
 │   │   ├── App.fs                      # Main app entry
 │   │   ├── State.fs                    # Elmish state management
@@ -87,11 +87,11 @@ RequirementsVillage/
 ### Full Development (both API and Client)
 ```bash
 # Terminal 1: Run the API
-cd RequirementsVillage/RequirementsVillage.FSharp.Api
+cd RequirementsVillage/RequirementsVillage.Api
 dotnet run
 
 # Terminal 2: Run client with hot reload
-cd RequirementsVillage/RequirementsVillage.FSharp.Client
+cd RequirementsVillage/RequirementsVillage.Client
 npm install
 npm start
 ```
@@ -102,11 +102,11 @@ npm start
 ### Production Build
 ```bash
 # Build client
-cd RequirementsVillage/RequirementsVillage.FSharp.Client
+cd RequirementsVillage/RequirementsVillage.Client
 npm run build
 
 # Run API (serves both API and static files)
-cd RequirementsVillage/RequirementsVillage.FSharp.Api
+cd RequirementsVillage/RequirementsVillage.Api
 dotnet run --configuration Release
 ```
 
