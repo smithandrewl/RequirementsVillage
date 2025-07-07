@@ -4,7 +4,7 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Fetch
 open Thoth.Json
-open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Models.Domain
 
 let private statusDecoder: Decoder<ProjectStatus> =
   Decode.string

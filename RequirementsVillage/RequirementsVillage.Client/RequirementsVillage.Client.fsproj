@@ -2,16 +2,18 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>893</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="src/Types.fs" />
+    <Compile Include="src/Models/Domain.fs" />
     <Compile Include="src/Api/Projects.fs" />
+    <Compile Include="src/ElmishApp/Types.fs" />
+    <Compile Include="src/ElmishApp/Update.fs" />
     <Compile Include="src/Components/ThemeSelector.fs" />
     <Compile Include="src/Components/ProjectCard.fs" />
     <Compile Include="src/Components/Layout.fs" />
     <Compile Include="src/Pages/Landing.fs" />
     <Compile Include="src/Pages/Dashboard.fs" />
-    <Compile Include="src/State.fs" />
     <Compile Include="src/App.fs" />
   </ItemGroup>
   <ItemGroup>

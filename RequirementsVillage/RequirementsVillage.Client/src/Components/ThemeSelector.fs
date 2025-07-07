@@ -2,7 +2,8 @@ module RequirementsVillage.Client.Components.ThemeSelector
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Models.Domain
+open RequirementsVillage.Client.ElmishApp.Types
 open Browser.Dom
 
 let view (currentTheme: Theme) (dispatch: Msg -> unit) =

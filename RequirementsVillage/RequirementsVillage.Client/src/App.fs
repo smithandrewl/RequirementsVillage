@@ -3,8 +3,9 @@ module RequirementsVillage.Client.App
 open Elmish
 open Elmish.React
 open Feliz
-open RequirementsVillage.Client.Types
-open RequirementsVillage.Client.State
+open RequirementsVillage.Client.Models.Domain
+open RequirementsVillage.Client.ElmishApp.Types
+open RequirementsVillage.Client.ElmishApp.Update
 open RequirementsVillage.Client.Pages
 open RequirementsVillage.Client.Components
 

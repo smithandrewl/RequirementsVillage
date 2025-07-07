@@ -1,7 +1,9 @@
-module RequirementsVillage.Client.State
+module RequirementsVillage.Client.ElmishApp.Update
 
 open Elmish
-open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Models.Domain
+open RequirementsVillage.Client.ElmishApp.Types
+open RequirementsVillage.Client.Api.Projects
 open Browser.Dom
 
 let init () : Model * Cmd<Msg> =
@@ -45,7 +47,7 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
   | LoadProjects ->
     let loadCmd =
       Cmd.OfPromise.perform
-        RequirementsVillage.Client.Api.Projects.getProjects
+        getProjects
         ()
         ProjectsLoaded
     { model with IsLoading = true }, loadCmd

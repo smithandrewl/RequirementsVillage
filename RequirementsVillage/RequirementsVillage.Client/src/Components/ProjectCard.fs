@@ -2,7 +2,7 @@ module RequirementsVillage.Client.Components.ProjectCard
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Models.Domain
 
 let view (project: Project) =
   Bulma.card [
