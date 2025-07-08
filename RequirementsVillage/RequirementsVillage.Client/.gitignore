@@ -1,1 +1,6 @@
 *.fs.js
+*.fs.js.map
+fable_modules/
+node_modules/
+dist/
+.fable/
