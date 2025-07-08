@@ -7,27 +7,14 @@ open RequirementsVillage.Client.Types
 let view (dispatch: Msg -> unit) =
   Bulma.hero [
     hero.isFullHeight
-    prop.style [
-      style.backgroundImage    "url('/landing-page-splash.png')"
-      style.backgroundSize     "cover"
-      style.backgroundPosition "center top"
-      style.backgroundRepeat.noRepeat
-    ]
+    prop.className "landing-hero"
     prop.children [
       Bulma.heroBody [
         Bulma.container [
           prop.className "has-text-centered"
           prop.children [
             Html.h1 [
-              prop.className "title title-font"
-              prop.style [
-                style.fontSize (length.rem 6)
-                style.color "#e4dcba"
-                style.custom(
-                  "textShadow", "2px 2px 4px rgba(0, 0, 0, 0.8)"
-                )
-                style.letterSpacing (length.px 2)
-              ]
+              prop.className "title title-font text-hero"
               prop.children [
                 Html.text "REQUIREMENTS"
                 Html.br []
@@ -35,19 +22,11 @@ let view (dispatch: Msg -> unit) =
               ]
             ]
             Html.p [
-              prop.className "subtitle body-font"
-              prop.style [
-                style.fontSize (length.rem 1.5)
-                style.color "#e4dcba"
-                style.custom(
-                  "textShadow", "2px 2px 4px rgba(0, 0, 0, 0.8)"
-                )
-                style.marginTop (length.rem 2)
-              ]
+              prop.className "subtitle body-font text-subtitle-large mt-lg"
               prop.text "Where project ideas get laid to rest"
             ]
             Html.div [
-              prop.style [ style.marginTop (length.rem 4) ]
+              prop.className "mt-xl"
               prop.children [
                 Bulma.button.a [
                   color.isPrimary
@@ -55,52 +34,26 @@ let view (dispatch: Msg -> unit) =
                   prop.onClick (fun _ ->
                     dispatch (NavigateTo Dashboard)
                   )
-                  prop.style [
-                    style.paddingLeft   (length.rem 3)
-                    style.paddingRight  (length.rem 3)
-                    style.letterSpacing (length.px  1)
-                  ]
+                  prop.className "landing-button"
                   prop.text "GET STARTED"
                 ]
               ]
             ]
             Html.div [
-              prop.style [
-                style.marginTop (length.rem 6)
-                style.opacity 0.6
-              ]
+              prop.className "landing-decorative"
               prop.children [
                 Html.div [
-                  prop.style [
-                    style.display.flex
-                    style.alignItems.center
-                    style.justifyContent.center
-                    style.gap (length.rem 1)
-                  ]
+                  prop.className "landing-decorative-flex"
                   prop.children [
                     Html.hr [
-                      prop.style [
-                        style.width (length.rem 4)
-                        style.backgroundColor "#808080"
-                        style.height (length.px 1)
-                        style.border (
-                          0, borderStyle.none, "transparent"
-                        )
-                      ]
+                      prop.className "landing-decorative-hr"
                     ]
                     Html.span [
-                      prop.style [ style.color "#808080" ]
+                      prop.className "landing-decorative-text"
                       prop.text "⚰️"
                     ]
                     Html.hr [
-                      prop.style [
-                        style.width (length.rem 4)
-                        style.backgroundColor "#808080"
-                        style.height (length.px 1)
-                        style.border (
-                          0, borderStyle.none, "transparent"
-                        )
-                      ]
+                      prop.className "landing-decorative-hr"
                     ]
                   ]
                 ]

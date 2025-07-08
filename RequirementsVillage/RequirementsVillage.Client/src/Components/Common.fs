@@ -27,10 +27,6 @@ let CategoryBadge category =
 
 let TagContainer children =
   Html.div [
-    prop.style [
-      style.display.flex
-      style.gap (length.rem 0.5)
-      style.flexWrap.wrap
-    ]
+    prop.className "tag-container"
     prop.children (children : Fable.React.ReactElement seq)
   ]

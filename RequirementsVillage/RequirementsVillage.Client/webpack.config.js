@@ -45,6 +45,10 @@ module.exports = {
           globOptions: {
             ignore: ['**/index.html']
           }
+        },
+        {
+          from: 'src/styles',
+          to: 'styles'
         }
       ]
     })

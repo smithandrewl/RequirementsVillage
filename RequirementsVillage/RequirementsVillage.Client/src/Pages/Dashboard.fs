@@ -16,7 +16,7 @@ let view (model: Model) (dispatch: Msg -> unit) =
     Html.div [
       prop.className
         "is-flex is-flex-wrap-wrap is-align-items-center is-justify-content-space-between"
-      prop.style [ style.marginBottom (length.rem 1.5) ]
+      prop.className "dashboard-filter"
       prop.children [
         Bulma.select [
           prop.onChange (fun (e: Browser.Types.Event) ->
@@ -59,17 +59,14 @@ let view (model: Model) (dispatch: Msg -> unit) =
     elif List.isEmpty filteredProjects then
       Html.div [
         prop.className "has-text-centered"
-        prop.style [ style.paddingTop (length.rem 3) ]
+        prop.className "dashboard-empty"
         prop.children [
           Html.div [
-            prop.style [
-              style.color "#808080"
-              style.marginBottom (length.rem 1)
-            ]
+            prop.className "dashboard-empty-icon-container"
             prop.children [
               Html.i [
                 prop.className "fas fa-folder-open"
-                prop.style [ style.fontSize (length.rem 4) ]
+                prop.className "dashboard-empty-icon"
               ]
             ]
           ]
@@ -79,7 +76,7 @@ let view (model: Model) (dispatch: Msg -> unit) =
           ]
           Html.p [
             prop.className "has-text-grey"
-            prop.style [ style.marginBottom (length.rem 1) ]
+            prop.className "dashboard-empty-text"
             prop.text
               "Get started by creating your first project idea."
           ]
