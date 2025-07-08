@@ -1,0 +1,60 @@
+/* Page Styles - Requirements Village */
+
+/* Landing Page */
+.landing-hero {
+  background-image:    url('../landing-page-splash.png');
+  background-size:     cover;
+  background-position: center top;
+  background-repeat:   no-repeat;
+}
+
+.landing-button {
+  padding-left:    var(--spacing-xxl);
+  padding-right:   var(--spacing-xxl);
+  letter-spacing:  var(--letter-spacing-normal);
+}
+
+.landing-decorative {
+  margin-top: var(--spacing-huge);
+  opacity:    0.6;
+}
+
+.landing-decorative-flex {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  gap:             var(--gap-md);
+}
+
+.landing-decorative-hr {
+  width:            var(--decorative-width);
+  background-color: var(--color-text-muted);
+  height:           var(--decorative-height);
+  border:           0 none transparent;
+}
+
+.landing-decorative-text {
+  color: var(--color-text-muted);
+}
+
+/* Dashboard Page */
+.dashboard-filter {
+  margin-bottom: var(--spacing-lg);
+}
+
+.dashboard-empty {
+  padding-top: var(--spacing-xxl);
+}
+
+.dashboard-empty-icon-container {
+  color:         var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.dashboard-empty-icon {
+  font-size: var(--font-size-xl);
+}
+
+.dashboard-empty-text {
+  margin-bottom: var(--spacing-md);
+}

@@ -1,0 +1,183 @@
+/* Utility Classes - Requirements Village */
+
+/* Layout utilities */
+.flex-container {
+  display: flex;
+}
+
+.flex-between {
+  display:         flex;
+  justify-content: space-between;
+  align-items:     flex-start;
+}
+
+.flex-center {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+}
+
+.flex-wrap {
+  display:   flex;
+  flex-wrap: wrap;
+}
+
+.gap-sm {
+  gap: var(--gap-sm);
+}
+
+.gap-md {
+  gap: var(--gap-md);
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+/* Spacing utilities */
+.mb-xs {
+  margin-bottom: var(--spacing-xs);
+}
+
+.mb-sm {
+  margin-bottom: var(--spacing-sm);
+}
+
+.mb-md {
+  margin-bottom: var(--spacing-md);
+}
+
+.mb-lg {
+  margin-bottom: var(--spacing-lg);
+}
+
+.mb-xl {
+  margin-bottom: var(--spacing-xl);
+}
+
+.mb-xxl {
+  margin-bottom: var(--spacing-huge);
+}
+
+.mt-md {
+  margin-top: var(--spacing-md);
+}
+
+.mt-lg {
+  margin-top: var(--spacing-xl);
+}
+
+.mt-xl {
+  margin-top: var(--spacing-xxxl);
+}
+
+.mt-xxl {
+  margin-top: var(--spacing-huge);
+}
+
+.pt-lg {
+  padding-top: var(--spacing-xxl);
+}
+
+.p-lg {
+  padding: var(--spacing-lg);
+}
+
+.px-xl {
+  padding-left:  var(--spacing-xxl);
+  padding-right: var(--spacing-xxl);
+}
+
+/* Typography utilities */
+.text-hero {
+  font-size:      var(--font-size-hero);
+  color:          var(--color-text-light);
+  text-shadow:    var(--shadow-text);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.text-subtitle-large {
+  font-size:   var(--font-size-large);
+  color:       var(--color-text-light);
+  text-shadow: var(--shadow-text);
+}
+
+.text-small {
+  font-size:   var(--font-size-small);
+  line-height: var(--line-height-normal);
+}
+
+.text-large {
+  font-size: var(--font-size-xl);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-weight-semibold {
+  font-weight: var(--font-weight-semibold);
+}
+
+.text-spacing-wide {
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+.line-height-tight {
+  line-height: var(--line-height-tight);
+}
+
+.line-height-normal {
+  line-height: var(--line-height-normal);
+}
+
+/* Color utilities */
+.text-light {
+  color: var(--color-text-light);
+}
+
+.bg-light {
+  background-color: var(--color-bg-light);
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.bg-muted {
+  background-color: var(--color-text-muted);
+}
+
+/* Effects utilities */
+.opacity-60 {
+  opacity: 0.6;
+}
+
+.transition-duration-200 {
+  transition-duration: 200ms;
+}
+
+.text-shadow {
+  text-shadow: var(--shadow-text);
+}
+
+/* Border utilities */
+.border-light {
+  border: 1px solid var(--color-border);
+}
+
+.border-bottom-light {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.border-none {
+  border: 0 none transparent;
+}
