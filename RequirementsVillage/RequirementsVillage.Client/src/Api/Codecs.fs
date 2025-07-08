@@ -35,7 +35,7 @@ let projectDecoder: Decoder<Project> =
       Description = get.Required.Field "description" Decode.string
       Category    = get.Required.Field "category"    categoryDecoder
       Status      = get.Required.Field "status"      statusDecoder
-      CreatedAt   = get.Required.Field "createdAt"   Decode.datetime
-      UpdatedAt   = get.Required.Field "updatedAt"   Decode.datetime
+      CreatedAt   = get.Required.Field "createdAt"   Decode.datetimeUtc
+      UpdatedAt   = get.Required.Field "updatedAt"   Decode.datetimeUtc
     }
   )
