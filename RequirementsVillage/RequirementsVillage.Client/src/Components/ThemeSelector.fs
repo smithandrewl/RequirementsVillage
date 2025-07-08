@@ -3,18 +3,19 @@ module RequirementsVillage.Client.Components.ThemeSelector
 open Feliz
 open Feliz.Bulma
 open RequirementsVillage.Client.Elm.Types
+open RequirementsVillage.Client.Constants
 open Browser.Dom
 
 let private themeToValue = function
-  | Light -> "requirements-village"
-  | Dark  -> "requirements-village-dark"
+  | Light -> Theme.Light
+  | Dark  -> Theme.Dark
 
 let private handleThemeClick theme dispatch =
   dispatch (SetTheme theme)
 
   let themeValue = themeToValue theme
 
-  window.localStorage.setItem("theme", themeValue)
+  window.localStorage.setItem(Theme.StorageKey, themeValue)
 
   document.documentElement.setAttribute("data-theme", themeValue)
 

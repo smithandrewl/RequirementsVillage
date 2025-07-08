@@ -3,20 +3,21 @@ module RequirementsVillage.Client.Elm.State
 open Elmish
 open RequirementsVillage.Client.Types
 open RequirementsVillage.Client.Elm.Types
+open RequirementsVillage.Client.Constants
 open Browser.Dom
 
 let init () : Model * Cmd<Msg> =
   let savedTheme =
-    match window.localStorage.getItem("theme") with
-    | null -> Light
-    | "requirements-village-dark" -> Dark
-    | _ -> Light
+    match window.localStorage.getItem(Theme.StorageKey) with
+    | null                         -> Light
+    | value when value = Theme.Dark -> Dark
+    | _                            -> Light
 
   // Apply the theme to DOM on startup
   let themeValue = 
     match savedTheme with
-    | Light -> "requirements-village"
-    | Dark -> "requirements-village-dark"
+    | Light -> Theme.Light
+    | Dark  -> Theme.Dark
   document.documentElement.setAttribute("data-theme", themeValue)
 
   let initialModel = {
