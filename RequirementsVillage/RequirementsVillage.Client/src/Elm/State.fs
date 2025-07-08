@@ -1,7 +1,8 @@
-module RequirementsVillage.Client.State
+module RequirementsVillage.Client.Elm.State
 
 open Elmish
 open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Elm.Types
 open Browser.Dom
 
 let init () : Model * Cmd<Msg> =

@@ -4,6 +4,7 @@ open Fable.Core
 
 open Thoth.Json
 open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Elm.Types
 
 open Codecs
 

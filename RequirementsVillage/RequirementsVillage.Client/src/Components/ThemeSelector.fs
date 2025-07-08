@@ -2,7 +2,7 @@ module RequirementsVillage.Client.Components.ThemeSelector
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Elm.Types
 open Browser.Dom
 
 let private themeToValue = function

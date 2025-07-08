@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src/Types.fs" />
+    <Compile Include="src/Elm/Types.fs" />
     <Compile Include="src\Api\Codecs.fs" />
     <Compile Include="src/Api/Projects.fs" />
     <Compile Include="src/Components/ThemeSelector.fs" />
@@ -13,7 +14,8 @@
     <Compile Include="src/Components/Layout.fs" />
     <Compile Include="src/Pages/Landing.fs" />
     <Compile Include="src/Pages/Dashboard.fs" />
-    <Compile Include="src/State.fs" />
+    <Compile Include="src/Elm/State.fs" />
+    <Compile Include="src/Elm/Program.fs" />
     <Compile Include="src/App.fs" />
   </ItemGroup>
   <ItemGroup>
