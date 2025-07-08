@@ -32,7 +32,7 @@ let TagContainer children =
       style.gap (length.rem 0.5)
       style.flexWrap.wrap
     ]
-    prop.children children
+    prop.children (children : Fable.React.ReactElement seq)
   ]
 
 // Private card-specific components
@@ -51,7 +51,7 @@ let private ProjectHeader name =
           style.marginBottom 0
           style.fontWeight 600
         ]
-        prop.text name
+        prop.text (name : string)
       ]
     ]
   ]
@@ -64,7 +64,7 @@ let private ProjectDescription description =
       style.marginBottom (length.rem 1)
       style.lineHeight 1.5
     ]
-    prop.text description
+    prop.text (description : string)
   ]
 
 // Main component
