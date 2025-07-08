@@ -8,6 +8,7 @@
     <Compile Include="src\Api\Codecs.fs" />
     <Compile Include="src/Api/Projects.fs" />
     <Compile Include="src/Components/ThemeSelector.fs" />
+    <Compile Include="src/Components/Common.fs" />
     <Compile Include="src/Components/ProjectCard.fs" />
     <Compile Include="src/Components/Layout.fs" />
     <Compile Include="src/Pages/Landing.fs" />
