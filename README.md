@@ -21,7 +21,7 @@ Requirements Village is a full-stack F# application for organizing software proj
 - **Language:** F# (compiled to JavaScript via Fable)
 - **Architecture:** Elmish (Model-View-Update pattern)
 - **UI Library:** Feliz (type-safe React bindings)
-- **Styling:** Tailwind CSS + DaisyUI
+- **Styling:** Bulma CSS + Feliz.Bulma (type-safe Bulma bindings)
 - **Build:** Webpack with hot module replacement
 
 ---
@@ -167,8 +167,8 @@ The application features a Gothic aesthetic with polished irreverence, as demons
 - **Feliz:** Type-safe React DSL for F#
 - **Giraffe:** Functional web framework for ASP.NET Core
 - **Dapper:** Lightweight object mapper for data access
-- **Tailwind CSS:** Utility-first CSS framework
-- **DaisyUI:** Component library for Tailwind CSS
+- **Bulma CSS:** Modern CSS framework based on Flexbox
+- **Feliz.Bulma:** Type-safe F# bindings for Bulma components
 
 ---
 
