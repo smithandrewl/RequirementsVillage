@@ -1,6 +1,6 @@
 module RequirementsVillage.Client.Elm.Types
 
-open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Domain
 
 type Theme =
   | Light

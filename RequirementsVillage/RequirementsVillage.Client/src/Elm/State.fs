@@ -1,7 +1,7 @@
 module RequirementsVillage.Client.Elm.State
 
 open Elmish
-open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Domain
 open RequirementsVillage.Client.Elm.Types
 open RequirementsVillage.Client.Constants
 open Browser.Dom

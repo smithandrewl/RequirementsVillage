@@ -2,7 +2,7 @@ module RequirementsVillage.Client.Pages.Dashboard
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Domain
 open RequirementsVillage.Client.Elm.Types
 open RequirementsVillage.Client.Components
 

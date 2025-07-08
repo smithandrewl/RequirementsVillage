@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src/Constants.fs" />
+    <Compile Include="src/Domain.fs" />
     <Compile Include="src/Types.fs" />
     <Compile Include="src/Elm/Types.fs" />
     <Compile Include="src\Api\Codecs.fs" />

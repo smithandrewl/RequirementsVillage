@@ -2,7 +2,7 @@ module RequirementsVillage.Client.Components.ProjectCard
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Types
+open RequirementsVillage.Client.Domain
 open RequirementsVillage.Client.Components.Common
 
 // Private card-specific components
