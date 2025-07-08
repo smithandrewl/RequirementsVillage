@@ -2,7 +2,8 @@ module RequirementsVillage.Client.Pages.Landing
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Elm.Types
+open RequirementsVillage.Client.Models.Domain
+open RequirementsVillage.Client.ElmishApp.Types
 
 let view (dispatch: Msg -> unit) =
   Bulma.hero [

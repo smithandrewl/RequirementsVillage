@@ -2,9 +2,15 @@ module RequirementsVillage.Client.Components.ThemeSelector
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Elm.Types
-open RequirementsVillage.Client.Constants
+open RequirementsVillage.Client.Models.Domain
+open RequirementsVillage.Client.ElmishApp.Types
 open Browser.Dom
+
+// Theme constants
+module private Theme =
+  let Light = "light"
+  let Dark = "dark"
+  let StorageKey = "requirements-village-theme"
 
 let private themeToValue = function
   | Light -> Theme.Light

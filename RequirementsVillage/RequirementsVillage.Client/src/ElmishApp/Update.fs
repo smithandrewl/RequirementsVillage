@@ -1,10 +1,16 @@
-module RequirementsVillage.Client.Elm.State
+module RequirementsVillage.Client.ElmishApp.Update
 
 open Elmish
-open RequirementsVillage.Client.Domain
-open RequirementsVillage.Client.Elm.Types
-open RequirementsVillage.Client.Constants
+open RequirementsVillage.Client.Models.Domain
+open RequirementsVillage.Client.ElmishApp.Types
+open RequirementsVillage.Client.Api.Projects
 open Browser.Dom
+
+// Theme constants
+module private Theme =
+  let Light = "light"
+  let Dark = "dark"
+  let StorageKey = "requirements-village-theme"
 
 let init () : Model * Cmd<Msg> =
   let savedTheme =
@@ -47,7 +53,7 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
   | LoadProjects ->
     let loadCmd =
       Cmd.OfPromise.perform
-        RequirementsVillage.Client.Api.Projects.getProjects
+        getProjects
         ()
         ProjectsLoaded
     { model with IsLoading = true }, loadCmd

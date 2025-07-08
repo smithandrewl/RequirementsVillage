@@ -1,7 +1,7 @@
 module RequirementsVillage.Client.Api.Codecs
 
 open Thoth.Json
-open RequirementsVillage.Client.Domain
+open RequirementsVillage.Client.Models.Domain
 
 let statusDecoder: Decoder<ProjectStatus> =
   Decode.string

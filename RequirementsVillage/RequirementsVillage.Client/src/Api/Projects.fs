@@ -3,8 +3,7 @@ module RequirementsVillage.Client.Api.Projects
 open Fable.Core
 
 open Thoth.Json
-open RequirementsVillage.Client.Domain
-open RequirementsVillage.Client.Elm.Types
+open RequirementsVillage.Client.Models.Domain
 
 open Codecs
 
