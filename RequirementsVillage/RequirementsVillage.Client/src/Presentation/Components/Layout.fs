@@ -35,7 +35,7 @@ let appView (model: Model) (dispatch: Msg -> unit) (content: ReactElement) =
                       prop.text "Where project ideas get laid to rest"
                     ]
                   ]
-                  ThemeSelector.view model.CurrentTheme dispatch
+                  ThemeSelector.view model.UI.CurrentTheme dispatch
                 ]
               ]
             ]

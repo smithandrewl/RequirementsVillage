@@ -9,7 +9,7 @@ open RequirementsVillage.Client.Presentation.Pages
 open RequirementsVillage.Client.Presentation.Components
 
 let view (model: Model) (dispatch: Msg -> unit) =
-  match model.CurrentPage with
+  match model.UI.CurrentPage with
   | Landing   -> Layout.landingView model dispatch (Landing.view dispatch)
   | Dashboard -> Layout.appView model dispatch (Dashboard.view model dispatch)
 

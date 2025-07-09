@@ -5,12 +5,12 @@
     <NoWarn>893</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src/Configuration/Constants.fs" />
     <Compile Include="src/Domain/Project.fs" />
     <Compile Include="src/Infrastructure/Api/Types.fs" />
     <Compile Include="src/Infrastructure/Api/Codecs.fs" />
-    <Compile Include="src/Infrastructure/Api/Projects.fs" />
+    <Compile Include="src/Infrastructure/Api/Project.fs" />
     <Compile Include="src/Infrastructure/Storage/ThemeStorage.fs" />
-    <Compile Include="src/Configuration/Constants.fs" />
     <Compile Include="src/Presentation/State/Types.fs" />
     <Compile Include="src/Presentation/State/Update.fs" />
     <Compile Include="src/Presentation/Components/Common.fs" />

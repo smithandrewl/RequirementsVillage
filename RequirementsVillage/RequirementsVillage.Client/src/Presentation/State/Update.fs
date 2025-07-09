@@ -3,7 +3,7 @@ module RequirementsVillage.Client.Presentation.State.Update
 open Elmish
 open RequirementsVillage.Client.Domain.Project
 open RequirementsVillage.Client.Presentation.State.Types
-open RequirementsVillage.Client.Infrastructure.Api.Projects
+open RequirementsVillage.Client.Infrastructure.Api.Project
 open RequirementsVillage.Client.Infrastructure.Storage.ThemeStorage
 open RequirementsVillage.Client.Infrastructure.Api.Types
 
@@ -14,12 +14,16 @@ let init () : Model * Cmd<Msg> =
   Theme.applyToDom savedTheme
 
   let initialModel = {
-    CurrentPage    = Landing
-    CurrentTheme   = savedTheme
-    Projects       = []
-    FilteredStatus = None
-    IsLoading      = false
-    Error          = None
+    Domain = {
+      Projects = []
+    }
+    UI = {
+      CurrentPage       = Landing
+      CurrentTheme      = savedTheme
+      FilteredStatus    = None
+      LoadingOperations = Set.empty
+      Error             = None
+    }
   }
 
   initialModel, Cmd.none
@@ -29,27 +33,46 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
   | NavigateTo page ->
     let cmd =
       match page with
-      | Dashboard when List.isEmpty model.Projects ->
+      | Dashboard when List.isEmpty model.Domain.Projects ->
         Cmd.ofMsg LoadProjects
       | _ -> Cmd.none
-    { model with CurrentPage = page }, cmd
+    { model with
+        UI = {
+          model.UI with
+            CurrentPage = page
+        }
+    }, cmd
 
   | SetTheme theme ->
-    { model with CurrentTheme = theme }, Cmd.none
+    { model with
+        UI = {
+          model.UI with
+            CurrentTheme = theme
+        }
+    }, Cmd.none
 
   | LoadProjects ->
     let loadCmd =
-      Cmd.OfPromise.perform
-        getProjects
-        ()
-        ProjectsLoaded
-    { model with IsLoading = true }, loadCmd
+      Cmd.batch [
+        Cmd.ofMsg (StartLoading LoadingProjects)
+        Cmd.OfPromise.perform
+          getProjects
+          ()
+          ProjectsLoaded
+      ]
+    model, loadCmd
 
   | ProjectsLoaded (Ok projects) ->
     { model with
-        Projects = projects
-        IsLoading = false
-        Error = None
+        Domain = {
+          model.Domain with
+            Projects = projects
+        }
+        UI = {
+          model.UI with
+            LoadingOperations = model.UI.LoadingOperations |> Set.remove LoadingProjects
+            Error             = None
+        }
     }, Cmd.none
 
   | ProjectsLoaded (Error error) ->
@@ -59,12 +82,42 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
       | DecodingError msg       -> $"Data error: {msg}"
       | ServerError (code, msg) -> $"Server error ({code}): {msg}"
     { model with
-        IsLoading = false
-        Error = Some errorMsg
+        UI = {
+          model.UI with
+            LoadingOperations = model.UI.LoadingOperations |> Set.remove LoadingProjects
+            Error             = Some errorMsg
+        }
     }, Cmd.none
 
   | FilterByStatus status ->
-    { model with FilteredStatus = status }, Cmd.none
+    { model with
+        UI = {
+          model.UI with
+            FilteredStatus = status
+        }
+    }, Cmd.none
 
   | ClearError ->
-    { model with Error = None }, Cmd.none
+    { model with
+        UI = {
+          model.UI with
+            Error = None
+        }
+    }, Cmd.none
+
+  | StartLoading operation ->
+    { model with
+        UI = {
+          model.UI with
+            LoadingOperations = model.UI.LoadingOperations |> Set.add operation
+        }
+    }, Cmd.none
+
+  | StopLoading operation ->
+    { model with
+        UI = {
+          model.UI with
+            LoadingOperations = model.UI.LoadingOperations |> Set.remove operation
+        }
+    }, Cmd.none
+

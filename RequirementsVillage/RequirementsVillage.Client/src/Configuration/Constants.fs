@@ -5,6 +5,9 @@ module Api =
   let BaseUrl      = "/api"
   let ProjectsPath = "/projects"
   let HealthPath   = "/health"
+  
+  // Helper to construct full API URLs
+  let url path = BaseUrl + path
 
 // UI Configuration
 module UI =

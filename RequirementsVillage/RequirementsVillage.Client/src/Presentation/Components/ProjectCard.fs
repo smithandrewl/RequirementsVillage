@@ -54,14 +54,33 @@ let private ProjectDescription description =
   ]
 
 // Main component
-let view (project: Project) =
+let view (project: Project) (isLoading: bool) =
   Bulma.card [
     prop.className "project-card"
+    if isLoading then
+      prop.style [ style.opacity 0.6 ]
     prop.onMouseEnter (fun _ ->
       // Would handle hover state in real app
       ()
     )
     prop.children [
+      if isLoading then
+        Html.div [
+          prop.style [
+            style.position.absolute
+            style.top 0
+            style.left 0
+            style.right 0
+            style.height (length.px 3)
+          ]
+          prop.children [
+            Bulma.progress [
+              progress.isSmall
+              color.isPrimary
+              prop.style [ style.marginBottom 0 ]
+            ]
+          ]
+        ]
       Bulma.cardContent [
         ProjectHeader project.Name
         ProjectDescription project.Description

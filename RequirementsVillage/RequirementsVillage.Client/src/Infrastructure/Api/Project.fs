@@ -1,15 +1,17 @@
-module RequirementsVillage.Client.Infrastructure.Api.Projects
+module RequirementsVillage.Client.Infrastructure.Api.Project
 
 open Fable.Core
+open Fetch
 open Thoth.Json
 open RequirementsVillage.Client.Domain.Project
 open RequirementsVillage.Client.Infrastructure.Api.Types
 open RequirementsVillage.Client.Infrastructure.Api.Codecs
+open RequirementsVillage.Client.Configuration.Constants
 
 let getProjects () : JS.Promise<Result<Project list, ApiError>> =
   promise {
     try
-      let! response = Fetch.fetch "/api/projects" []
+      let! response = Fetch.fetch (Api.url Api.ProjectsPath) []
 
       if response.Ok then
         let! text = response.text()

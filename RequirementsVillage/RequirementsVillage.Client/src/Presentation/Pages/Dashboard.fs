@@ -73,7 +73,7 @@ let private EmptyState (dispatch: Msg -> unit) =
     ]
   ]
 
-let private ProjectGrid (projects: Project list) =
+let private ProjectGrid (projects: Project list) (uiState: UIState) =
   Bulma.columns [
     columns.isMultiline
     prop.children [
@@ -81,16 +81,18 @@ let private ProjectGrid (projects: Project list) =
         Bulma.column [
           column.isOneThirdDesktop
           column.isHalfTablet
-          prop.children [ ProjectCard.view project ]
+          prop.children [ 
+            ProjectCard.view project (UIState.isLoadingProject project.Id uiState)
+          ]
         ]
     ]
   ]
 
 let view (model: Model) (dispatch: Msg -> unit) =
   let filteredProjects =
-    match model.FilteredStatus with
-    | None        -> model.Projects
-    | Some status -> model.Projects |> List.filter (fun p -> p.Status = status)
+    match model.UI.FilteredStatus with
+    | None        -> model.Domain.Projects
+    | Some status -> model.Domain.Projects |> List.filter (fun p -> p.Status = status)
 
   Html.div [
     prop.className "p-lg"
@@ -99,9 +101,9 @@ let view (model: Model) (dispatch: Msg -> unit) =
       style.maxWidth (length.percent 100)
     ]
     prop.children [
-      StatusFilter model.FilteredStatus dispatch
+      StatusFilter model.UI.FilteredStatus dispatch
 
-      if model.IsLoading then
+      if UIState.isLoading LoadingProjects model.UI then
         Bulma.progress [
           progress.isSmall
           color.isPrimary
@@ -109,6 +111,6 @@ let view (model: Model) (dispatch: Msg -> unit) =
       elif List.isEmpty filteredProjects then
         EmptyState dispatch
       else
-        ProjectGrid filteredProjects
+        ProjectGrid filteredProjects model.UI
     ]
   ]
