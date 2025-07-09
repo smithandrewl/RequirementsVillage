@@ -1,10 +1,4 @@
-module RequirementsVillage.Client.Constants
-
-// Theme Configuration
-module Theme =
-  let Light      = "requirements-village"
-  let Dark       = "requirements-village-dark"
-  let StorageKey = "theme"
+module RequirementsVillage.Client.Configuration.Constants
 
 // API Configuration  
 module Api =

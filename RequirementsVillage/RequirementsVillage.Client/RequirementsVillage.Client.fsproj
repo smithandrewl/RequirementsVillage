@@ -5,17 +5,20 @@
     <NoWarn>893</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="src/Models/Domain.fs" />
-    <Compile Include="src/Api/Codecs.fs" />
-    <Compile Include="src/Api/Projects.fs" />
-    <Compile Include="src/State/Types.fs" />
-    <Compile Include="src/State/Update.fs" />
-    <Compile Include="src/Components/Common.fs" />
-    <Compile Include="src/Components/ThemeSelector.fs" />
-    <Compile Include="src/Components/ProjectCard.fs" />
-    <Compile Include="src/Components/Layout.fs" />
-    <Compile Include="src/Pages/Landing.fs" />
-    <Compile Include="src/Pages/Dashboard.fs" />
+    <Compile Include="src/Domain/Project.fs" />
+    <Compile Include="src/Infrastructure/Api/Types.fs" />
+    <Compile Include="src/Infrastructure/Api/Codecs.fs" />
+    <Compile Include="src/Infrastructure/Api/Projects.fs" />
+    <Compile Include="src/Infrastructure/Storage/ThemeStorage.fs" />
+    <Compile Include="src/Configuration/Constants.fs" />
+    <Compile Include="src/Presentation/State/Types.fs" />
+    <Compile Include="src/Presentation/State/Update.fs" />
+    <Compile Include="src/Presentation/Components/Common.fs" />
+    <Compile Include="src/Presentation/Components/ThemeSelector.fs" />
+    <Compile Include="src/Presentation/Components/ProjectCard.fs" />
+    <Compile Include="src/Presentation/Components/Layout.fs" />
+    <Compile Include="src/Presentation/Pages/Landing.fs" />
+    <Compile Include="src/Presentation/Pages/Dashboard.fs" />
     <Compile Include="src/App.fs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,10 @@
-module RequirementsVillage.Client.Api.Projects
+module RequirementsVillage.Client.Infrastructure.Api.Projects
 
 open Fable.Core
-
 open Thoth.Json
-open RequirementsVillage.Client.Models.Domain
-
-open Codecs
+open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Client.Infrastructure.Api.Types
+open RequirementsVillage.Client.Infrastructure.Api.Codecs
 
 let getProjects () : JS.Promise<Result<Project list, ApiError>> =
   promise {

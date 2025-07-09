@@ -1,30 +1,17 @@
-module RequirementsVillage.Client.State.Update
+module RequirementsVillage.Client.Presentation.State.Update
 
 open Elmish
-open RequirementsVillage.Client.Models.Domain
-open RequirementsVillage.Client.State.Types
-open RequirementsVillage.Client.Api.Projects
-open Browser.Dom
-
-// Theme constants
-module private Theme =
-  let Light = "light"
-  let Dark = "dark"
-  let StorageKey = "requirements-village-theme"
+open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Client.Presentation.State.Types
+open RequirementsVillage.Client.Infrastructure.Api.Projects
+open RequirementsVillage.Client.Infrastructure.Storage.ThemeStorage
+open RequirementsVillage.Client.Infrastructure.Api.Types
 
 let init () : Model * Cmd<Msg> =
-  let savedTheme =
-    match window.localStorage.getItem(Theme.StorageKey) with
-    | null                         -> Light
-    | value when value = Theme.Dark -> Dark
-    | _                            -> Light
-
+  let savedTheme = Theme.load()
+  
   // Apply the theme to DOM on startup
-  let themeValue = 
-    match savedTheme with
-    | Light -> Theme.Light
-    | Dark  -> Theme.Dark
-  document.documentElement.setAttribute("data-theme", themeValue)
+  Theme.applyToDom savedTheme
 
   let initialModel = {
     CurrentPage    = Landing

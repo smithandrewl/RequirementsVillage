@@ -1,8 +1,8 @@
-module RequirementsVillage.Client.Components.Common
+module RequirementsVillage.Client.Presentation.Components.Common
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Models.Domain
+open RequirementsVillage.Client.Domain.Project
 
 // Private helper functions
 let private statusToColor = function

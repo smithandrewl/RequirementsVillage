@@ -264,7 +264,7 @@ let update = """
 ```
 
 #### Pattern Matching
-Align match cases and use consistent spacing:
+Align match cases and arrows with consistent spacing:
 ```fsharp
 match status with
 | Idea       -> "idea"
@@ -272,6 +272,20 @@ match status with
 | Completed  -> "completed"
 | Abandoned  -> "abandoned"
 | OnHold     -> "onHold"
+```
+
+#### Function Body Formatting
+Group statements by type, align equals signs within each group, reset alignment for new groups:
+```fsharp
+let processProject project =
+  let name     = project.Name
+  let category = project.Category
+  
+  let result         = validateProject project
+  let updatedProject = updateTimestamp project
+  
+  saveProject updatedProject
+  logActivity project.Id
 ```
 
 #### Function Parameters

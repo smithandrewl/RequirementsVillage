@@ -1,6 +1,13 @@
-module RequirementsVillage.Client.State.Types
+module RequirementsVillage.Client.Presentation.State.Types
 
-open RequirementsVillage.Client.Models.Domain
+open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Client.Infrastructure.Api.Types
+open RequirementsVillage.Client.Infrastructure.Storage.ThemeStorage
+
+// UI pages
+type Page =
+  | Landing
+  | Dashboard
 
 type Model = {
   CurrentPage:    Page

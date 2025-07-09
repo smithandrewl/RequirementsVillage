@@ -1,10 +1,10 @@
-module RequirementsVillage.Client.Pages.Dashboard
+module RequirementsVillage.Client.Presentation.Pages.Dashboard
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Models.Domain
-open RequirementsVillage.Client.State.Types
-open RequirementsVillage.Client.Components
+open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Client.Presentation.State.Types
+open RequirementsVillage.Client.Presentation.Components
 
 // Private components
 let private StatusFilter (currentFilter: ProjectStatus option) (dispatch: Msg -> unit) =

@@ -1,29 +1,15 @@
-module RequirementsVillage.Client.Components.ThemeSelector
+module RequirementsVillage.Client.Presentation.Components.ThemeSelector
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Models.Domain
-open RequirementsVillage.Client.State.Types
-open Browser.Dom
-
-// Theme constants
-module private Theme =
-  let Light = "light"
-  let Dark = "dark"
-  let StorageKey = "requirements-village-theme"
-
-let private themeToValue = function
-  | Light -> Theme.Light
-  | Dark  -> Theme.Dark
+open RequirementsVillage.Client.Infrastructure.Storage.ThemeStorage
+open RequirementsVillage.Client.Presentation.State.Types
 
 let private handleThemeClick theme dispatch =
   dispatch (SetTheme theme)
-
-  let themeValue = themeToValue theme
-
-  window.localStorage.setItem(Theme.StorageKey, themeValue)
-
-  document.documentElement.setAttribute("data-theme", themeValue)
+  
+  Theme.save theme
+  Theme.applyToDom theme
 
 let private createThemeItem currentTheme dispatch (theme, label: string) =
   Bulma.dropdownItem.a [

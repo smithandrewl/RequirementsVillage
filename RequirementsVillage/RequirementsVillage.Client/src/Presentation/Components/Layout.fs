@@ -1,9 +1,9 @@
-module RequirementsVillage.Client.Components.Layout
+module RequirementsVillage.Client.Presentation.Components.Layout
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.State.Types
-open RequirementsVillage.Client.Components
+open RequirementsVillage.Client.Presentation.State.Types
+open RequirementsVillage.Client.Presentation.Components
 
 let view (model: Model) (dispatch: Msg -> unit) 
   (content: ReactElement) =

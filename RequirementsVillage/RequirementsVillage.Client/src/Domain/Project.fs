@@ -1,12 +1,15 @@
-module RequirementsVillage.Client.Models.Domain
+module RequirementsVillage.Client.Domain.Project
 
 open System
 open System.Text.RegularExpressions
 
+// Utility function for display text conversion
 let duCaseToDisplayText (caseValue: obj) =
   let caseStr = caseValue.ToString()
+  
   Regex.Replace(caseStr, "([A-Z])", " $1").Trim()
 
+// Project status domain
 type ProjectStatus =
   | Idea
   | InProgress
@@ -14,6 +17,7 @@ type ProjectStatus =
   | Abandoned
   | OnHold
 
+// Project category domain
 type ProjectCategory =
   | WebApp
   | MobileApp
@@ -22,14 +26,16 @@ type ProjectCategory =
   | Game
   | Other of string
 
+// Display text utilities
 module ProjectStatus =
   let toDisplayText status = duCaseToDisplayText status
 
 module ProjectCategory =
   let toDisplayText = function
-    | Other s -> s
+    | Other s  -> s
     | category -> duCaseToDisplayText category
 
+// Main project entity
 type Project = {
   Id:          Guid
   Name:        string
@@ -39,16 +45,3 @@ type Project = {
   CreatedAt:   DateTime
   UpdatedAt:   DateTime
 }
-
-type Theme =
-  | Light
-  | Dark
-
-type Page =
-  | Landing
-  | Dashboard
-
-type ApiError =
-  | NetworkError  of string
-  | DecodingError of string
-  | ServerError   of int * string
