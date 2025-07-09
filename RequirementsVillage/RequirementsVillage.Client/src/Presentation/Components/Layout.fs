@@ -5,15 +5,17 @@ open Feliz.Bulma
 open RequirementsVillage.Client.Presentation.State.Types
 open RequirementsVillage.Client.Presentation.Components
 
-let view (model: Model) (dispatch: Msg -> unit) 
-  (content: ReactElement) =
+// Landing page layout - full screen, no header
+let landingView (model: Model) (dispatch: Msg -> unit) (content: ReactElement) =
+  content
+
+// App layout - with header and navigation
+let appView (model: Model) (dispatch: Msg -> unit) (content: ReactElement) =
   Html.div [
-    prop.className "is-flex layout-container"
+    prop.className "layout-container"
     prop.children [
       Html.div [
-        prop.className 
-          "is-flex-grow-1 is-flex is-flex-direction-column"
-        prop.className "overflow-hidden"
+        prop.className "layout-content"
         prop.children [
           Html.header [
             prop.className "layout-header"
@@ -39,11 +41,8 @@ let view (model: Model) (dispatch: Msg -> unit)
             ]
           ]
           Html.main [
-            prop.className "is-flex-grow-1"
-            prop.className "overflow-auto p-lg"
-            prop.children [ 
-              Bulma.container [ content ]
-            ]
+            prop.className "layout-main"
+            prop.children [ content ]
           ]
         ]
       ]

@@ -10,8 +10,8 @@ open RequirementsVillage.Client.Presentation.Components
 
 let view (model: Model) (dispatch: Msg -> unit) =
   match model.CurrentPage with
-  | Landing   -> Landing.view dispatch
-  | Dashboard -> Layout.view model dispatch (Dashboard.view model dispatch)
+  | Landing   -> Layout.landingView model dispatch (Landing.view dispatch)
+  | Dashboard -> Layout.appView model dispatch (Dashboard.view model dispatch)
 
 let program =
   Program.mkProgram init update view

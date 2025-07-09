@@ -93,15 +93,22 @@ let view (model: Model) (dispatch: Msg -> unit) =
     | Some status -> model.Projects |> List.filter (fun p -> p.Status = status)
 
   Html.div [
-    StatusFilter model.FilteredStatus dispatch
+    prop.className "p-lg"
+    prop.style [
+      style.width (length.percent 100)
+      style.maxWidth (length.percent 100)
+    ]
+    prop.children [
+      StatusFilter model.FilteredStatus dispatch
 
-    if model.IsLoading then
-      Bulma.progress [
-        progress.isSmall
-        color.isPrimary
-      ]
-    elif List.isEmpty filteredProjects then
-      EmptyState dispatch
-    else
-      ProjectGrid filteredProjects
+      if model.IsLoading then
+        Bulma.progress [
+          progress.isSmall
+          color.isPrimary
+        ]
+      elif List.isEmpty filteredProjects then
+        EmptyState dispatch
+      else
+        ProjectGrid filteredProjects
+    ]
   ]
