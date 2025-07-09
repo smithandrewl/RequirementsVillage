@@ -2,7 +2,7 @@ module RequirementsVillage.Client.Components.Layout
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.ElmishApp.Types
+open RequirementsVillage.Client.State.Types
 open RequirementsVillage.Client.Components
 
 let view (model: Model) (dispatch: Msg -> unit) 

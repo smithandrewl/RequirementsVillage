@@ -8,8 +8,8 @@
     <Compile Include="src/Models/Domain.fs" />
     <Compile Include="src/Api/Codecs.fs" />
     <Compile Include="src/Api/Projects.fs" />
-    <Compile Include="src/ElmishApp/Types.fs" />
-    <Compile Include="src/ElmishApp/Update.fs" />
+    <Compile Include="src/State/Types.fs" />
+    <Compile Include="src/State/Update.fs" />
     <Compile Include="src/Components/Common.fs" />
     <Compile Include="src/Components/ThemeSelector.fs" />
     <Compile Include="src/Components/ProjectCard.fs" />

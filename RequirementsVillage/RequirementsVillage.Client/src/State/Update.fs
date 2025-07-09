@@ -1,8 +1,8 @@
-module RequirementsVillage.Client.ElmishApp.Update
+module RequirementsVillage.Client.State.Update
 
 open Elmish
 open RequirementsVillage.Client.Models.Domain
-open RequirementsVillage.Client.ElmishApp.Types
+open RequirementsVillage.Client.State.Types
 open RequirementsVillage.Client.Api.Projects
 open Browser.Dom
 

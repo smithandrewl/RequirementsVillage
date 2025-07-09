@@ -1,4 +1,4 @@
-module RequirementsVillage.Client.ElmishApp.Types
+module RequirementsVillage.Client.State.Types
 
 open RequirementsVillage.Client.Models.Domain
 
