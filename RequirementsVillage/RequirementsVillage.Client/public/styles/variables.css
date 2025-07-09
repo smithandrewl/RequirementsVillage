@@ -1,0 +1,45 @@
+/* CSS Variables - Requirements Village */
+
+:root {
+  /* Colors */
+  --color-text-light:  #e4dcba;
+  --color-text-muted:  #808080;
+  --color-bg-light:    #f5f5f5;
+  --color-border:      #e5e5e5;
+  
+  /* Shadows */
+  --shadow-text:       2px 2px 4px rgba(0, 0, 0, 0.8);
+  --shadow-text-light: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  
+  /* Spacing */
+  --spacing-xs:   0.2rem;
+  --spacing-sm:   0.75rem;
+  --spacing-md:   1rem;
+  --spacing-lg:   1.5rem;
+  --spacing-xl:   2rem;
+  --spacing-xxl:  3rem;
+  --spacing-xxxl: 4rem;
+  --spacing-huge: 6rem;
+  
+  /* Typography */
+  --font-size-small: 0.875rem;
+  --font-size-large: 1.5rem;
+  --font-size-xl:    4rem;
+  --font-size-hero:  6rem;
+  
+  --font-weight-semibold: 600;
+  
+  --line-height-tight:  1.2;
+  --line-height-normal: 1.5;
+  
+  --letter-spacing-normal: 1px;
+  --letter-spacing-wide:   2px;
+  
+  /* Layout */
+  --gap-sm: 0.5rem;
+  --gap-md: 1rem;
+  
+  /* Decorative */
+  --decorative-width:  4rem;
+  --decorative-height: 1px;
+}

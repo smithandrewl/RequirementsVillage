@@ -41,7 +41,9 @@ let view (model: Model) (dispatch: Msg -> unit)
           Html.main [
             prop.className "is-flex-grow-1"
             prop.className "overflow-auto p-lg"
-            prop.children [ content ]
+            prop.children [ 
+              Bulma.container [ content ]
+            ]
           ]
         ]
       ]

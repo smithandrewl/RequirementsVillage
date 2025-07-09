@@ -5,8 +5,8 @@ open Browser.Dom
 // Theme storage constants
 module private Constants =
   let StorageKey = "requirements-village-theme"
-  let LightValue = "light"
-  let DarkValue  = "dark"
+  let LightValue = "requirements-village"
+  let DarkValue  = "requirements-village-dark"
 
 // Theme type
 type Theme =
