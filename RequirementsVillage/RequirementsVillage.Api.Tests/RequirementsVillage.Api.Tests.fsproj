@@ -57,6 +57,7 @@
     <Compile Include="Unit/Repository/InMemoryProjectRepositoryTests.fs" />
     <Compile Include="Unit/Services/ProjectServiceTests.fs" />
     <Compile Include="Unit/Services/ProjectServiceValidationTests.fs" />
+    <Compile Include="Unit/Services/ProjectServiceAdvancedTests.fs" />
     
     <!-- Integration Tests -->
     <Compile Include="Integration/ApiTestFactory.fs" />

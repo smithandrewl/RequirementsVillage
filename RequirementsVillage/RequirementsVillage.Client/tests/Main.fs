@@ -9,6 +9,8 @@ open RequirementsVillage.Client.Tests.State.StatePropertyTests
 open RequirementsVillage.Client.Tests.State.CommandTests
 open RequirementsVillage.Client.Tests.Components.ProjectCardTests
 open RequirementsVillage.Client.Tests.Components.ThemeSelectorTests
+open RequirementsVillage.Client.Tests.Components.CommonTests
+open RequirementsVillage.Client.Tests.Components.LayoutTests
 open RequirementsVillage.Client.Tests.Api.ProjectApiTests
 open RequirementsVillage.Client.Tests.Api.CodecsTests
 
@@ -21,6 +23,8 @@ let allTests =
     RequirementsVillage.Client.Tests.State.CommandTests.tests
     RequirementsVillage.Client.Tests.Components.ProjectCardTests.tests
     RequirementsVillage.Client.Tests.Components.ThemeSelectorTests.tests
+    RequirementsVillage.Client.Tests.Components.CommonTests.tests
+    RequirementsVillage.Client.Tests.Components.LayoutTests.tests
     RequirementsVillage.Client.Tests.Api.ProjectApiTests.tests
     RequirementsVillage.Client.Tests.Api.CodecsTests.tests
   ]
