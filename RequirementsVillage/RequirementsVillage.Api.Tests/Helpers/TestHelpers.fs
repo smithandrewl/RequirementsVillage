@@ -3,34 +3,13 @@ namespace RequirementsVillage.Api.Tests.Helpers
 open System
 open FsUnit.Xunit
 open RequirementsVillage.Shared
+open RequirementsVillage.Shared.TestGenerators
 
 module TestHelpers =
   
-  // Helper function to create a valid project with default values
-  let createTestProject() = {
-    Id          = Guid.NewGuid()
-    Name        = "Test Project"
-    Description = "A test project description"
-    Category    = WebApp
-    Status      = Idea
-    CreatedAt   = DateTime.UtcNow
-    UpdatedAt   = DateTime.UtcNow
-  }
-  
-  // Helper to create a project with specific values
-  let createProject
-    (name: string)
-    (description: string)
-    (category: ProjectCategory)
-    (status: ProjectStatus) = {
-    Id          = Guid.NewGuid()
-    Name        = name
-    Description = description
-    Category    = category
-    Status      = status
-    CreatedAt   = DateTime.UtcNow
-    UpdatedAt   = DateTime.UtcNow
-  }
+  // Use shared test helpers
+  let createTestProject = TestDataGenerators.Bogus.Default.project
+  let createProject = TestHelpers.createProject
   
   // Assert Result is Ok
   let shouldBeOk (result: Result<'a, 'b>) =

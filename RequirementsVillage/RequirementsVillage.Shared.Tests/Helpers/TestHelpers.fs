@@ -3,34 +3,13 @@ namespace RequirementsVillage.Shared.Tests.Helpers
 open System
 open FsUnit.Xunit
 open RequirementsVillage.Shared
+open RequirementsVillage.Shared.TestGenerators
 
 module TestHelpers =
   
-  // Helper function to create a valid project with default values
-  let createTestProject() = {
-    Id          = Guid.NewGuid()
-    Name        = "Test Project"
-    Description = "A test project description"
-    Category    = WebApp
-    Status      = Idea
-    CreatedAt   = DateTime.UtcNow
-    UpdatedAt   = DateTime.UtcNow
-  }
-  
-  // Helper to create a project with specific values
-  let createProject
-    (name: string)
-    (description: string)
-    (category: ProjectCategory)
-    (status: ProjectStatus) = {
-    Id          = Guid.NewGuid()
-    Name        = name
-    Description = description
-    Category    = category
-    Status      = status
-    CreatedAt   = DateTime.UtcNow
-    UpdatedAt   = DateTime.UtcNow
-  }
+  // Use shared test helpers and generators
+  let createTestProject = TestDataGenerators.Bogus.Default.project
+  let createProject = TestHelpers.createProject
   
   // Assert Result is Ok
   let shouldBeOk (result: Result<'a, 'b>) =
@@ -117,12 +96,12 @@ module TestHelpers =
   let shouldEqualIgnoreCase (expected: string) (actual: string) =
     actual.ToLowerInvariant() |> should equal (expected.ToLowerInvariant())
   
-  // Validation test data
-  let validProjectNameSample = "Valid Project Name"
-  let validProjectDescriptionSample = "This is a valid project description."
+  // Import validation helpers from shared
+  let validProjectName = TestHelpers.validProjectName
+  let validProjectDescription = TestHelpers.validProjectDescription
   
-  let invalidProjectName = ""
-  let invalidProjectDescription = ""
+  let invalidProjectName = TestHelpers.invalidProjectName
+  let invalidProjectDescription = TestHelpers.invalidProjectDescription
   
-  let tooLongProjectName = String.replicate 101 "x"
-  let tooLongProjectDescription = String.replicate 1001 "x"
+  let tooLongProjectName = TestHelpers.tooLongProjectName
+  let tooLongProjectDescription = TestHelpers.tooLongProjectDescription
