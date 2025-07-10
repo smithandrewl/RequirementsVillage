@@ -7,6 +7,7 @@ open FsCheck.Xunit
 open RequirementsVillage.Api.Models
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Tests.Helpers
+open FsCheck
 
 module ProjectServiceValidationTests =
   
@@ -165,7 +166,9 @@ module ProjectServiceValidationTests =
         // Try the transition
         let! result = testService.UpdateProjectStatusAsync(project.Id, toStatus)
         
-        result |> should be (ofCase <@ Ok @>)
+        match result with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
       } |> TestHelpers.runAsync
   
   module DeleteValidation =
@@ -203,7 +206,9 @@ module ProjectServiceValidationTests =
         
         let! result = testService.DeleteProjectAsync(abandonedProject.Id)
         
-        result |> should be (ofCase <@ Ok @>)
+        match result with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
       } |> TestHelpers.runAsync
     
     [<Fact>]

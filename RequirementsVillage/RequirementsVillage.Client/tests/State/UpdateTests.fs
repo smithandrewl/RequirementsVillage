@@ -251,4 +251,144 @@ let tests =
         Assert.isTrue (Elmish.cmdIsEmpty cmd) "Should have no commands"
       }
     ]
+    
+    testList "State transitions" [
+      
+      test "full loading cycle - success path" {
+        // Start with initial state
+        let model0 = State.initialModel()
+        
+        // Navigate to Dashboard (triggers LoadProjects)
+        let model1, cmd1 = update (NavigateTo Dashboard) model0
+        Assert.equal Dashboard model1.UI.CurrentPage "Should be on Dashboard"
+        Assert.isTrue (Elmish.cmdContainsMessage LoadProjects cmd1) "Should trigger load"
+        
+        // LoadProjects dispatches StartLoading
+        let model2, cmd2 = update LoadProjects model1
+        let messages = Elmish.extractMessages cmd2
+        Assert.isTrue 
+          (messages |> List.contains (StartLoading LoadingProjects))
+          "Should start loading"
+        
+        // Apply StartLoading
+        let model3, _ = update (StartLoading LoadingProjects) model2
+        Assert.isTrue (UIState.isLoadingProjects model3.UI) "Should be loading"
+        
+        // Projects loaded successfully
+        let projects = Generate.projects 5
+        let model4, _ = update (ProjectsLoaded (Ok projects)) model3
+        Assert.equal projects model4.Domain.Projects "Projects should be loaded"
+        Assert.isFalse (UIState.isLoadingProjects model4.UI) "Should stop loading"
+        Assert.isNone model4.UI.Error "Should have no error"
+      }
+      
+      test "full loading cycle - error path" {
+        // Start loading
+        let model = 
+          State.initialModel()
+          |> State.withPage Dashboard
+          |> State.withLoading LoadingProjects
+        
+        // Error occurs
+        let error = NetworkError "Connection timeout"
+        let model2, _ = update (ProjectsLoaded (Error error)) model
+        
+        Assert.isEmpty model2.Domain.Projects "Projects should remain empty"
+        Assert.isFalse (UIState.isLoadingProjects model2.UI) "Should stop loading"
+        Assert.isSome model2.UI.Error "Should have error"
+        
+        // Clear error
+        let model3, _ = update ClearError model2
+        Assert.isNone model3.UI.Error "Error should be cleared"
+      }
+    ]
+    
+    testList "Edge cases and error scenarios" [
+      
+      test "multiple StartLoading messages maintain all operations" {
+        let projectId = Guid.NewGuid()
+        let model = State.initialModel()
+        
+        // Add multiple loading operations
+        let model1, _ = update (StartLoading LoadingProjects) model
+        let model2, _ = update (StartLoading CreatingProject) model1
+        let model3, _ = update (StartLoading (UpdatingProject projectId)) model2
+        
+        Assert.equal 3 model3.UI.LoadingOperations.Count "Should have 3 operations"
+        Assert.isTrue (UIState.isLoadingProjects model3.UI) "Should be loading projects"
+        Assert.isTrue (UIState.isCreatingProject model3.UI) "Should be creating project"
+        Assert.isTrue (UIState.isLoadingProject projectId model3.UI) "Should be loading specific project"
+      }
+      
+      test "StopLoading only removes specific operation" {
+        let projectId1 = Guid.NewGuid()
+        let projectId2 = Guid.NewGuid()
+        
+        let model = 
+          State.initialModel()
+          |> State.withLoading (UpdatingProject projectId1)
+          |> State.withLoading (UpdatingProject projectId2)
+          |> State.withLoading LoadingProjects
+        
+        let model2, _ = update (StopLoading (UpdatingProject projectId1)) model
+        
+        Assert.isFalse (UIState.isLoadingProject projectId1 model2.UI) "Project 1 should not be loading"
+        Assert.isTrue (UIState.isLoadingProject projectId2 model2.UI) "Project 2 should still be loading"
+        Assert.isTrue (UIState.isLoadingProjects model2.UI) "Should still be loading projects"
+        Assert.equal 2 model2.UI.LoadingOperations.Count "Should have 2 operations remaining"
+      }
+      
+      test "navigating away from Dashboard preserves state" {
+        let projects = Generate.projects 3
+        let model = 
+          State.initialModel()
+          |> State.withProjects projects
+          |> State.withPage Dashboard
+          |> State.withFilter (Some InProgress)
+        
+        let model2, cmd = update (NavigateTo Landing) model
+        
+        Assert.equal Landing model2.UI.CurrentPage "Page should change"
+        Assert.equal projects model2.Domain.Projects "Projects should be preserved"
+        Assert.equal (Some InProgress) model2.UI.FilteredStatus "Filter should be preserved"
+        Assert.isTrue (Elmish.cmdIsEmpty cmd) "Should have no commands"
+      }
+      
+      test "error messages preserve other UI state" {
+        let model = 
+          State.initialModel()
+          |> State.withPage Dashboard
+          |> State.withTheme Dark
+          |> State.withFilter (Some Completed)
+          |> State.withLoading LoadingProjects
+        
+        let error = ServerError (404, "Not found")
+        let model2, _ = update (ProjectsLoaded (Error error)) model
+        
+        // Error should be set but other state preserved
+        Assert.isSome model2.UI.Error "Should have error"
+        Assert.equal Dashboard model2.UI.CurrentPage "Page should be preserved"
+        Assert.equal Dark model2.UI.CurrentTheme "Theme should be preserved"
+        Assert.equal (Some Completed) model2.UI.FilteredStatus "Filter should be preserved"
+        Assert.isFalse (UIState.isLoadingProjects model2.UI) "Loading should be cleared"
+      }
+    ]
+    
+    testList "init function edge cases" [
+      
+      test "init returns consistent state on multiple calls" {
+        let model1, cmd1 = init()
+        let model2, cmd2 = init()
+        
+        // Models should have same structure (not same instance)
+        Assert.equal model1.UI.CurrentPage model2.UI.CurrentPage "Pages should match"
+        Assert.equal model1.UI.CurrentTheme model2.UI.CurrentTheme "Themes should match"
+        Assert.isEmpty model1.Domain.Projects "Should have no projects"
+        Assert.isEmpty model2.Domain.Projects "Should have no projects"
+        
+        // Commands should be empty
+        Assert.isTrue (Elmish.cmdIsEmpty cmd1) "First init should have no commands"
+        Assert.isTrue (Elmish.cmdIsEmpty cmd2) "Second init should have no commands"
+      }
+    ]
   ]

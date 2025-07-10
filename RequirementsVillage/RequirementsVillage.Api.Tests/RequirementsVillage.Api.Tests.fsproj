@@ -41,6 +41,29 @@
 
   <ItemGroup>
     <!-- Test Files (in compilation order) -->
+    
+    <!-- Helpers -->
+    <Compile Include="Helpers/TestHelpers.fs" />
+    <Compile Include="Helpers/Generators.fs" />
+    <Compile Include="Helpers/Fixtures.fs" />
+    
+    <!-- Unit Tests -->
+    <Compile Include="Unit/Models/ProjectCategoryTests.fs" />
+    <Compile Include="Unit/Models/ProjectStatusTests.fs" />
+    <Compile Include="Unit/Models/ProjectTests.fs" />
+    <Compile Include="Unit/Models/ProjectErrorTests.fs" />
+    <Compile Include="Unit/Models/ModelConversionTests.fs" />
+    <Compile Include="Unit/Models/ModelEdgeCaseTests.fs" />
+    <Compile Include="Unit/Repository/InMemoryProjectRepositoryTests.fs" />
+    <Compile Include="Unit/Services/ProjectServiceTests.fs" />
+    <Compile Include="Unit/Services/ProjectServiceValidationTests.fs" />
+    
+    <!-- Integration Tests -->
+    <Compile Include="Integration/ApiTestFactory.fs" />
+    <Compile Include="Integration/HealthEndpointTests.fs" />
+    <Compile Include="Integration/ProjectEndpointsTests.fs" />
+    
+    <!-- Simple Test Example -->
     <Compile Include="SimpleTestExample.fs" />
     
     <!-- Entry Point -->

@@ -6,13 +6,14 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.AspNetCore.Mvc.Testing
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
+open FsUnit.Xunit
 open RequirementsVillage.Api
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Tests.Helpers
 
 type TestWebApplicationFactory() =
-  inherit WebApplicationFactory<Program>()
+  inherit WebApplicationFactory<RequirementsVillage.Api.Program.Program>()
   
   let mutable configureTestServices: (IServiceCollection -> unit) option = None
   

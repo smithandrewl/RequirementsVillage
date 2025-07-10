@@ -15,6 +15,9 @@ open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Endpoints
 open FSharp.SystemTextJson
 
+// Entry point for WebApplicationFactory
+type Program() = class end
+
 // Configure services
 let configureServices (services: IServiceCollection) =
   // Add Giraffe

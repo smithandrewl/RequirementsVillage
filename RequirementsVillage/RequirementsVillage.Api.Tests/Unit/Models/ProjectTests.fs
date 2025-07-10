@@ -4,6 +4,7 @@ open System
 open System.Text.Json
 open Xunit
 open FsUnit.Xunit
+open FsCheck
 open FsCheck.Xunit
 open RequirementsVillage.Api.Models
 open RequirementsVillage.Api.Models.Serialization
@@ -60,7 +61,7 @@ module ProjectTests =
     (category: ProjectCategory)
     (status: ProjectStatus) =
     
-    (TestHelpers.validProjectName name && TestHelpers.validProjectDescription description) ==> lazy (
+    (name <> null && description <> null && TestHelpers.validProjectName name && TestHelpers.validProjectDescription description) ==> lazy (
       
       let project = {
         Id          = id
@@ -127,8 +128,11 @@ module ProjectTests =
     let ``Valid project should pass all validation rules`` (project: Project) =
       Generators.FsCheck.registerGenerators() |> ignore
       
-      TestHelpers.validProjectName project.Name &&
-      TestHelpers.validProjectDescription project.Description
+      // Filter out projects with null values
+      (project.Name <> null && project.Description <> null) ==> lazy (
+        TestHelpers.validProjectName project.Name &&
+        TestHelpers.validProjectDescription project.Description
+      )
   
   module ProjectEquality =
     

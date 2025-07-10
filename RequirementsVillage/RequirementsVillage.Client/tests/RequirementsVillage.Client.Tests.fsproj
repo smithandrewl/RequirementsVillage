@@ -30,6 +30,8 @@
     <Compile Include="Helpers/ApiMock.fs" />
     <Compile Include="State/TypesTests.fs" />
     <Compile Include="State/UpdateTests.fs" />
+    <Compile Include="State/StatePropertyTests.fs" />
+    <Compile Include="State/CommandTests.fs" />
     <Compile Include="Components/ProjectCardTests.fs" />
     <Compile Include="Components/ThemeSelectorTests.fs" />
     <Compile Include="Api/ProjectApiTests.fs" />

@@ -125,7 +125,7 @@ module ProjectEndpointsTests =
         
         ApiTestHelpers.shouldBeBadRequest response
         
-        let! errorContent = ApiTestHelpers.getResponseContent response
+        let errorContent = ApiTestHelpers.getResponseContent response
         errorContent |> should haveSubstring "name"
         errorContent |> should haveSubstring "empty"
       } |> TestHelpers.runAsync
@@ -245,7 +245,7 @@ module ProjectEndpointsTests =
         
         ApiTestHelpers.shouldBeBadRequest response
         
-        let! errorContent = ApiTestHelpers.getResponseContent response
+        let errorContent = ApiTestHelpers.getResponseContent response
         errorContent |> should haveSubstring "Cannot transition directly from Idea to Completed"
       } |> TestHelpers.runAsync
   
@@ -282,7 +282,7 @@ module ProjectEndpointsTests =
         
         ApiTestHelpers.shouldBeBadRequest response
         
-        let! errorContent = ApiTestHelpers.getResponseContent response
+        let errorContent = ApiTestHelpers.getResponseContent response
         errorContent |> should haveSubstring "Can only delete projects in Abandoned status"
       } |> TestHelpers.runAsync
     

@@ -30,7 +30,7 @@ module HealthEndpointTests =
       
       ApiTestHelpers.shouldBeOk response
       
-      let! content = ApiTestHelpers.getResponseContent response
+      let content = ApiTestHelpers.getResponseContent response
       
       content |> should haveSubstring "\"status\":\"healthy\""
       content |> should haveSubstring "\"timestamp\""
@@ -71,6 +71,6 @@ module HealthEndpointTests =
       let! response = client.SendAsync(request) |> Async.AwaitTask
       
       ApiTestHelpers.shouldBeOk response
-      let! content = ApiTestHelpers.getResponseContent response
+      let content = ApiTestHelpers.getResponseContent response
       content |> should equal "" // HEAD requests should have no body
     } |> TestHelpers.runAsync

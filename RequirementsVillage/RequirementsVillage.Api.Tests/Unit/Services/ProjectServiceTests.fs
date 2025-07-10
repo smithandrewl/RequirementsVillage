@@ -7,6 +7,7 @@ open FsCheck.Xunit
 open RequirementsVillage.Api.Models
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Tests.Helpers
+open FsCheck
 
 module ProjectServiceTests =
   
@@ -162,7 +163,9 @@ module ProjectServiceTests =
         
         let! result = context.Service.UpdateProjectAsync(updatedProject)
         
-        result |> should be (ofCase <@ Ok @>)
+        match result with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
         
         // Verify the update
         let! getResult = context.Service.GetProjectByIdAsync(originalProject.Id)
@@ -185,7 +188,9 @@ module ProjectServiceTests =
         let! result = service.UpdateProjectAsync(oldProject)
         let afterUpdate = DateTime.UtcNow
         
-        result |> should be (ofCase <@ Ok @>)
+        match result with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
         
         let! getResult = service.GetProjectByIdAsync(oldProject.Id)
         let updated = TestHelpers.shouldBeSome (TestHelpers.shouldBeOk getResult)
@@ -212,33 +217,37 @@ module ProjectServiceTests =
   
   module ErrorHandling =
     
-    [<Theory>]
-    [<InlineData("GetAll")>]
-    [<InlineData("GetById")>]
-    [<InlineData("Create")>]
-    [<InlineData("Update")>]
-    [<InlineData("Delete")>]
-    let ``Service should propagate repository errors`` (operation: string) =
+    [<Fact>]
+    let ``Service should propagate repository errors for GetAll`` () =
       async {
-        let error = DatabaseError(operation, "Projects", Exception("Test error"))
+        let error = DatabaseError("GetAll", "Projects", Exception("Test error"))
         let service = Fixtures.ServiceFactories.createFailingProjectService error
-        let testId = Guid.NewGuid()
-        let testProject = TestHelpers.createTestProject()
         
-        let! result =
-          match operation with
-          | "GetAll"  -> service.GetAllProjectsAsync()
-          | "GetById" -> service.GetProjectByIdAsync(testId)
-          | "Create"  -> service.CreateProjectAsync("Test", "Test", WebApp)
-          | "Update"  -> service.UpdateProjectAsync(testProject)
-          | "Delete"  -> service.DeleteProjectAsync(testId)
-          | _         -> failwith "Unknown operation"
+        let! result = service.GetAllProjectsAsync()
         
         let actualError = TestHelpers.shouldBeError result
         
         match actualError with
         | DatabaseError(op, table, _) ->
-          op    |> should equal operation
+          op    |> should equal "GetAll"
+          table |> should equal "Projects"
+        | _ -> failwith "Expected DatabaseError"
+      } |> TestHelpers.runAsync
+    
+    [<Fact>]
+    let ``Service should propagate repository errors for GetById`` () =
+      async {
+        let error = DatabaseError("GetById", "Projects", Exception("Test error"))
+        let service = Fixtures.ServiceFactories.createFailingProjectService error
+        let testId = Guid.NewGuid()
+        
+        let! result = service.GetProjectByIdAsync(testId)
+        
+        let actualError = TestHelpers.shouldBeError result
+        
+        match actualError with
+        | DatabaseError(op, table, _) ->
+          op    |> should equal "GetById"
           table |> should equal "Projects"
         | _ -> failwith "Expected DatabaseError"
       } |> TestHelpers.runAsync

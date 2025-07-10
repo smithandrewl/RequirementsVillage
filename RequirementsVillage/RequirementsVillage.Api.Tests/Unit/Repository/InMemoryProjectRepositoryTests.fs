@@ -31,7 +31,9 @@ module InMemoryProjectRepositoryTests =
         let newProject = TestHelpers.createTestProject()
         
         let! createResult = repo.CreateAsync(newProject)
-        createResult |> should be (ofCase <@ Ok @>)
+        match createResult with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
         
         let! getAllResult = repo.GetAllAsync()
         let projects = TestHelpers.shouldBeOk getAllResult
@@ -48,7 +50,9 @@ module InMemoryProjectRepositoryTests =
         let newProject = TestHelpers.createTestProject()
         
         let! createResult = repo.CreateAsync(newProject)
-        createResult |> should be (ofCase <@ Ok @>)
+        match createResult with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
         
         let! getResult = repo.GetByIdAsync(newProject.Id)
         let foundProject = TestHelpers.shouldBeSome (TestHelpers.shouldBeOk getResult)
@@ -75,7 +79,9 @@ module InMemoryProjectRepositoryTests =
         let newProject = TestHelpers.createTestProject()
         
         let! createResult = repo.CreateAsync(newProject)
-        createResult |> should be (ofCase <@ Ok @>)
+        match createResult with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
         
         let! getResult = repo.GetByIdAsync(newProject.Id)
         let foundProject = TestHelpers.shouldBeSome (TestHelpers.shouldBeOk getResult)
@@ -111,7 +117,9 @@ module InMemoryProjectRepositoryTests =
         let originalProject = TestHelpers.createTestProject()
         
         let! createResult = repo.CreateAsync(originalProject)
-        createResult |> should be (ofCase <@ Ok @>)
+        match createResult with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
         
         let updatedProject = {
           originalProject with
@@ -121,7 +129,9 @@ module InMemoryProjectRepositoryTests =
         }
         
         let! updateResult = repo.UpdateAsync(updatedProject)
-        updateResult |> should be (ofCase <@ Ok @>)
+        match updateResult with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
         
         let! getResult = repo.GetByIdAsync(originalProject.Id)
         let foundProject = TestHelpers.shouldBeSome (TestHelpers.shouldBeOk getResult)
@@ -171,10 +181,14 @@ module InMemoryProjectRepositoryTests =
         let project = TestHelpers.createTestProject()
         
         let! createResult = repo.CreateAsync(project)
-        createResult |> should be (ofCase <@ Ok @>)
+        match createResult with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
         
         let! deleteResult = repo.DeleteAsync(project.Id)
-        deleteResult |> should be (ofCase <@ Ok @>)
+        match deleteResult with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
         
         let! getResult = repo.GetByIdAsync(project.Id)
         let projectOption = TestHelpers.shouldBeOk getResult
@@ -187,7 +201,9 @@ module InMemoryProjectRepositoryTests =
         let repo = createRepository()
         let! result = repo.DeleteAsync(Guid.NewGuid())
         
-        result |> should be (ofCase <@ Ok @>)
+        match result with
+        | Ok _ -> ()
+        | Error e -> failwithf "Expected Ok but got Error: %A" e
       } |> TestHelpers.runAsync
     
     [<Fact>]

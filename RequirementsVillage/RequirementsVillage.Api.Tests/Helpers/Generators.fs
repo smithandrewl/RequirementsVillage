@@ -14,19 +14,19 @@ module Generators =
   module Bogus =
     
     let projectName() =
-      faker.Random.Pick([|
+      faker.Random.ArrayElement([|
         faker.Commerce.ProductName()
         faker.Company.CatchPhrase()
-        faker.Hacker.Noun() + " " + faker.Hacker.Noun()
-        faker.Lorem.Word() + " Manager"
-        faker.Lorem.Word() + " Tracker"
+        sprintf "%s %s" (faker.Hacker.Noun()) (faker.Hacker.Noun())
+        sprintf "%s Manager" (faker.Lorem.Word())
+        sprintf "%s Tracker" (faker.Lorem.Word())
       |])
     
     let projectDescription() =
-      faker.Lorem.Paragraph(min = 1, max = 3)
+      faker.Lorem.Paragraph()
     
     let projectCategory() =
-      faker.Random.Pick([|
+      faker.Random.ArrayElement([|
         WebApp
         MobileApp
         Library
@@ -36,7 +36,7 @@ module Generators =
       |])
     
     let projectStatus() =
-      faker.Random.Pick([|
+      faker.Random.ArrayElement([|
         Idea
         InProgress
         Completed
@@ -45,13 +45,13 @@ module Generators =
       |])
     
     let project() = {
-      Id          = faker.Random.Guid()
+      Id          = System.Guid.NewGuid()
       Name        = projectName()
       Description = projectDescription()
       Category    = projectCategory()
       Status      = projectStatus()
-      CreatedAt   = faker.Date.Past(years = 2)
-      UpdatedAt   = faker.Date.Recent(days = 30)
+      CreatedAt   = faker.Date.Past(2, DateTime.UtcNow)
+      UpdatedAt   = faker.Date.Recent(30)
     }
     
     let projects (count: int) =
@@ -64,13 +64,13 @@ module Generators =
       { project() with Category = category }
     
     let recentProject() =
-      let created = faker.Date.Recent(days = 7)
+      let created = faker.Date.Recent(7)
       { project() with
           CreatedAt = created
           UpdatedAt = faker.Date.Between(created, DateTime.UtcNow) }
     
     let oldProject() =
-      let created = faker.Date.Past(years = 2)
+      let created = faker.Date.Past(2, DateTime.UtcNow)
       { project() with
           CreatedAt = created
           UpdatedAt = faker.Date.Between(created, DateTime.UtcNow.AddMonths(-6)) }
@@ -88,16 +88,16 @@ module Generators =
         (2, Gen.constant Library)
         (2, Gen.constant Tool)
         (1, Gen.constant Game)
-        (1, Gen.map Other (Gen.alphaStr |> Gen.filter (fun s -> s.Length > 0)))
+        (1, Arb.generate<string> |> Gen.filter (fun s -> not (String.IsNullOrWhiteSpace s)) |> Gen.map Other)
       ]
     
     let validProjectNameGen =
-      Gen.alphaNumStr
-      |> Gen.filter (fun s -> s.Length > 0 && s.Length <= 100)
+      Arb.generate<string>
+      |> Gen.filter (fun s -> not (String.IsNullOrWhiteSpace s) && s.Length <= 100)
     
     let validProjectDescriptionGen =
-      Gen.alphaNumStr
-      |> Gen.filter (fun s -> s.Length > 0 && s.Length <= 1000)
+      Arb.generate<string>
+      |> Gen.filter (fun s -> not (String.IsNullOrWhiteSpace s) && s.Length <= 1000)
     
     let dateTimeGen =
       gen {
@@ -112,7 +112,7 @@ module Generators =
     
     let projectGen =
       gen {
-        let! id = Gen.guid
+        let! id = Arb.generate<Guid>
         let! name = validProjectNameGen
         let! description = validProjectDescriptionGen
         let! category = projectCategoryGen
