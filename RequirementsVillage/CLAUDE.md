@@ -201,6 +201,17 @@ A realistic app icon concept showing a gravestone with a project folder symbol â
   - Leverage type inference
   - Organize code with modules
 
+### Development Methodology
+- **Test-Driven Development (TDD)**: 
+  - Write tests BEFORE implementing features
+  - Follow Red-Green-Refactor cycle
+  - Start with failing tests that define behavior
+  - Implement minimum code to make tests pass
+  - Refactor while keeping tests green
+  - Use property-based tests with FsCheck for complex logic
+  - Use Faker/Bogus for realistic test data generation
+  - Aim for high test coverage from the start
+
 ### Formatting Preferences
 
 #### Record Types
