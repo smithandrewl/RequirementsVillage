@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>opencover,lcov,json</Format>
+          <Exclude>[xunit.*]*,[*]*.Program,[*]*.Tests.*,[*]Argu*,[*]FSharp.Core*,[*]Giraffe*,[*]Microsoft.*,[*]System.*,[*]Newtonsoft.*</Exclude>
+          <ExcludeByFile>**/obj/**/*,**/bin/**/*,**/*.AssemblyInfo.fs,**/Program.fs</ExcludeByFile>
+          <Include>[RequirementsVillage.*]*</Include>
+          <SingleHit>false</SingleHit>
+          <UseSourceLink>true</UseSourceLink>
+          <IncludeTestAssembly>false</IncludeTestAssembly>
+          <SkipAutoProps>true</SkipAutoProps>
+          <DeterministicReport>false</DeterministicReport>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

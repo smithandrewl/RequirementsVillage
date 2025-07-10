@@ -68,3 +68,10 @@ _ReSharper.*
 *.coverage
 *.nunit.xml
 *.TestResult.xml
+
+# --- Test Coverage ---
+coverage/
+*.opencover.xml
+*.lcov
+.nyc_output/
+coverlet.json

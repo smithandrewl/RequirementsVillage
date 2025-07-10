@@ -110,6 +110,78 @@ cd RequirementsVillage/RequirementsVillage.Api
 dotnet run --configuration Release
 ```
 
+### Testing Commands
+
+#### Using F# Test Runner (Recommended)
+```bash
+# Run all tests
+dotnet fsi TestRunner.fsx All
+
+# Run backend tests only
+dotnet fsi TestRunner.fsx Backend
+
+# Run frontend tests only
+dotnet fsi TestRunner.fsx Frontend
+
+# Run all tests with coverage
+dotnet fsi TestRunner.fsx All -c
+
+# Run backend tests with coverage
+dotnet fsi TestRunner.fsx Backend -c
+
+# Run filtered backend tests
+dotnet fsi TestRunner.fsx Backend -f "ProjectService"
+
+# Run tests with custom output directory
+dotnet fsi TestRunner.fsx All -c -o ./my-coverage
+```
+
+#### Using Python Test Runner (Alternative)
+```bash
+# Run all tests
+python test_runner.py all
+
+# Run backend tests with coverage
+python test_runner.py backend -c
+
+# Run frontend tests only
+python test_runner.py frontend
+
+# Run all tests with coverage to custom directory
+python test_runner.py all -c -o ./cov
+
+# Run filtered backend tests
+python test_runner.py backend -f "ProjectService"
+```
+
+#### Using Make-style F# Script
+```bash
+# Show available tasks
+dotnet fsi make.fsx help
+
+# Run all tests
+dotnet fsi make.fsx test
+
+# Run tests with coverage
+dotnet fsi make.fsx test:coverage
+
+# Build solution
+dotnet fsi make.fsx build
+
+# Clean build artifacts and coverage
+dotnet fsi make.fsx clean
+```
+
+### Coverage Reports
+After running tests with coverage, reports are generated in:
+- `./coverage/backend/` - Backend coverage reports
+- `./coverage/frontend/` - Frontend coverage reports
+- `./coverage/summary.txt` - Coverage summary
+
+HTML reports can be viewed by opening:
+- Backend: `./coverage/backend/index.html`
+- Frontend: `./coverage/frontend/index.html`
+
 ---
 
 ## 🌐 API Endpoints

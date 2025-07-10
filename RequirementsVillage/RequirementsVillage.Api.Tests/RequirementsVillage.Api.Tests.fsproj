@@ -32,7 +32,23 @@
     
     <!-- Mocking (if needed) -->
     <PackageReference Include="NSubstitute" Version="5.1.0" />
+    
+    <!-- Code Coverage -->
+    <PackageReference Include="coverlet.msbuild" Version="6.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
+  
+  <!-- Coverage Settings -->
+  <PropertyGroup>
+    <CollectCoverage>false</CollectCoverage>
+    <CoverletOutputFormat>opencover</CoverletOutputFormat>
+    <Exclude>[xunit.*]*,[*]*.Program,[*]*.Tests.*,[*]Argu*</Exclude>
+    <ExcludeByFile>**/obj/**/*,**/bin/**/*,**/*.AssemblyInfo.fs</ExcludeByFile>
+    <IncludeTestAssembly>false</IncludeTestAssembly>
+    <SkipAutoProps>true</SkipAutoProps>
+  </PropertyGroup>
 
   <ItemGroup>
     <!-- Project Reference -->
@@ -58,6 +74,7 @@
     <Compile Include="Unit/Services/ProjectServiceTests.fs" />
     <Compile Include="Unit/Services/ProjectServiceValidationTests.fs" />
     <Compile Include="Unit/Services/ProjectServiceAdvancedTests.fs" />
+    <Compile Include="Unit/PropertyTests.fs" />
     
     <!-- Integration Tests -->
     <Compile Include="Integration/ApiTestFactory.fs" />
