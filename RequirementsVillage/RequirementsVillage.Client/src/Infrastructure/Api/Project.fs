@@ -3,9 +3,9 @@ module RequirementsVillage.Client.Infrastructure.Api.Project
 open Fable.Core
 open Fetch
 open Thoth.Json
-open RequirementsVillage.Client.Domain.Project
-open RequirementsVillage.Client.Infrastructure.Api.Types
+open RequirementsVillage.Shared
 open RequirementsVillage.Client.Infrastructure.Api.Codecs
+open RequirementsVillage.Client.Infrastructure.Api.Types
 open RequirementsVillage.Client.Configuration.Constants
 
 let getProjects () : JS.Promise<Result<Project list, ApiError>> =

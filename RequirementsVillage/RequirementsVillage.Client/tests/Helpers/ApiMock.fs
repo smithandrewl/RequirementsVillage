@@ -2,7 +2,7 @@ module RequirementsVillage.Client.Tests.Helpers.ApiMock
 
 open Fable.Core
 open Fable.Core.JS
-open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Shared
 open RequirementsVillage.Client.Infrastructure.Api.Types
 open RequirementsVillage.Client.Tests.Helpers.TestData
 

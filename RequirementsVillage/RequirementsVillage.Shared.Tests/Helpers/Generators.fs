@@ -1,4 +1,4 @@
-namespace RequirementsVillage.Api.Tests.Helpers
+namespace RequirementsVillage.Shared.Tests.Helpers
 
 open System
 open Bogus

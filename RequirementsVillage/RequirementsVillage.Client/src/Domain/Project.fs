@@ -1,47 +1,19 @@
 module RequirementsVillage.Client.Domain.Project
 
-open System
-open System.Text.RegularExpressions
+// Import all shared domain types
+open RequirementsVillage.Shared
 
-// Utility function for display text conversion
-let duCaseToDisplayText (caseValue: obj) =
-  let caseStr = caseValue.ToString()
-  
-  Regex.Replace(caseStr, "([A-Z])", " $1").Trim()
+// Re-export for backward compatibility
+type Project         = RequirementsVillage.Shared.Project
+type ProjectStatus   = RequirementsVillage.Shared.ProjectStatus
+type ProjectCategory = RequirementsVillage.Shared.ProjectCategory
 
-// Project status domain
-type ProjectStatus =
-  | Idea
-  | InProgress
-  | Completed
-  | Abandoned
-  | OnHold
+// Re-export utility functions
+let duCaseToDisplayText = Utils.duCaseToDisplayText
 
-// Project category domain
-type ProjectCategory =
-  | WebApp
-  | MobileApp
-  | Library
-  | Tool
-  | Game
-  | Other of string
-
-// Display text utilities
+// Re-export display text functions
 module ProjectStatus =
-  let toDisplayText status = duCaseToDisplayText status
+  let toDisplayText = ProjectStatus.toDisplayText
 
 module ProjectCategory =
-  let toDisplayText = function
-    | Other s  -> s
-    | category -> duCaseToDisplayText category
-
-// Main project entity
-type Project = {
-  Id:          Guid
-  Name:        string
-  Description: string
-  Category:    ProjectCategory
-  Status:      ProjectStatus
-  CreatedAt:   DateTime
-  UpdatedAt:   DateTime
-}
+  let toDisplayText = ProjectCategory.toDisplayText

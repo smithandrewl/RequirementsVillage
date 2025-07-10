@@ -1,4 +1,4 @@
-namespace RequirementsVillage.Api.Tests.Helpers
+namespace RequirementsVillage.Shared.Tests.Helpers
 
 open System
 open FsUnit.Xunit
@@ -112,3 +112,17 @@ module TestHelpers =
     if diff > toleranceMs then
       failwithf "Expected %A to be within %A of %A, but difference was %A"
         actual tolerance expected (TimeSpan.FromMilliseconds(diff))
+  
+  // Assert strings are equal ignoring case
+  let shouldEqualIgnoreCase (expected: string) (actual: string) =
+    actual.ToLowerInvariant() |> should equal (expected.ToLowerInvariant())
+  
+  // Validation test data
+  let validProjectNameSample = "Valid Project Name"
+  let validProjectDescriptionSample = "This is a valid project description."
+  
+  let invalidProjectName = ""
+  let invalidProjectDescription = ""
+  
+  let tooLongProjectName = String.replicate 101 "x"
+  let tooLongProjectDescription = String.replicate 1001 "x"

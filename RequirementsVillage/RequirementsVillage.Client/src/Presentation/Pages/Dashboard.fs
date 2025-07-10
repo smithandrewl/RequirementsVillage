@@ -2,7 +2,7 @@ module RequirementsVillage.Client.Presentation.Pages.Dashboard
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Shared
 open RequirementsVillage.Client.Presentation.State.Types
 open RequirementsVillage.Client.Presentation.Components
 

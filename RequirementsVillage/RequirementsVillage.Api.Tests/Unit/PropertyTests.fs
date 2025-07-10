@@ -4,7 +4,7 @@ open System
 open Xunit
 open FsCheck
 open FsCheck.Xunit
-open RequirementsVillage.Api.Models
+open RequirementsVillage.Shared
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Tests.Helpers.Generators

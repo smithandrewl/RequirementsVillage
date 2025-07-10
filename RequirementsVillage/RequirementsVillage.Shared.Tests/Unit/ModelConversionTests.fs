@@ -1,4 +1,4 @@
-namespace RequirementsVillage.Api.Tests.Unit.Models
+namespace RequirementsVillage.Shared.Tests.Unit
 
 open System
 open System.Text.Json
@@ -6,9 +6,9 @@ open Xunit
 open FsUnit.Xunit
 open FsCheck
 open FsCheck.Xunit
-open RequirementsVillage.Api.Models
-open RequirementsVillage.Api.Models.Serialization
-open RequirementsVillage.Api.Tests.Helpers
+open RequirementsVillage.Shared
+open RequirementsVillage.Shared.Tests.Helpers.JsonHelpers
+open RequirementsVillage.Shared.Tests.Helpers
 
 module ModelConversionTests =
   

@@ -1,7 +1,7 @@
 namespace RequirementsVillage.Api.Tests.Helpers
 
 open System
-open RequirementsVillage.Api.Models
+open RequirementsVillage.Shared
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Services
 

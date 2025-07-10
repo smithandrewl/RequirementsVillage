@@ -25,48 +25,21 @@ module DapperTypeHandlers =
     inherit SqlMapper.TypeHandler<ProjectStatus>()
 
     override _.SetValue(param, value) =
-      let stringValue =
-        match value with
-        | Idea       -> "idea"
-        | InProgress -> "inProgress"
-        | Completed  -> "completed"
-        | Abandoned  -> "abandoned"
-        | OnHold     -> "onHold"
-
-      param.Value <- stringValue
+      param.Value <- ProjectStatus.toString value
 
     override _.Parse(value) =
-      match value :?> string with
-      | "idea"       -> Idea
-      | "inProgress" -> InProgress
-      | "completed"  -> Completed
-      | "abandoned"  -> Abandoned
-      | "onHold"     -> OnHold
-      | s            -> failwithf "Unknown ProjectStatus: %s" s
+      match ProjectStatus.fromString (value :?> string) with
+      | Ok status -> status
+      | Error msg -> failwith msg
 
   type ProjectCategoryHandler() =
     inherit SqlMapper.TypeHandler<ProjectCategory>()
 
     override _.SetValue(param, value) =
-      let stringValue =
-        match value with
-        | WebApp    -> "webApp"
-        | MobileApp -> "mobileApp"
-        | Library   -> "library"
-        | Tool      -> "tool"
-        | Game      -> "game"
-        | Other s   -> s
-
-      param.Value <- stringValue
+      param.Value <- ProjectCategory.toString value
 
     override _.Parse(value) =
-      match value :?> string with
-      | "webApp"    -> WebApp
-      | "mobileApp" -> MobileApp
-      | "library"   -> Library
-      | "tool"      -> Tool
-      | "game"      -> Game
-      | s           -> Other s
+      value :?> string |> ProjectCategory.fromString
 
   let registerHandlers() =
     SqlMapper.AddTypeHandler(ProjectStatusHandler())

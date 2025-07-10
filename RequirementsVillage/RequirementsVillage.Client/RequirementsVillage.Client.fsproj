@@ -22,6 +22,9 @@
     <Compile Include="src/App.fs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="../RequirementsVillage.Shared/RequirementsVillage.Shared.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Fable.Core" Version="4.3.0">
       <ExcludeAssets>contentFiles</ExcludeAssets>
     </PackageReference>

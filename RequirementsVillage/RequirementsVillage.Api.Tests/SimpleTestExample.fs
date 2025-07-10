@@ -2,7 +2,7 @@ module RequirementsVillage.Api.Tests.SimpleTestExample
 
 open Xunit
 open FsUnit.Xunit
-open RequirementsVillage.Api.Models
+open RequirementsVillage.Shared
 
 // Simple example test to verify the test project is set up correctly
 [<Fact>]

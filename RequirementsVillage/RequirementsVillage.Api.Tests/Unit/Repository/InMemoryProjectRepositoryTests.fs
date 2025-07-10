@@ -3,7 +3,7 @@ namespace RequirementsVillage.Api.Tests.Unit.Repository
 open System
 open Xunit
 open FsUnit.Xunit
-open RequirementsVillage.Api.Models
+open RequirementsVillage.Shared
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Tests.Helpers
 

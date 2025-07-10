@@ -4,7 +4,7 @@ open Fable.Mocha
 open RequirementsVillage.Client.Presentation.State.Types
 open RequirementsVillage.Client.Presentation.State.Update
 open RequirementsVillage.Client.Infrastructure.Api.Types
-open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Shared
 open RequirementsVillage.Client.Tests.Helpers.TestHelpers
 open RequirementsVillage.Client.Tests.Helpers.TestData
 open System

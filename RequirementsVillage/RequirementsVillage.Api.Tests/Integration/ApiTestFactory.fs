@@ -60,7 +60,7 @@ module ApiTestHelpers =
   
   open System.Text
   open System.Text.Json
-  open RequirementsVillage.Api.Models
+  open RequirementsVillage.Shared
   open RequirementsVillage.Api.Models.Serialization
   
   let createClient (factory: TestWebApplicationFactory) =

@@ -1,32 +1,21 @@
 module RequirementsVillage.Client.Infrastructure.Api.Codecs
 
 open Thoth.Json
-open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Shared
+open System
 
 // Decoders
 let statusDecoder: Decoder<ProjectStatus> =
   Decode.string
   |> Decode.andThen (fun s ->
-    match s with
-    | "idea"       -> Decode.succeed Idea
-    | "inProgress" -> Decode.succeed InProgress
-    | "completed"  -> Decode.succeed Completed
-    | "abandoned"  -> Decode.succeed Abandoned
-    | "onHold"     -> Decode.succeed OnHold
-    | _            -> Decode.fail (sprintf "Unknown status: %s" s)
+    match ProjectStatus.fromString s with
+    | Ok status -> Decode.succeed status
+    | Error msg -> Decode.fail msg
   )
 
 let categoryDecoder: Decoder<ProjectCategory> =
   Decode.string
-  |> Decode.andThen (fun s ->
-    match s with
-    | "webApp"    -> Decode.succeed WebApp
-    | "mobileApp" -> Decode.succeed MobileApp
-    | "library"   -> Decode.succeed Library
-    | "tool"      -> Decode.succeed Tool
-    | "game"      -> Decode.succeed Game
-    | other       -> Decode.succeed (Other other)
-  )
+  |> Decode.map ProjectCategory.fromString
 
 let projectDecoder: Decoder<Project> =
   Decode.object (fun get ->
@@ -43,30 +32,17 @@ let projectDecoder: Decoder<Project> =
 
 // Encoders
 module ProjectStatus =
-  let encoder (status: ProjectStatus) : Encoder<obj> =
-    match status with
-    | Idea       -> Encode.string "Idea"
-    | InProgress -> Encode.string "InProgress"
-    | Completed  -> Encode.string "Completed"
-    | Abandoned  -> Encode.string "Abandoned"
-    | OnHold     -> Encode.string "OnHold"
-  
+  let encoder (status: ProjectStatus) =
+    ProjectStatus.toString status |> Encode.string
   let decoder = statusDecoder
 
 module ProjectCategory =
-  let encoder (category: ProjectCategory) : Encoder<obj> =
-    match category with
-    | WebApp    -> Encode.string "WebApp"
-    | MobileApp -> Encode.string "MobileApp"
-    | Library   -> Encode.string "Library"
-    | Tool      -> Encode.string "Tool"
-    | Game      -> Encode.string "Game"
-    | Other s   -> Encode.string $"Other:{s}"
-  
+  let encoder (category: ProjectCategory) =
+    ProjectCategory.toString category |> Encode.string
   let decoder = categoryDecoder
 
 module Project =
-  let encoder (project: Project) : Encoder<obj> =
+  let encoder (project: Project) =
     Encode.object [
       "id",          Encode.guid project.Id
       "name",        Encode.string project.Name
@@ -76,5 +52,4 @@ module Project =
       "createdAt",   Encode.datetime project.CreatedAt
       "updatedAt",   Encode.datetime project.UpdatedAt
     ]
-  
   let decoder = projectDecoder

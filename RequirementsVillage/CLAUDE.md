@@ -386,3 +386,38 @@ member _.CreateProjectAsync(
 - **Frontend Build**: Webpack outputs to API's wwwroot folder
 - **CORS**: Enabled for localhost:8080 in development
 - **JSON**: Custom F# converters for discriminated unions
+
+### Testing Infrastructure
+Requirements Village is a full-stack F# application with comprehensive test coverage:
+- **Backend Tests**: xUnit, FsUnit, FsCheck, Bogus for API and business logic
+- **Frontend Tests**: Fable.Mocha for Elmish state and components
+- **Test Runner**: Unified F# script (TestRunner.fsx) for all tests
+- **Coverage**: Integrated coverage reporting for both backend and frontend
+
+### Running Tests
+```bash
+# Run all tests
+dotnet fsi TestRunner.fsx All
+
+# Run backend tests only
+dotnet fsi TestRunner.fsx Backend
+
+# Run frontend tests only  
+dotnet fsi TestRunner.fsx Frontend
+
+# Run with coverage
+dotnet fsi TestRunner.fsx All -c
+
+# Filter backend tests
+dotnet fsi TestRunner.fsx Backend -f "ProjectService"
+```
+
+### Test Organization
+- **Backend**: RequirementsVillage.Api.Tests/
+  - Unit tests for Models, Services, Repository
+  - Integration tests for API endpoints
+  - Property-based tests with FsCheck
+- **Frontend**: RequirementsVillage.Client/tests/
+  - State management tests
+  - Component tests
+  - API client tests

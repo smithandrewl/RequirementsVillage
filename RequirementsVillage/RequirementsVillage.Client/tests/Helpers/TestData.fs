@@ -1,7 +1,7 @@
 module RequirementsVillage.Client.Tests.Helpers.TestData
 
 open System
-open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Shared
 open Bogus
 
 // Configure Bogus faker

@@ -4,7 +4,7 @@ open Fable.Core
 open Fable.Mocha
 open RequirementsVillage.Client.Presentation.State.Types
 open RequirementsVillage.Client.Infrastructure.Storage.ThemeStorage
-open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Shared
 open Elmish
 
 // Test assertion helpers

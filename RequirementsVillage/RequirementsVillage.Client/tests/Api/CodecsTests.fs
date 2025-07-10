@@ -2,8 +2,8 @@ module RequirementsVillage.Client.Tests.Api.CodecsTests
 
 open Fable.Mocha
 open Thoth.Json
+open RequirementsVillage.Shared
 open RequirementsVillage.Client.Infrastructure.Api.Codecs
-open RequirementsVillage.Client.Domain.Project
 open RequirementsVillage.Client.Tests.Helpers.TestHelpers
 open RequirementsVillage.Client.Tests.Helpers.TestData
 open System

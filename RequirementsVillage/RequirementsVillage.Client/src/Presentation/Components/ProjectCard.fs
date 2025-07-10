@@ -2,7 +2,7 @@ module RequirementsVillage.Client.Presentation.Components.ProjectCard
 
 open Feliz
 open Feliz.Bulma
-open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Shared
 
 // Private helper functions
 let private statusToColor = function

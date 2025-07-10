@@ -5,7 +5,7 @@ open Feliz
 open RequirementsVillage.Client.Presentation.Components.Common
 open RequirementsVillage.Client.Tests.Helpers.TestHelpers
 open RequirementsVillage.Client.Tests.Helpers.TestData
-open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Shared
 
 // Helper to verify component structure
 let private verifyTagStructure (element: ReactElement) =

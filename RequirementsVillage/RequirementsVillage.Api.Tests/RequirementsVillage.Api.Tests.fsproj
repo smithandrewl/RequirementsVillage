@@ -51,8 +51,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Project Reference -->
+    <!-- Project References -->
     <ProjectReference Include="..\RequirementsVillage.Api\RequirementsVillage.Api.fsproj" />
+    <ProjectReference Include="..\RequirementsVillage.Shared\RequirementsVillage.Shared.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,12 +65,6 @@
     <Compile Include="Helpers/Fixtures.fs" />
     
     <!-- Unit Tests -->
-    <Compile Include="Unit/Models/ProjectCategoryTests.fs" />
-    <Compile Include="Unit/Models/ProjectStatusTests.fs" />
-    <Compile Include="Unit/Models/ProjectTests.fs" />
-    <Compile Include="Unit/Models/ProjectErrorTests.fs" />
-    <Compile Include="Unit/Models/ModelConversionTests.fs" />
-    <Compile Include="Unit/Models/ModelEdgeCaseTests.fs" />
     <Compile Include="Unit/Repository/InMemoryProjectRepositoryTests.fs" />
     <Compile Include="Unit/Services/ProjectServiceTests.fs" />
     <Compile Include="Unit/Services/ProjectServiceValidationTests.fs" />

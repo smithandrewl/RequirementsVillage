@@ -5,7 +5,7 @@ open Feliz
 open RequirementsVillage.Client.Presentation.Components.ProjectCard
 open RequirementsVillage.Client.Tests.Helpers.TestHelpers
 open RequirementsVillage.Client.Tests.Helpers.TestData
-open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Shared
 open System
 
 // Helper to verify component structure

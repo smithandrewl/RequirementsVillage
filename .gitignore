@@ -75,3 +75,6 @@ coverage/
 *.lcov
 .nyc_output/
 coverlet.json
+
+# --- Fable transpiled files ---
+RequirementsVillage/RequirementsVillage.Shared/*.js

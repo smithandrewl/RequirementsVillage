@@ -1,47 +1,15 @@
 namespace RequirementsVillage.Api.Models
 
 open System
+open RequirementsVillage.Shared
 
-type ProjectStatus =
-  | Idea
-  | InProgress
-  | Completed
-  | Abandoned
-  | OnHold
+// Import shared models for convenience
+type Project      = RequirementsVillage.Shared.Project
+type ProjectStatus = RequirementsVillage.Shared.ProjectStatus
+type ProjectCategory = RequirementsVillage.Shared.ProjectCategory
+type ProjectError = RequirementsVillage.Shared.ProjectError
 
-type ProjectCategory =
-  | WebApp
-  | MobileApp
-  | Library
-  | Tool
-  | Game
-  | Other of string
-
-type ProjectError =
-  | NotFound of
-        projectId:     Guid
-      * searchContext: string
-  | ValidationFailed of
-        field:          string
-      * reason:         string
-      * attemptedValue: obj
-  | DatabaseError of
-        operation:  string
-      * tableName:  string
-      * innerError: exn
-  | UnknownError of message: string
-
-type Project = {
-  Id:          Guid
-  Name:        string
-  Description: string
-  Category:    ProjectCategory
-  Status:      ProjectStatus
-  CreatedAt:   DateTime
-  UpdatedAt:   DateTime
-}
-
-// Module for serialization helpers
+// API-specific serialization support for System.Text.Json
 module Serialization =
   open System.Text.Json
   open System.Text.Json.Serialization
@@ -51,46 +19,21 @@ module Serialization =
     inherit JsonConverter<ProjectStatus>()
 
     override _.Read(reader, typeToConvert, options) =
-      match reader.GetString() with
-      | "idea"       -> Idea
-      | "inProgress" -> InProgress
-      | "completed"  -> Completed
-      | "abandoned"  -> Abandoned
-      | "onHold"     -> OnHold
-      | s            -> failwithf "Unknown ProjectStatus: %s" s
+      match ProjectStatus.fromString (reader.GetString()) with
+      | Ok status -> status
+      | Error msg -> failwith msg
 
     override _.Write(writer, value, options) =
-      let stringValue =
-        match value with
-        | Idea       -> "idea"
-        | InProgress -> "inProgress"
-        | Completed  -> "completed"
-        | Abandoned  -> "abandoned"
-        | OnHold     -> "onHold"
-      writer.WriteStringValue(stringValue)
+      writer.WriteStringValue(ProjectStatus.toString value)
 
   type ProjectCategoryConverter() =
     inherit JsonConverter<ProjectCategory>()
 
     override _.Read(reader, typeToConvert, options) =
-      match reader.GetString() with
-      | "webApp"    -> WebApp
-      | "mobileApp" -> MobileApp
-      | "library"   -> Library
-      | "tool"      -> Tool
-      | "game"      -> Game
-      | s           -> Other s
+      reader.GetString() |> ProjectCategory.fromString
 
     override _.Write(writer, value, options) =
-      let stringValue =
-        match value with
-        | WebApp    -> "webApp"
-        | MobileApp -> "mobileApp"
-        | Library   -> "library"
-        | Tool      -> "tool"
-        | Game      -> "game"
-        | Other s   -> s
-      writer.WriteStringValue(stringValue)
+      writer.WriteStringValue(ProjectCategory.toString value)
 
   // JSON serialization options
   let jsonOptions =

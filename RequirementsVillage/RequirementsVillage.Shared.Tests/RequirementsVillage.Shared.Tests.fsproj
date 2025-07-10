@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <GenerateProgramFile>false</GenerateProgramFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Helpers/TestHelpers.fs" />
+    <Compile Include="Helpers/Generators.fs" />
+    <Compile Include="Helpers/JsonHelpers.fs" />
+    <Compile Include="Unit/ProjectTests.fs" />
+    <Compile Include="Unit/ProjectStatusTests.fs" />
+    <Compile Include="Unit/ProjectCategoryTests.fs" />
+    <Compile Include="Unit/ProjectErrorTests.fs" />
+    <Compile Include="Unit/ModelConversionTests.fs" />
+    <Compile Include="Unit/ModelEdgeCaseTests.fs" />
+    <Compile Include="Unit/CodecsTests.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../RequirementsVillage.Shared/RequirementsVillage.Shared.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.6.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="FsUnit.xUnit" Version="5.6.1" />
+    <PackageReference Include="FsCheck" Version="2.16.6" />
+    <PackageReference Include="FsCheck.Xunit" Version="2.16.6" />
+    <PackageReference Include="Bogus" Version="35.0.1" />
+    <PackageReference Include="Thoth.Json.Net" Version="11.0.0" />
+  </ItemGroup>
+
+</Project>

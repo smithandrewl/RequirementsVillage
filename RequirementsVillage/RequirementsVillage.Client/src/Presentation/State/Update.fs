@@ -1,7 +1,7 @@
 module RequirementsVillage.Client.Presentation.State.Update
 
 open Elmish
-open RequirementsVillage.Client.Domain.Project
+open RequirementsVillage.Shared
 open RequirementsVillage.Client.Presentation.State.Types
 open RequirementsVillage.Client.Infrastructure.Api.Project
 open RequirementsVillage.Client.Infrastructure.Storage.ThemeStorage

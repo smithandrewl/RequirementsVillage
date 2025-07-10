@@ -1,4 +1,4 @@
-namespace RequirementsVillage.Api.Tests.Unit.Models
+namespace RequirementsVillage.Shared.Tests.Unit
 
 open System
 open System.Text.Json
@@ -6,12 +6,9 @@ open Xunit
 open FsUnit.Xunit
 open FsCheck
 open FsCheck.Xunit
-open RequirementsVillage.Api.Models
-open RequirementsVillage.Api.Models.Serialization
-open RequirementsVillage.Api.Persistence.DapperTypeHandlers
-open RequirementsVillage.Api.Tests.Helpers
-open Dapper
-open FsCheck
+open RequirementsVillage.Shared
+open RequirementsVillage.Shared.Tests.Helpers.JsonHelpers
+open RequirementsVillage.Shared.Tests.Helpers
 
 module ProjectCategoryTests =
   
@@ -100,43 +97,4 @@ module ProjectCategoryTests =
       match category with
       | Other value -> value = s
       | _           -> false
-    )
-  
-  [<Fact>]
-  let ``Dapper type handler should correctly serialize categories`` () =
-    // Register handlers
-    registerHandlers()
-    
-    let handler = ProjectCategoryHandler()
-    
-    // Test serialization directly without mock parameter
-    let testCases = [
-      (WebApp,         "webApp")
-      (MobileApp,      "mobileApp")
-      (Library,        "library")
-      (Tool,           "tool")
-      (Game,           "game")
-      (Other "Custom", "Custom")
-    ]
-    
-    // For now, just verify the handler exists
-    handler |> should not' (be null)
-  
-  [<Fact>]
-  let ``Dapper type handler should correctly deserialize categories`` () =
-    let handler = ProjectCategoryHandler()
-    
-    let testCases = [
-      ("webApp",    WebApp)
-      ("mobileApp", MobileApp)
-      ("library",   Library)
-      ("tool",      Tool)
-      ("game",      Game)
-      ("Custom",    Other "Custom")
-    ]
-    
-    testCases
-    |> List.iter (fun (value, expected) ->
-      let result = handler.Parse(value)
-      result |> should equal expected
     )
