@@ -5,7 +5,9 @@
   "scripts": {
     "start": "dotnet fable watch . --run webpack serve",
     "build": "dotnet fable . && webpack",
-    "test": "echo 'No tests configured yet'"
+    "test": "dotnet fable watch tests --run mocha tests-js --recursive --exit",
+    "test:once": "dotnet fable tests && mocha tests-js --recursive --exit",
+    "test:watch": "dotnet fable watch tests --run mocha tests-js --recursive --watch"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",
@@ -13,7 +15,10 @@
     "html-webpack-plugin": "^5.5.3",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^4.15.1",
+    "mocha": "^10.2.0",
+    "jsdom": "^23.0.0",
+    "jsdom-global": "^3.0.2"
   },
   "dependencies": {
     "react": "^18.2.0",

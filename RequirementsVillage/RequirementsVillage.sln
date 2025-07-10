@@ -7,6 +7,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RequirementsVillage.Client"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RequirementsVillage.Api", "RequirementsVillage.Api\RequirementsVillage.Api.fsproj", "{D7E7713C-FFBF-473A-986C-E87AB3110C88}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RequirementsVillage.Api.Tests", "RequirementsVillage.Api.Tests\RequirementsVillage.Api.Tests.fsproj", "{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A7B5E9C3-4F2D-4A8E-9C1D-3E2F4B5A6D7C}"
 	ProjectSection(SolutionItems) = preProject
 		..\README.md = ..\README.md
@@ -47,6 +49,18 @@ Global
 		{D7E7713C-FFBF-473A-986C-E87AB3110C88}.Release|x64.Build.0 = Release|Any CPU
 		{D7E7713C-FFBF-473A-986C-E87AB3110C88}.Release|x86.ActiveCfg = Release|Any CPU
 		{D7E7713C-FFBF-473A-986C-E87AB3110C88}.Release|x86.Build.0 = Release|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Debug|x64.Build.0 = Debug|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Debug|x86.Build.0 = Debug|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Release|x64.ActiveCfg = Release|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Release|x64.Build.0 = Release|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Release|x86.ActiveCfg = Release|Any CPU
+		{E8F9C5D1-3A2B-4E7F-8C9D-1E2F3A4B5C6D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
