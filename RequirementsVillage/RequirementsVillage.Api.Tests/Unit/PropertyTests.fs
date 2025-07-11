@@ -7,12 +7,12 @@ open FsCheck.Xunit
 open RequirementsVillage.Shared
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Persistence
-open RequirementsVillage.Api.Tests.Helpers.Generators
+open RequirementsVillage.Shared.TestGenerators
 
 module PropertyTests =
   
   // Register custom generators
-  do FsCheck.registerGenerators() |> ignore
+  do TestDataGenerators.FsCheck.registerGenerators() |> ignore
   
   // Helper to create service with in-memory repository
   let createServiceWithRepo() =
@@ -27,102 +27,40 @@ module PropertyTests =
     
     [<Property>]
     let ``UpdatedAt should always be greater than or equal to CreatedAt`` () =
-      Prop.forAll (FsCheck.projectGen |> Arb.fromGen) (fun project ->
+      Prop.forAll (TestDataGenerators.FsCheck.validProject |> Arb.fromGen) (fun project ->
         project.UpdatedAt >= project.CreatedAt
       )
     
     [<Property>]
     let ``Project Name should never be empty or whitespace`` () =
-      Prop.forAll (FsCheck.projectGen |> Arb.fromGen) (fun project ->
+      Prop.forAll (TestDataGenerators.FsCheck.validProject |> Arb.fromGen) (fun project ->
         not (String.IsNullOrWhiteSpace project.Name)
       )
     
     [<Property>]
     let ``Project Description should never be empty or whitespace`` () =
-      Prop.forAll (FsCheck.projectGen |> Arb.fromGen) (fun project ->
+      Prop.forAll (TestDataGenerators.FsCheck.validProject |> Arb.fromGen) (fun project ->
         not (String.IsNullOrWhiteSpace project.Description)
       )
     
     [<Property>]
     let ``Project Name length should be within valid bounds`` () =
-      Prop.forAll (FsCheck.projectGen |> Arb.fromGen) (fun project ->
+      Prop.forAll (TestDataGenerators.FsCheck.validProject |> Arb.fromGen) (fun project ->
         project.Name.Length > 0 && project.Name.Length <= 100
       )
     
     [<Property>]
     let ``Project Description length should be within valid bounds`` () =
-      Prop.forAll (FsCheck.projectGen |> Arb.fromGen) (fun project ->
+      Prop.forAll (TestDataGenerators.FsCheck.validProject |> Arb.fromGen) (fun project ->
         project.Description.Length > 0 && project.Description.Length <= 1000
       )
     
     [<Property>]
     let ``Project ID should never be empty Guid`` () =
-      Prop.forAll (FsCheck.projectGen |> Arb.fromGen) (fun project ->
+      Prop.forAll (TestDataGenerators.FsCheck.validProject |> Arb.fromGen) (fun project ->
         project.Id <> Guid.Empty
       )
   
-  // ===================================================================
-  // Status Transition Properties
-  // ===================================================================
-  
-  module StatusTransitions =
-    
-    // Valid transitions
-    let validTransitions = Set.ofList [
-      (Idea, InProgress)
-      (Idea, Abandoned)
-      (Idea, OnHold)
-      (InProgress, Completed)
-      (InProgress, Abandoned)
-      (InProgress, OnHold)
-      (OnHold, InProgress)
-      (OnHold, Abandoned)
-      (Completed, Abandoned)
-    ]
-    
-    // Self-transitions are always valid
-    let isSelfTransition from to' = from = to'
-    
-    // Check if transition is valid
-    let isValidTransition from to' =
-      isSelfTransition from to' || 
-      Set.contains (from, to') validTransitions
-    
-    [<Property>]
-    let ``Cannot transition directly from Idea to Completed`` () =
-      // This is our main business rule
-      not (isValidTransition Idea Completed)
-    
-    [<Property>]
-    let ``All self-transitions should be valid`` () =
-      Prop.forAll (FsCheck.projectStatusGen |> Arb.fromGen) (fun status ->
-        isValidTransition status status
-      )
-    
-    [<Property>]
-    let ``Valid transitions should form a directed acyclic graph (except self-transitions)`` () =
-      // Cannot go from Completed back to InProgress or Idea
-      not (isValidTransition Completed InProgress) &&
-      not (isValidTransition Completed Idea) &&
-      not (isValidTransition Completed OnHold) &&
-      // Cannot go from Abandoned to anything (terminal state)
-      not (isValidTransition Abandoned Idea) &&
-      not (isValidTransition Abandoned InProgress) &&
-      not (isValidTransition Abandoned Completed) &&
-      not (isValidTransition Abandoned OnHold)
-    
-    [<Property>]
-    let ``Abandoned and Completed are terminal states (except to each other or self)`` () =
-      let terminalStates = [Abandoned; Completed]
-      let nonTerminalStates = [Idea; InProgress; OnHold]
-      
-      terminalStates
-      |> List.forall (fun terminal ->
-        nonTerminalStates
-        |> List.forall (fun nonTerminal ->
-          not (isValidTransition terminal nonTerminal)
-        )
-      )
   
   // ===================================================================
   // Service Logic Properties
@@ -134,9 +72,9 @@ module PropertyTests =
     let ``Creating a project then getting it by ID should return the same project`` () =
       Prop.forAll (
         Gen.map3 (fun a b c -> (a, b, c))
-          FsCheck.validProjectNameGen
-          FsCheck.validProjectDescriptionGen
-          FsCheck.projectCategoryGen
+          TestDataGenerators.FsCheck.projectName
+          TestDataGenerators.FsCheck.projectDescription
+          TestDataGenerators.FsCheck.projectCategory
         |> Arb.fromGen
       ) (fun (name, description, category) ->
         async {
@@ -165,9 +103,9 @@ module PropertyTests =
     let ``All created projects should start with Idea status`` () =
       Prop.forAll (
         Gen.map3 (fun a b c -> (a, b, c))
-          FsCheck.validProjectNameGen
-          FsCheck.validProjectDescriptionGen
-          FsCheck.projectCategoryGen
+          TestDataGenerators.FsCheck.projectName
+          TestDataGenerators.FsCheck.projectDescription
+          TestDataGenerators.FsCheck.projectCategory
         |> Arb.fromGen
       ) (fun (name, description, category) ->
         async {
@@ -187,9 +125,9 @@ module PropertyTests =
       Prop.forAll (
         Gen.listOfLength 10 (
           Gen.map3 (fun a b c -> (a, b, c))
-            FsCheck.validProjectNameGen
-            FsCheck.validProjectDescriptionGen
-            FsCheck.projectCategoryGen
+            TestDataGenerators.FsCheck.projectName
+            TestDataGenerators.FsCheck.projectDescription
+            TestDataGenerators.FsCheck.projectCategory
         ) |> Arb.fromGen
       ) (fun projectSpecs ->
         async {
@@ -220,7 +158,7 @@ module PropertyTests =
     [<Property>]
     let ``Updating a project should preserve its ID and CreatedAt`` () =
       Prop.forAll (
-        FsCheck.projectGen |> Arb.fromGen
+        TestDataGenerators.FsCheck.validProject |> Arb.fromGen
       ) (fun originalProject ->
         async {
           let service = createServiceWithRepo()
@@ -263,11 +201,10 @@ module PropertyTests =
       )
     
     [<Property>]
-    let ``Deleting a project should only succeed if status is Abandoned`` () =
+    let ``Deleting a project should succeed for any status`` () =
       Prop.forAll (
-        Gen.map2 (fun a b -> (a, b)) FsCheck.projectGen FsCheck.projectStatusGen
-        |> Arb.fromGen
-      ) (fun (project, status) ->
+        TestDataGenerators.FsCheck.validProject |> Arb.fromGen
+      ) (fun project ->
         async {
           let service = createServiceWithRepo()
           
@@ -281,30 +218,12 @@ module PropertyTests =
           
           match createResult with
           | Ok createdProject ->
-            // We need to follow valid transitions to get to the target status
-            let! transitionResult =
-              match status with
-              | Idea -> async { return Ok () } // Already Idea
-              | InProgress ->
-                service.UpdateProjectStatusAsync(createdProject.Id, InProgress)
-              | Abandoned ->
-                service.UpdateProjectStatusAsync(createdProject.Id, Abandoned)
-              | OnHold ->
-                service.UpdateProjectStatusAsync(createdProject.Id, OnHold)
-              | Completed ->
-                // Need to go through InProgress first
-                async {
-                  let! _ = service.UpdateProjectStatusAsync(createdProject.Id, InProgress)
-                  return! service.UpdateProjectStatusAsync(createdProject.Id, Completed)
-                }
-            
-            // Try to delete
+            // Delete should always succeed
             let! deleteResult = 
               service.DeleteProjectAsync(createdProject.Id)
             
-            match deleteResult, status with
-            | Ok (), _ when status = Abandoned -> return true // Should succeed for Abandoned
-            | Error _, _ when status <> Abandoned -> return true // Should fail for non-Abandoned
+            match deleteResult with
+            | Ok () -> return true
             | _ -> return false
           | _ -> return false
         } |> Async.RunSynchronously
@@ -390,7 +309,7 @@ module PropertyTests =
     [<Property>]
     let ``Repository should maintain consistent count after operations`` () =
       Prop.forAll (
-        Gen.listOfLength 5 FsCheck.projectGen |> Arb.fromGen
+        Gen.listOfLength 5 TestDataGenerators.FsCheck.validProject |> Arb.fromGen
       ) (fun projects ->
         async {
           let repo = InMemoryProjectRepository() :> IProjectRepository
@@ -427,7 +346,7 @@ module PropertyTests =
     [<Property>]
     let ``Updating non-existent project should fail`` () =
       Prop.forAll (
-        FsCheck.projectGen |> Arb.fromGen
+        TestDataGenerators.FsCheck.validProject |> Arb.fromGen
       ) (fun project ->
         async {
           let repo = InMemoryProjectRepository() :> IProjectRepository
@@ -445,7 +364,7 @@ module PropertyTests =
     [<Property>]
     let ``Getting all projects should return them in UpdatedAt descending order`` () =
       Prop.forAll (
-        Gen.listOfLength 10 FsCheck.projectGen 
+        Gen.listOfLength 10 TestDataGenerators.FsCheck.validProject 
         |> Gen.map (fun projects ->
           // Ensure distinct UpdatedAt times
           projects
@@ -599,84 +518,6 @@ module PropertyTests =
         } |> Async.RunSynchronously
       )
   
-  // ===================================================================
-  // Complex Business Logic Properties
-  // ===================================================================
-  
-  module ComplexBusinessLogic =
-    
-    [<Property>]
-    let ``Status transition validation should be transitive where applicable`` () =
-      // If A -> B is valid and B -> C is valid, check specific cases
-      let checkTransitivity from intermediate to' =
-        let service = createServiceWithRepo()
-        
-        async {
-          // Create project
-          let! createResult = 
-            service.CreateProjectAsync("Test", "Test", WebApp)
-          
-          match createResult with
-          | Ok project ->
-            // Try direct transition
-            let directTransition = 
-              match from, to' with
-              | Idea, Completed -> false // Known invalid
-              | _ -> true // Assume valid for this test
-            
-            // Try through intermediate
-            let! firstTransition = 
-              service.UpdateProjectStatusAsync(project.Id, intermediate)
-            
-            match firstTransition with
-            | Ok () ->
-              let! secondTransition = 
-                service.UpdateProjectStatusAsync(project.Id, to')
-              
-              match secondTransition with
-              | Ok () -> return true
-              | _ -> return not directTransition
-            | _ -> return false
-          | _ -> return false
-        } |> Async.RunSynchronously
-      
-      // Test specific transition paths
-      checkTransitivity Idea InProgress Completed &&
-      not (checkTransitivity Idea Abandoned InProgress) // Cannot leave Abandoned
-    
-    [<Property>]
-    let ``Project lifecycle should follow business rules`` () =
-      // A project's typical lifecycle
-      let typicalLifecycle = [
-        Idea
-        InProgress
-        Completed
-      ]
-      
-      async {
-        let service = createServiceWithRepo()
-        
-        // Create project
-        let! createResult = 
-          service.CreateProjectAsync("Lifecycle Test", "Test", WebApp)
-        
-        match createResult with
-        | Ok project ->
-          // Follow the lifecycle
-          let! results =
-            typicalLifecycle
-            |> List.skip 1 // Skip Idea as it's the initial status
-            |> List.map (fun status ->
-              service.UpdateProjectStatusAsync(project.Id, status)
-            )
-            |> Async.Sequential
-          
-          let allSuccessful = 
-            results |> Array.forall (function Ok () -> true | _ -> false)
-          
-          return allSuccessful
-        | _ -> return false
-      } |> Async.RunSynchronously
   
   // ===================================================================
   // Custom Generators for Complex Scenarios
@@ -705,8 +546,8 @@ module PropertyTests =
           |> List.map string
           |> String.concat ""
         
-        let! category = FsCheck.projectCategoryGen
-        let! status = FsCheck.projectStatusGen
+        let! category = TestDataGenerators.FsCheck.projectCategory
+        let! status = TestDataGenerators.FsCheck.projectStatus
         
         let now = DateTime.UtcNow
         let! daysAgo = Gen.choose (0, 365)
@@ -736,43 +577,12 @@ module PropertyTests =
         project.UpdatedAt >= project.CreatedAt
       )
     
-    // Generator for valid status transition sequences
-    let validStatusTransitionSequenceGen =
-      let transitions = Map.ofList [
-        Idea, [InProgress; Abandoned; OnHold]
-        InProgress, [Completed; Abandoned; OnHold]
-        OnHold, [InProgress; Abandoned]
-        Completed, [Abandoned]
-        Abandoned, []
-      ]
-      
-      let rec generatePath currentStatus maxLength =
-        gen {
-          if maxLength <= 0 then
-            return [currentStatus]
-          else
-            match Map.tryFind currentStatus transitions with
-            | Some possibleNext when possibleNext.Length > 0 ->
-              let! useTransition = Gen.frequency [(3, Gen.constant true); (1, Gen.constant false)]
-              if useTransition then
-                let! nextStatus = Gen.elements possibleNext
-                let! restPath = generatePath nextStatus (maxLength - 1)
-                return currentStatus :: restPath
-              else
-                return [currentStatus]
-            | _ -> return [currentStatus]
-        }
-      
-      gen {
-        let! maxLength = Gen.choose (1, 5)
-        return! generatePath Idea maxLength
-      }
     
     // Generator for projects with specific category patterns
     let projectWithCategoryPatternGen =
       gen {
         let! categoryType = Gen.choose (1, 6)
-        let! baseName = FsCheck.validProjectNameGen
+        let! baseName = TestDataGenerators.FsCheck.projectName
         
         let! categoryAndPrefix =
           match categoryType with
@@ -793,8 +603,8 @@ module PropertyTests =
           if baseName.StartsWith(namePrefix) then baseName
           else namePrefix + baseName
         
-        let! description = FsCheck.validProjectDescriptionGen
-        let! status = FsCheck.projectStatusGen
+        let! description = TestDataGenerators.FsCheck.projectDescription
+        let! status = TestDataGenerators.FsCheck.projectStatus
         
         return {
           Id          = Guid.NewGuid()
@@ -813,43 +623,6 @@ module PropertyTests =
   
   module AdvancedBusinessLogic =
     
-    [<Property>]
-    let ``Valid status transition sequences should always succeed`` () =
-      Prop.forAll (CustomGenerators.validStatusTransitionSequenceGen |> Arb.fromGen) (fun transitions ->
-        async {
-          if transitions.Length = 0 then
-            return true
-          else
-            let service = createServiceWithRepo()
-            
-            // Create project
-            let! createResult = 
-              service.CreateProjectAsync("Test Project", "Test Description", WebApp)
-            
-            match createResult with
-            | Ok project ->
-              // Apply all transitions in sequence (skip first as it's already Idea)
-              let! results =
-                transitions
-                |> List.skip 1
-                |> List.map (fun status ->
-                  service.UpdateProjectStatusAsync(project.Id, status)
-                )
-                |> List.fold (fun accAsync statusAsync ->
-                  async {
-                    let! acc = accAsync
-                    match acc with
-                    | Ok _ -> return! statusAsync
-                    | error -> return error
-                  }
-                ) (async { return Ok () })
-              
-              match results with
-              | Ok _ -> return true
-              | Error _ -> return false
-            | _ -> return false
-        } |> Async.RunSynchronously
-      )
     
     [<Property>]
     let ``Project categories should influence validation in expected ways`` () =
@@ -866,7 +639,7 @@ module PropertyTests =
     
     [<Property>]
     let ``Batch operations should maintain repository consistency`` () =
-      Prop.forAll (Gen.listOfLength 20 FsCheck.projectGen |> Arb.fromGen) (fun projects ->
+      Prop.forAll (Gen.listOfLength 20 TestDataGenerators.FsCheck.validProject |> Arb.fromGen) (fun projects ->
         async {
           let repo = InMemoryProjectRepository() :> IProjectRepository
           let service = ProjectService(repo) :> IProjectService
@@ -896,7 +669,7 @@ module PropertyTests =
     
     [<Property>]
     let ``Concurrent updates to different projects should all succeed`` () =
-      Prop.forAll (Gen.listOfLength 10 FsCheck.projectGen |> Arb.fromGen) (fun projectSpecs ->
+      Prop.forAll (Gen.listOfLength 10 TestDataGenerators.FsCheck.validProject |> Arb.fromGen) (fun projectSpecs ->
         async {
           let service = createServiceWithRepo()
           
@@ -954,13 +727,13 @@ module PropertyTests =
         (2, Gen.map (fun n -> String.replicate n " ") (Gen.choose (1, 10)))
         (2, Gen.map (fun n -> String.replicate n "a") (Gen.choose (95, 105)))
         (2, Gen.map (fun n -> String.replicate n "b") (Gen.choose (995, 1005)))
-        (3, FsCheck.validProjectNameGen)
+        (3, TestDataGenerators.FsCheck.projectName)
       ]
     
     [<Property>]
     let ``Complex validation scenarios should behave correctly`` () =
       Prop.forAll (
-        Gen.map3 (fun a b c -> (a, b, c)) edgeCaseStringGen edgeCaseStringGen FsCheck.projectCategoryGen
+        Gen.map3 (fun a b c -> (a, b, c)) edgeCaseStringGen edgeCaseStringGen TestDataGenerators.FsCheck.projectCategory
         |> Arb.fromGen
       ) (fun (name, description, category) ->
         async {
@@ -1015,67 +788,6 @@ module PropertyTests =
         } |> Async.RunSynchronously
       )
   
-  // ===================================================================
-  // State Machine Properties
-  // ===================================================================
-  
-  module StateMachineProperties =
-    
-    // Model the project status as a state machine
-    type StatusStateMachine = {
-      Current: ProjectStatus
-      History: ProjectStatus list
-    }
-    
-    let initialState = { Current = Idea; History = [Idea] }
-    
-    let transition state newStatus =
-      match StatusTransitions.isValidTransition state.Current newStatus with
-      | true -> 
-        Some { Current = newStatus; History = newStatus :: state.History }
-      | false -> 
-        None
-    
-    [<Property>]
-    let ``Status state machine should never reach invalid states`` () =
-      Prop.forAll (
-        Gen.listOfLength 10 FsCheck.projectStatusGen |> Arb.fromGen
-      ) (fun statusSequence ->
-        let finalState =
-          statusSequence
-          |> List.fold (fun state status ->
-            match state with
-            | Some s -> transition s status
-            | None -> None
-          ) (Some initialState)
-        
-        // If we have a final state, all transitions were valid
-        match finalState with
-        | Some state ->
-          // Check that history makes sense
-          state.History 
-          |> List.pairwise
-          |> List.forall (fun (newer, older) ->
-            // newer should be a valid transition from older (history is reversed)
-            StatusTransitions.isValidTransition older newer
-          )
-        | None -> 
-          // Some transition was invalid, which is expected
-          true
-      )
-    
-    [<Property>]
-    let ``Terminal states should not allow further transitions (except self)`` () =
-      let terminalStates = [Abandoned; Completed]
-      let nonTerminalTransitions = [Idea; InProgress; OnHold]
-      
-      terminalStates
-      |> List.forall (fun terminal ->
-        nonTerminalTransitions
-        |> List.forall (fun target ->
-          not (StatusTransitions.isValidTransition terminal target)
-        )
-      )
   
   // ===================================================================
   // Performance and Scale Properties
@@ -1115,7 +827,7 @@ module PropertyTests =
     
     [<Property>]
     let ``Repository operations should be idempotent where applicable`` () =
-      Prop.forAll (FsCheck.projectGen |> Arb.fromGen) (fun project ->
+      Prop.forAll (TestDataGenerators.FsCheck.validProject |> Arb.fromGen) (fun project ->
         async {
           let repo = InMemoryProjectRepository() :> IProjectRepository
           
@@ -1145,8 +857,8 @@ module PropertyTests =
   module AlgebraicProperties =
     
     [<Property>]
-    let ``Creating then deleting should result in empty repository (for abandoned projects)`` () =
-      Prop.forAll (FsCheck.projectGen |> Arb.fromGen) (fun projectSpec ->
+    let ``Creating then deleting should result in empty repository`` () =
+      Prop.forAll (TestDataGenerators.FsCheck.validProject |> Arb.fromGen) (fun projectSpec ->
         async {
           let service = createServiceWithRepo()
           
@@ -1160,23 +872,16 @@ module PropertyTests =
           
           match createResult with
           | Ok project ->
-            // Transition to Abandoned
-            let! abandonResult = 
-              service.UpdateProjectStatusAsync(project.Id, Abandoned)
+            // Delete project (no need to transition to Abandoned first)
+            let! deleteResult = service.DeleteProjectAsync(project.Id)
             
-            match abandonResult with
+            match deleteResult with
             | Ok () ->
-              // Delete project
-              let! deleteResult = service.DeleteProjectAsync(project.Id)
+              // Try to get project
+              let! getResult = service.GetProjectByIdAsync(project.Id)
               
-              match deleteResult with
-              | Ok () ->
-                // Try to get project
-                let! getResult = service.GetProjectByIdAsync(project.Id)
-                
-                match getResult with
-                | Ok None -> return true // Project not found, as expected
-                | _ -> return false
+              match getResult with
+              | Ok None -> return true // Project not found, as expected
               | _ -> return false
             | _ -> return false
           | _ -> return false
@@ -1187,9 +892,9 @@ module PropertyTests =
     let ``Update operations should be associative`` () =
       Prop.forAll (
         Gen.map3 (fun a b c -> (a, b, c))
-          FsCheck.validProjectNameGen
-          FsCheck.validProjectNameGen
-          FsCheck.validProjectNameGen
+          TestDataGenerators.FsCheck.projectName
+          TestDataGenerators.FsCheck.projectName
+          TestDataGenerators.FsCheck.projectName
         |> Arb.fromGen
       ) (fun (name1, name2, name3) ->
         async {

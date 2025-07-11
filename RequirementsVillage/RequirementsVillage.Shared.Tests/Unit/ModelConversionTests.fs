@@ -270,7 +270,7 @@ module ModelConversionTests =
       (category: ProjectCategory)
       (status: ProjectStatus) =
       
-      (TestHelpers.validProjectName name && TestHelpers.validProjectDescription description) ==> lazy (
+      (TestHelpers.isValidProjectName name && TestHelpers.isValidProjectDescription description) ==> lazy (
         let original = TestHelpers.createTestProject()
         
         let updated = {

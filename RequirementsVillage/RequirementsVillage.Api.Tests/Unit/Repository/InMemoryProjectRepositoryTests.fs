@@ -6,6 +6,7 @@ open FsUnit.Xunit
 open RequirementsVillage.Shared
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Tests.Helpers
+open RequirementsVillage.Shared.TestGenerators
 
 module InMemoryProjectRepositoryTests =
   
@@ -231,7 +232,7 @@ module InMemoryProjectRepositoryTests =
     let ``Repository should handle concurrent creates`` () =
       async {
         let repo = createRepository()
-        let projects = Generators.Bogus.projects 10
+        let projects = TestDataGenerators.Bogus.Default.projects 10
         
         let! results =
           projects
@@ -309,7 +310,7 @@ module InMemoryProjectRepositoryTests =
       async {
         let repo = createRepository()
         let projectCount = 20
-        let projects = Generators.Bogus.projects projectCount
+        let projects = TestDataGenerators.Bogus.Default.projects projectCount
         
         // Create initial projects
         let! _ =
@@ -320,7 +321,7 @@ module InMemoryProjectRepositoryTests =
         // Mix of operations
         let operations = [
           // Create new projects
-          yield! Generators.Bogus.projects 5 |> List.map (fun p -> repo.CreateAsync(p))
+          yield! TestDataGenerators.Bogus.Default.projects 5 |> List.map (fun p -> repo.CreateAsync(p))
           
           // Update some existing projects
           yield! projects
@@ -382,7 +383,7 @@ module InMemoryProjectRepositoryTests =
         let initialCount = initialProjects |> List.length
         
         // Add projects
-        let newProjects = Generators.Bogus.projects 5
+        let newProjects = TestDataGenerators.Bogus.Default.projects 5
         for project in newProjects do
           let! _ = repo.CreateAsync(project)
           ()
@@ -432,7 +433,7 @@ module InMemoryProjectRepositoryTests =
     open FsCheck.Xunit
     
     // Register custom generators
-    do Generators.FsCheck.registerGenerators() |> ignore
+    do TestDataGenerators.FsCheck.registerGenerators() |> ignore
     
     [<Property>]
     let ``Created projects should always be retrievable by ID`` (project: Project) =

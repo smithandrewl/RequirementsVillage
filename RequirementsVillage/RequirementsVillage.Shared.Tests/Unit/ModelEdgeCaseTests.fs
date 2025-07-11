@@ -82,8 +82,8 @@ module ModelEdgeCaseTests =
           Description = String.replicate maxDescriptionLength "b"
       }
       
-      TestHelpers.validProjectName project.Name               |> should equal true
-      TestHelpers.validProjectDescription project.Description |> should equal true
+      TestHelpers.isValidProjectName project.Name               |> should equal true
+      TestHelpers.isValidProjectDescription project.Description |> should equal true
   
   module ProjectCategoryEdgeCases =
     
@@ -243,7 +243,7 @@ module ModelEdgeCaseTests =
       
       whitespaceNames
       |> List.iter (fun name ->
-        TestHelpers.validProjectName name |> should equal false
+        TestHelpers.isValidProjectName name |> should equal false
       )
     
     [<Fact>]
@@ -259,7 +259,7 @@ module ModelEdgeCaseTests =
       
       whitespaceDescriptions
       |> List.iter (fun desc ->
-        TestHelpers.validProjectDescription desc |> should equal false
+        TestHelpers.isValidProjectDescription desc |> should equal false
       )
     
     [<Property>]
@@ -268,8 +268,8 @@ module ModelEdgeCaseTests =
       let descGen = Gen.map (fun c -> String.replicate 1000 (string c)) (Gen.elements ['a'..'z'])
       
       Prop.forAll (Arb.fromGen (Gen.zip nameGen descGen)) (fun (name, desc) ->
-        TestHelpers.validProjectName name &&
-        TestHelpers.validProjectDescription desc
+        TestHelpers.isValidProjectName name &&
+        TestHelpers.isValidProjectDescription desc
       )
     
     [<Property>]
@@ -278,6 +278,6 @@ module ModelEdgeCaseTests =
       let descGen = Gen.map (fun c -> String.replicate 1001 (string c)) (Gen.elements ['a'..'z'])
       
       Prop.forAll (Arb.fromGen (Gen.zip nameGen descGen)) (fun (name, desc) ->
-        not (TestHelpers.validProjectName name) &&
-        not (TestHelpers.validProjectDescription desc)
+        not (TestHelpers.isValidProjectName name) &&
+        not (TestHelpers.isValidProjectDescription desc)
       )

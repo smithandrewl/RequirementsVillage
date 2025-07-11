@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Models.fs" />
+    <Compile Include="Models/Serialization.fs" />
     <Compile Include="Database.fs" />
     <Compile Include="Services.fs" />
     <Compile Include="Endpoints.fs" />

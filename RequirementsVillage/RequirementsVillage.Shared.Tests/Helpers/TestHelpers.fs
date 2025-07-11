@@ -48,12 +48,6 @@ module TestHelpers =
   let reasonableString (s: string) =
     nonEmptyString s && s.Length <= 1000
   
-  let validProjectName (s: string) =
-    nonEmptyString s && s.Length <= 100
-  
-  let validProjectDescription (s: string) =
-    nonEmptyString s && s.Length <= 1000
-  
   // Error matching helpers
   let isValidationError (error: ProjectError) =
     match error with
@@ -96,10 +90,13 @@ module TestHelpers =
   let shouldEqualIgnoreCase (expected: string) (actual: string) =
     actual.ToLowerInvariant() |> should equal (expected.ToLowerInvariant())
   
-  // Import validation helpers from shared
+  // Import validation functions from shared
+  let isValidProjectName = TestHelpers.isValidProjectName
+  let isValidProjectDescription = TestHelpers.isValidProjectDescription
+  
+  // Import validation constants from shared
   let validProjectName = TestHelpers.validProjectName
   let validProjectDescription = TestHelpers.validProjectDescription
-  
   let invalidProjectName = TestHelpers.invalidProjectName
   let invalidProjectDescription = TestHelpers.invalidProjectDescription
   

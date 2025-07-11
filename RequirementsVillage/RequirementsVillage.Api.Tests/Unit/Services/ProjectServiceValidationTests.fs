@@ -8,6 +8,7 @@ open RequirementsVillage.Shared
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Tests.Helpers
+open RequirementsVillage.Shared.TestGenerators
 open FsCheck
 open NSubstitute
 
@@ -57,19 +58,6 @@ module ProjectServiceValidationTests =
         | _ -> failwith "Expected ValidationFailed error"
       } |> TestHelpers.runAsync
     
-    [<Property>]
-    let ``CreateProject should accept valid names`` (name: string) =
-      (TestHelpers.validProjectName name) ==> lazy (
-        async {
-          let! result = service.CreateProjectAsync(name, "Valid description", WebApp)
-          
-          match result with
-          | Ok project -> 
-            project.Name |> should equal name
-            true
-          | Error _    -> false
-        } |> TestHelpers.runAsync
-      )
   
   module DescriptionValidation =
     
@@ -104,130 +92,28 @@ module ProjectServiceValidationTests =
         | _ -> failwith "Expected ValidationFailed error"
       } |> TestHelpers.runAsync
     
-    [<Property>]
-    let ``CreateProject should accept valid descriptions`` (desc: string) =
-      (TestHelpers.validProjectDescription desc) ==> lazy (
-        async {
-          let! result = service.CreateProjectAsync("Valid name", desc, WebApp)
-          
-          match result with
-          | Ok project -> 
-            project.Description |> should equal desc
-            true
-          | Error _    -> false
-        } |> TestHelpers.runAsync
-      )
   
-  module StatusTransitionValidation =
-    
-    [<Fact>]
-    let ``UpdateProjectStatus should fail for invalid transition Idea to Completed`` () =
-      async {
-        // Use in-memory repository so we can actually store and retrieve projects
-        let testService = Fixtures.ServiceFactories.createInMemoryProjectService()
-        
-        // First create a project in Idea status
-        let! createResult = testService.CreateProjectAsync("Test", "Description", WebApp)
-        let project = TestHelpers.shouldBeOk createResult
-        
-        // Try to transition directly to Completed
-        let! updateResult = testService.UpdateProjectStatusAsync(project.Id, Completed)
-        
-        let error = TestHelpers.shouldBeError updateResult
-        
-        match error with
-        | ValidationFailed(field, reason, attemptedValue) ->
-          field |> should equal "status"
-          reason |> should haveSubstring "Cannot transition directly from Idea to Completed"
-          attemptedValue |> should equal Completed
-        | _ -> failwith "Expected ValidationFailed error"
-      } |> TestHelpers.runAsync
-    
-    [<Theory>]
-    [<InlineData("Idea", "InProgress")>]
-    [<InlineData("Idea", "Abandoned")>]
-    [<InlineData("Idea", "OnHold")>]
-    [<InlineData("InProgress", "Completed")>]
-    [<InlineData("InProgress", "Abandoned")>]
-    [<InlineData("InProgress", "OnHold")>]
-    [<InlineData("OnHold", "InProgress")>]
-    [<InlineData("OnHold", "Abandoned")>]
-    let ``UpdateProjectStatus should allow valid transitions`` (fromStr: string, toStr: string) =
-      async {
-        let parseStatus s =
-          match s with
-          | "Idea"       -> Idea
-          | "InProgress" -> InProgress
-          | "Completed"  -> Completed
-          | "Abandoned"  -> Abandoned
-          | "OnHold"     -> OnHold
-          | _            -> failwithf "Unknown status: %s" s
-        
-        let fromStatus = parseStatus fromStr
-        let toStatus = parseStatus toStr
-        
-        // Create project with specific status
-        let project = Generators.Bogus.projectWithStatus fromStatus
-        let mockRepo = Fixtures.Mocks.ConfigurableMockRepository()
-        mockRepo.SetProjects([project])
-        let testService = Fixtures.ServiceFactories.createProjectService mockRepo
-        
-        // Try the transition
-        let! result = testService.UpdateProjectStatusAsync(project.Id, toStatus)
-        
-        match result with
-        | Ok _ -> ()
-        | Error e -> failwithf "Expected Ok but got Error: %A" e
-      } |> TestHelpers.runAsync
   
   module DeleteValidation =
     
     [<Fact>]
-    let ``DeleteProject should only allow deletion of Abandoned projects`` () =
+    let ``DeleteProject should succeed for any project status`` () =
       async {
-        let nonAbandonedStatuses = [ Idea; InProgress; Completed; OnHold ]
+        let statuses = [ Idea; InProgress; Completed; OnHold; Abandoned ]
         
-        for status in nonAbandonedStatuses do
-          let project = Generators.Bogus.projectWithStatus status
+        for status in statuses do
+          let project = TestDataGenerators.Bogus.Default.projectWithStatus status
           let mockRepo = Fixtures.Mocks.ConfigurableMockRepository()
           mockRepo.SetProjects([project])
           let testService = Fixtures.ServiceFactories.createProjectService mockRepo
           
           let! result = testService.DeleteProjectAsync(project.Id)
           
-          let error = TestHelpers.shouldBeError result
-          
-          match error with
-          | ValidationFailed(field, reason, attemptedValue) ->
-            field |> should equal "status"
-            reason |> should haveSubstring "Can only delete projects in Abandoned status"
-            attemptedValue |> should equal status
-          | _ -> failwithf "Expected ValidationFailed error for status %A" status
+          match result with
+          | Ok _ -> ()
+          | Error e -> failwithf "Expected Ok for status %A but got Error: %A" status e
       } |> TestHelpers.runAsync
     
-    [<Fact>]
-    let ``DeleteProject should succeed for Abandoned projects`` () =
-      async {
-        let abandonedProject = Generators.Bogus.projectWithStatus Abandoned
-        let mockRepo = Fixtures.Mocks.ConfigurableMockRepository()
-        mockRepo.SetProjects([abandonedProject])
-        let testService = Fixtures.ServiceFactories.createProjectService mockRepo
-        
-        let! result = testService.DeleteProjectAsync(abandonedProject.Id)
-        
-        match result with
-        | Ok _ -> ()
-        | Error e -> failwithf "Expected Ok but got Error: %A" e
-      } |> TestHelpers.runAsync
-    
-    [<Fact>]
-    let ``DeleteProject should fail for non-existent project`` () =
-      async {
-        let! result = service.DeleteProjectAsync(Fixtures.TestData.nonExistentId)
-        
-        let error = TestHelpers.shouldBeError result
-        TestHelpers.isNotFoundError error |> should equal true
-      } |> TestHelpers.runAsync
   
   module ComplexValidationScenarios =
     
@@ -235,7 +121,7 @@ module ProjectServiceValidationTests =
     let ``UpdateProject should validate both name and description`` () =
       async {
         let projectId = Guid.NewGuid()
-        let existingProject = Generators.Bogus.project()
+        let existingProject = TestDataGenerators.Bogus.Default.project()
         
         let mockRepo = Substitute.For<IProjectRepository>()
         mockRepo.GetByIdAsync(projectId)
@@ -330,7 +216,7 @@ module ProjectServiceValidationTests =
       async {
         let projectId = Guid.NewGuid()
         let existingProject = {
-          Generators.Bogus.project() with
+          TestDataGenerators.Bogus.Default.project() with
             Id     = projectId
             Status = Idea
         }

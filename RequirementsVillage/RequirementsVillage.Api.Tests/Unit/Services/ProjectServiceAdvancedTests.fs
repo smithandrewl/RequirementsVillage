@@ -9,6 +9,7 @@ open RequirementsVillage.Shared
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Tests.Helpers
+open RequirementsVillage.Shared.TestGenerators
 open FsCheck
 open NSubstitute
 open NSubstitute.ExceptionExtensions
@@ -91,7 +92,7 @@ module ProjectServiceAdvancedTests =
           let projects = 
             [1..projectCount]
             |> List.map (fun i -> 
-              { Generators.Bogus.project() with 
+              { TestDataGenerators.Bogus.Default.project() with 
                   Name = $"Project {i}" })
           
           let mockRepo = Substitute.For<IProjectRepository>()
@@ -108,8 +109,8 @@ module ProjectServiceAdvancedTests =
           | Ok retrievedProjects ->
             retrievedProjects.Length |> should equal projectCount
             (endTime - startTime).TotalMilliseconds |> should be (lessThan 1000.0)
-            true
-          | Error _ -> false
+            return true
+          | Error _ -> return false
         } |> TestHelpers.runAsync
       )
   
@@ -119,7 +120,7 @@ module ProjectServiceAdvancedTests =
     let ``UpdateProject should be atomic - all or nothing`` () =
       async {
         let projectId = Guid.NewGuid()
-        let existingProject = { Generators.Bogus.project() with Id = projectId }
+        let existingProject = { TestDataGenerators.Bogus.Default.project() with Id = projectId }
         
         let mockRepo = Substitute.For<IProjectRepository>()
         mockRepo.GetByIdAsync(projectId)
@@ -154,7 +155,7 @@ module ProjectServiceAdvancedTests =
       async {
         let projectId = Guid.NewGuid()
         let originalProject = {
-          Generators.Bogus.project() with
+          TestDataGenerators.Bogus.Default.project() with
             Id = projectId
             Name = "Original"
         }
@@ -290,7 +291,7 @@ module ProjectServiceAdvancedTests =
     let ``Service should call repository methods in correct order`` () =
       async {
         let projectId = Guid.NewGuid()
-        let existingProject = Generators.Bogus.project()
+        let existingProject = TestDataGenerators.Bogus.Default.project()
         
         let mockRepo = Substitute.For<IProjectRepository>()
         let mutable callOrder = []

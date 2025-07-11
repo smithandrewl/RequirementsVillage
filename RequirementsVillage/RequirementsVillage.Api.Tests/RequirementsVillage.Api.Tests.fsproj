@@ -61,7 +61,6 @@
     
     <!-- Helpers -->
     <Compile Include="Helpers/TestHelpers.fs" />
-    <Compile Include="Helpers/Generators.fs" />
     <Compile Include="Helpers/Fixtures.fs" />
     
     <!-- Unit Tests -->

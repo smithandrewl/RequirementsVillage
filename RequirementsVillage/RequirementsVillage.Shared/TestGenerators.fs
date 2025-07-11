@@ -182,6 +182,9 @@ module TestDataGenerators =
       static member Project() = Arb.fromGen validProject
       static member ProjectStatus() = Arb.fromGen projectStatus
       static member ProjectCategory() = Arb.fromGen projectCategory
+    
+    let registerGenerators() =
+      Arb.register<Generators>() |> ignore
 
 /// Sample test data constants
 module SampleData =
@@ -235,6 +238,22 @@ module SampleData =
       Abandoned, testProject3
     ]
 
+/// Combined test data for complex scenarios
+module Combined =
+  
+  // Valid status transitions based on business rules
+  let validTransitions = [
+    (Idea, InProgress)
+    (Idea, Abandoned)
+    (Idea, OnHold)
+    (InProgress, Completed)
+    (InProgress, Abandoned)
+    (InProgress, OnHold)
+    (OnHold, InProgress)
+    (OnHold, Abandoned)
+    (Completed, Abandoned)
+  ]
+
 /// Common test helpers and assertions
 module TestHelpers =
   
@@ -253,6 +272,13 @@ module TestHelpers =
   // Validation helpers
   let validProjectName = "Valid Project Name"
   let validProjectDescription = "This is a valid project description."
+  
+  // Validation functions
+  let isValidProjectName (name: string) =
+    not (String.IsNullOrWhiteSpace(name)) && name.Length > 0 && name.Length <= 100
+    
+  let isValidProjectDescription (description: string) =
+    not (String.IsNullOrWhiteSpace(description)) && description.Length > 0 && description.Length <= 1000
   
   let invalidProjectName = ""
   let invalidProjectDescription = ""

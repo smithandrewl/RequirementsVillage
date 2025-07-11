@@ -4,7 +4,7 @@ open System
 open System.Data
 open Dapper
 open Microsoft.Data.Sqlite
-open RequirementsVillage.Api.Models
+open RequirementsVillage.Shared
 
 // Repository interface for dependency injection
 type IProjectRepository =

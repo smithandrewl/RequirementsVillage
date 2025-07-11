@@ -6,6 +6,7 @@ open Xunit
 open FsUnit.Xunit
 open FsCheck.Xunit
 open RequirementsVillage.Shared
+open RequirementsVillage.Shared.TestGenerators
 open RequirementsVillage.Shared.Tests.Helpers.JsonHelpers
 open RequirementsVillage.Shared.Tests.Helpers
 
@@ -81,7 +82,7 @@ module ProjectStatusTests =
     
     [<Fact>]
     let ``Valid status transitions should be allowed`` () =
-      let validTransitions = Generators.Combined.validTransitions
+      let validTransitions = Combined.validTransitions
       
       validTransitions
       |> List.iter (fun (from, to') ->

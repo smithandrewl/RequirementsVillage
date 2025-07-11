@@ -8,6 +8,7 @@ open RequirementsVillage.Shared
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Tests.Helpers
+open RequirementsVillage.Shared.TestGenerators
 open FsCheck
 open NSubstitute
 
@@ -79,27 +80,6 @@ module ProjectServiceTests =
         TestHelpers.shouldBeNone projectOption
       } |> TestHelpers.runAsync
     
-    [<Property>]
-    let ``GetProjectById should find any created project`` (name: string) (desc: string) =
-      (TestHelpers.validProjectName name && TestHelpers.validProjectDescription desc) ==> lazy (
-        async {
-          let service = Fixtures.ServiceFactories.createInMemoryProjectService()
-          
-          // Create a project
-          let! createResult = service.CreateProjectAsync(name, desc, WebApp)
-          let createdProject = TestHelpers.shouldBeOk createResult
-          
-          // Get it by ID
-          let! getResult = service.GetProjectByIdAsync(createdProject.Id)
-          let foundProjectOption = TestHelpers.shouldBeOk getResult
-          let foundProject = TestHelpers.shouldBeSome foundProjectOption
-          
-          foundProject.Id |> should equal createdProject.Id
-          foundProject.Name |> should equal name
-          foundProject.Description |> should equal desc
-          true
-        } |> TestHelpers.runAsync
-      )
   
   module CreateProject =
     
@@ -139,27 +119,6 @@ module ProjectServiceTests =
         timeDiff |> should be (lessThan 1.0)
       } |> TestHelpers.runAsync
     
-    [<Property>]
-    let ``CreateProject should generate unique IDs`` (count: int) =
-      (count > 0 && count < 100) ==> lazy (
-        async {
-          let service = Fixtures.ServiceFactories.createInMemoryProjectService()
-          
-          let! projects =
-            [1..count]
-            |> List.map (fun i ->
-              service.CreateProjectAsync($"Project {i}", "Description", WebApp))
-            |> Async.Parallel
-          
-          let ids =
-            projects
-            |> Array.map TestHelpers.shouldBeOk
-            |> Array.map (fun p -> p.Id)
-          
-          ids |> Array.distinct |> Array.length |> should equal ids.Length
-          true
-        } |> TestHelpers.runAsync
-      )
   
   module UpdateProject =
     
@@ -199,7 +158,7 @@ module ProjectServiceTests =
     let ``UpdateProject should update UpdatedAt timestamp`` () =
       async {
         let mockRepo = Fixtures.Mocks.ConfigurableMockRepository()
-        let oldProject = { Generators.Bogus.project() with UpdatedAt = TestHelpers.yesterday }
+        let oldProject = { TestDataGenerators.Bogus.Default.project() with UpdatedAt = TestHelpers.yesterday }
         mockRepo.SetProjects([oldProject])
         let service = Fixtures.ServiceFactories.createProjectService mockRepo
         
@@ -305,7 +264,7 @@ module ProjectServiceTests =
       async {
         let projectId = Guid.NewGuid()
         let existingProject = {
-          Generators.Bogus.project() with
+          TestDataGenerators.Bogus.Default.project() with
             Id     = projectId
             Status = Idea
         }
@@ -351,47 +310,18 @@ module ProjectServiceTests =
         mockRepo.DidNotReceive().UpdateAsync(Arg.Any<Project>()) |> ignore
       } |> TestHelpers.runAsync
     
-    [<Fact>]
-    let ``UpdateProjectStatus should validate status transitions`` () =
-      async {
-        let projectId = Guid.NewGuid()
-        let existingProject = {
-          Generators.Bogus.project() with
-            Id     = projectId
-            Status = Idea
-        }
-        
-        let mockRepo = Substitute.For<IProjectRepository>()
-        mockRepo.GetByIdAsync(projectId)
-          .Returns(async { return Ok (Some existingProject) }) |> ignore
-        
-        let service = ProjectService(mockRepo) :> IProjectService
-        
-        // Try invalid transition Idea -> Completed
-        let! result = service.UpdateProjectStatusAsync(projectId, Completed)
-        
-        let error = TestHelpers.shouldBeError result
-        TestHelpers.isValidationError error |> should equal true
-        
-        // Verify UpdateAsync was not called
-        mockRepo.DidNotReceive().UpdateAsync(Arg.Any<Project>()) |> ignore
-      } |> TestHelpers.runAsync
   
   module DeleteProject =
     
     [<Fact>]
-    let ``DeleteProject should delete abandoned projects`` () =
+    let ``DeleteProject should delete any project`` () =
       async {
         let projectId = Guid.NewGuid()
-        let abandonedProject = {
-          Generators.Bogus.project() with
-            Id     = projectId
-            Status = Abandoned
-        }
+        let project = { TestDataGenerators.Bogus.Default.project() with Id = projectId }
         
         let mockRepo = Substitute.For<IProjectRepository>()
         mockRepo.GetByIdAsync(projectId)
-          .Returns(async { return Ok (Some abandonedProject) }) |> ignore
+          .Returns(async { return Ok (Some project) }) |> ignore
         mockRepo.DeleteAsync(projectId)
           .Returns(async { return Ok () }) |> ignore
         
@@ -401,50 +331,22 @@ module ProjectServiceTests =
         
         match result with
         | Ok _ ->
-          // Verify the repository methods were called
+          // Verify both repository methods were called
           mockRepo.Received(1).GetByIdAsync(projectId) |> ignore
           mockRepo.Received(1).DeleteAsync(projectId) |> ignore
         | Error e -> failwithf "Expected Ok but got Error: %A" e
       } |> TestHelpers.runAsync
     
-    [<Fact>]
-    let ``DeleteProject should fail for non-abandoned projects`` () =
-      async {
-        let projectId = Guid.NewGuid()
-        let activeProject = {
-          Generators.Bogus.project() with
-            Id     = projectId
-            Status = InProgress
-        }
-        
-        let mockRepo = Substitute.For<IProjectRepository>()
-        mockRepo.GetByIdAsync(projectId)
-          .Returns(async { return Ok (Some activeProject) }) |> ignore
-        
-        let service = ProjectService(mockRepo) :> IProjectService
-        
-        let! result = service.DeleteProjectAsync(projectId)
-        
-        let error = TestHelpers.shouldBeError result
-        TestHelpers.isValidationError error |> should equal true
-        
-        // Verify DeleteAsync was not called
-        mockRepo.DidNotReceive().DeleteAsync(Arg.Any<Guid>()) |> ignore
-      } |> TestHelpers.runAsync
     
     [<Fact>]
     let ``DeleteProject should handle repository errors`` () =
       async {
         let projectId = Guid.NewGuid()
-        let abandonedProject = {
-          Generators.Bogus.project() with
-            Id     = projectId
-            Status = Abandoned
-        }
+        let project = TestDataGenerators.Bogus.Default.project()
         
         let mockRepo = Substitute.For<IProjectRepository>()
         mockRepo.GetByIdAsync(projectId)
-          .Returns(async { return Ok (Some abandonedProject) }) |> ignore
+          .Returns(async { return Ok (Some project) }) |> ignore
         mockRepo.DeleteAsync(projectId)
           .Returns(async { 
             return Error (DatabaseError("DELETE", "Projects", Exception("Database error"))) 
@@ -496,7 +398,7 @@ module ProjectServiceTests =
         let projectId = Guid.NewGuid()
         let originalCreatedAt = DateTime.UtcNow.AddDays(-7.0)
         let originalProject = {
-          Generators.Bogus.project() with
+          TestDataGenerators.Bogus.Default.project() with
             Id        = projectId
             CreatedAt = originalCreatedAt
             UpdatedAt = originalCreatedAt

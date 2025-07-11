@@ -4,7 +4,7 @@ open System
 open Microsoft.AspNetCore.Http
 open Giraffe
 open FSharp.Control.Tasks
-open RequirementsVillage.Api.Models
+open RequirementsVillage.Shared
 open RequirementsVillage.Api.Services
 
 // Request/Response DTOs

@@ -36,11 +36,11 @@ module HealthEndpointTests =
       content |> should haveSubstring "\"timestamp\""
       
       // Parse the response
-      let! health = ApiTestHelpers.getResponseJson<{| Status: string; Timestamp: DateTime |}> response
+      let health = content |> ApiTestHelpers.fromJson<{| status: string; timestamp: DateTime |}>
       
-      health.Status |> should equal "healthy"
-      health.Timestamp |> should be (greaterThanOrEqualTo beforeRequest)
-      health.Timestamp |> should be (lessThanOrEqualTo afterRequest)
+      health.status |> should equal "healthy"
+      health.timestamp |> should be (greaterThanOrEqualTo beforeRequest)
+      health.timestamp |> should be (lessThanOrEqualTo afterRequest)
     } |> TestHelpers.runAsync
   
   [<Fact>]

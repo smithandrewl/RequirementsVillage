@@ -9,6 +9,7 @@ open Thoth.Json.Net
 open RequirementsVillage.Shared
 open RequirementsVillage.Shared.Codecs
 open RequirementsVillage.Shared.Tests.Helpers
+open RequirementsVillage.Shared.TestGenerators
 
 module CodecsTests =
   
@@ -197,7 +198,7 @@ module CodecsTests =
     
     [<Property>]
     let ``Project round-trip encoding/decoding preserves all fields`` () =
-      let project = Generators.Bogus.project() // Use Bogus generator for more predictable test data
+      let project = TestDataGenerators.Bogus.Default.project() // Use Bogus generator for more predictable test data
       
       let encoded = Encode.project project
       let json = Encode.toString 0 encoded

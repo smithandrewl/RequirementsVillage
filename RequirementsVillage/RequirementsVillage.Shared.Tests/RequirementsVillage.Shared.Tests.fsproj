@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Compile Include="Helpers/TestHelpers.fs" />
-    <Compile Include="Helpers/Generators.fs" />
     <Compile Include="Helpers/JsonHelpers.fs" />
     <Compile Include="Unit/ProjectTests.fs" />
     <Compile Include="Unit/ProjectStatusTests.fs" />

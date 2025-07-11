@@ -9,7 +9,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Giraffe
-open RequirementsVillage.Api.Models
+open RequirementsVillage.Shared
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Endpoints

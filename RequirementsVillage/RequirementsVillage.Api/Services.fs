@@ -1,7 +1,7 @@
 namespace RequirementsVillage.Api.Services
 
 open System
-open RequirementsVillage.Api.Models
+open RequirementsVillage.Shared
 open RequirementsVillage.Api.Persistence
 
 // Service interface for dependency injection
@@ -63,21 +63,6 @@ type ProjectService(repository: IProjectRepository) =
     else
       Ok description
 
-  // Business rule: Cannot transition directly from Idea to Completed
-  let validateStatusTransition
-    (currentStatus: ProjectStatus)
-    (newStatus: ProjectStatus) =
-    match currentStatus, newStatus with
-    | Idea, Completed ->
-      Error (
-        ValidationFailed(
-          "status",
-          "Cannot transition directly from Idea to Completed",
-          newStatus
-        )
-      )
-    | _ ->
-      Ok newStatus
 
   interface IProjectService with
     member _.GetAllProjectsAsync() =
@@ -125,20 +110,9 @@ type ProjectService(repository: IProjectRepository) =
           // Check if project exists
           match! repository.GetByIdAsync(project.Id) with
           | Ok (Some existingProject) ->
-            // Validate status transition if status changed
-            if existingProject.Status <> project.Status then
-              match validateStatusTransition
-                      existingProject.Status
-                      project.Status with
-              | Ok _ ->
-                let updatedProject =
-                  { project with UpdatedAt = DateTime.UtcNow }
-                return! repository.UpdateAsync(updatedProject)
-              | Error e -> return Error e
-            else
-              let updatedProject =
-                { project with UpdatedAt = DateTime.UtcNow }
-              return! repository.UpdateAsync(updatedProject)
+            let updatedProject =
+              { project with UpdatedAt = DateTime.UtcNow }
+            return! repository.UpdateAsync(updatedProject)
           | Ok None ->
             return Error (NotFound(project.Id, "UpdateProject"))
           | Error e ->
@@ -155,14 +129,11 @@ type ProjectService(repository: IProjectRepository) =
       async {
         match! repository.GetByIdAsync(id) with
         | Ok (Some project) ->
-          match validateStatusTransition project.Status status with
-          | Ok validStatus ->
-            let updatedProject =
-              { project with
-                  Status = validStatus
-                  UpdatedAt = DateTime.UtcNow }
-            return! repository.UpdateAsync(updatedProject)
-          | Error e -> return Error e
+          let updatedProject =
+            { project with
+                Status = status
+                UpdatedAt = DateTime.UtcNow }
+          return! repository.UpdateAsync(updatedProject)
         | Ok None ->
           return Error (NotFound(id, "UpdateProjectStatus"))
         | Error e ->
@@ -171,21 +142,15 @@ type ProjectService(repository: IProjectRepository) =
 
     member _.DeleteProjectAsync(id: Guid) =
       async {
-        // Business rule: Can only delete projects in Abandoned status
+        // Check if project exists
         match! repository.GetByIdAsync(id) with
-        | Ok (Some project) ->
-          if project.Status = Abandoned then
-            return! repository.DeleteAsync(id)
-          else
-            return Error (
-              ValidationFailed(
-                "status",
-                "Can only delete projects in Abandoned status",
-                project.Status
-              )
-            )
+        | Ok (Some _) ->
+          // Project exists, delete it
+          return! repository.DeleteAsync(id)
         | Ok None ->
+          // Project doesn't exist
           return Error (NotFound(id, "DeleteProject"))
         | Error e ->
+          // Repository error
           return Error e
       }

@@ -5,6 +5,7 @@ open Xunit
 open FsUnit.Xunit
 open RequirementsVillage.Shared
 open RequirementsVillage.Api.Tests.Helpers
+open RequirementsVillage.Shared.TestGenerators
 
 module ProjectEndpointsTests =
   
@@ -46,7 +47,7 @@ module ProjectEndpointsTests =
     let ``GET /api/projects/{id} should return 200 OK for existing project`` () =
       async {
         use factory = new TestWebApplicationFactory()
-        let testProject = Generators.Bogus.project()
+        let testProject = TestDataGenerators.Bogus.Default.project()
         let mockRepo = Fixtures.Mocks.ConfigurableMockRepository()
         mockRepo.SetProjects([testProject])
         use client = ApiTestHelpers.createClientWithMockRepo mockRepo factory
@@ -55,7 +56,8 @@ module ProjectEndpointsTests =
         
         ApiTestHelpers.shouldBeOk response
         
-        let! project = ApiTestHelpers.getResponseJson<Project> response
+        let content = ApiTestHelpers.getResponseContent response
+        let project = content |> ApiTestHelpers.fromJson<Project>
         project.Id |> should equal testProject.Id
         project.Name |> should equal testProject.Name
       } |> TestHelpers.runAsync
@@ -101,7 +103,8 @@ module ProjectEndpointsTests =
         
         ApiTestHelpers.shouldBeCreated response
         
-        let! project = ApiTestHelpers.getResponseJson<Project> response
+        let content = ApiTestHelpers.getResponseContent response
+        let project = content |> ApiTestHelpers.fromJson<Project>
         project.Name |> should equal "New Test Project"
         project.Description |> should equal "This is a test project"
         project.Category |> should equal WebApp
@@ -154,7 +157,7 @@ module ProjectEndpointsTests =
     let ``PUT /api/projects/{id} should return 204 NoContent for successful update`` () =
       async {
         use factory = new TestWebApplicationFactory()
-        let existingProject = Generators.Bogus.project()
+        let existingProject = TestDataGenerators.Bogus.Default.project()
         let mockRepo = Fixtures.Mocks.ConfigurableMockRepository()
         mockRepo.SetProjects([existingProject])
         use client = ApiTestHelpers.createClientWithMockRepo mockRepo factory
@@ -172,7 +175,8 @@ module ProjectEndpointsTests =
         
         // Verify the update
         let! getResponse = client |> ApiTestHelpers.get $"/api/projects/{existingProject.Id}"
-        let! project = ApiTestHelpers.getResponseJson<Project> getResponse
+        let getContent = ApiTestHelpers.getResponseContent getResponse
+        let project = getContent |> ApiTestHelpers.fromJson<Project>
         
         project.Name |> should equal "Updated Name"
         project.Description |> should equal "Updated Description"
@@ -184,7 +188,7 @@ module ProjectEndpointsTests =
         use factory = new TestWebApplicationFactory()
         use client = ApiTestHelpers.createClientWithInMemoryData factory
         
-        let nonExistentProject = Generators.Bogus.project()
+        let nonExistentProject = TestDataGenerators.Bogus.Default.project()
         let content = ApiTestHelpers.createJsonContent nonExistentProject
         let! response = client |> ApiTestHelpers.put $"/api/projects/{nonExistentProject.Id}" content
         
@@ -197,7 +201,7 @@ module ProjectEndpointsTests =
         use factory = new TestWebApplicationFactory()
         use client = ApiTestHelpers.createClientWithInMemoryData factory
         
-        let project = Generators.Bogus.project()
+        let project = TestDataGenerators.Bogus.Default.project()
         let differentId = Guid.NewGuid()
         
         let content = ApiTestHelpers.createJsonContent project
@@ -212,7 +216,7 @@ module ProjectEndpointsTests =
     let ``PATCH /api/projects/{id}/status should return 204 NoContent for valid transition`` () =
       async {
         use factory = new TestWebApplicationFactory()
-        let project = Generators.Bogus.projectWithStatus Idea
+        let project = TestDataGenerators.Bogus.Default.projectWithStatus Idea
         let mockRepo = Fixtures.Mocks.ConfigurableMockRepository()
         mockRepo.SetProjects([project])
         use client = ApiTestHelpers.createClientWithMockRepo mockRepo factory
@@ -225,16 +229,17 @@ module ProjectEndpointsTests =
         
         // Verify the update
         let! getResponse = client |> ApiTestHelpers.get $"/api/projects/{project.Id}"
-        let! updatedProject = ApiTestHelpers.getResponseJson<Project> getResponse
+        let getContent = ApiTestHelpers.getResponseContent getResponse
+        let updatedProject = getContent |> ApiTestHelpers.fromJson<Project>
         
         updatedProject.Status |> should equal InProgress
       } |> TestHelpers.runAsync
     
     [<Fact>]
-    let ``PATCH /api/projects/{id}/status should return 400 BadRequest for invalid transition`` () =
+    let ``PATCH /api/projects/{id}/status should allow any status transition`` () =
       async {
         use factory = new TestWebApplicationFactory()
-        let project = Generators.Bogus.projectWithStatus Idea
+        let project = TestDataGenerators.Bogus.Default.projectWithStatus Idea
         let mockRepo = Fixtures.Mocks.ConfigurableMockRepository()
         mockRepo.SetProjects([project])
         use client = ApiTestHelpers.createClientWithMockRepo mockRepo factory
@@ -243,47 +248,48 @@ module ProjectEndpointsTests =
         let content = ApiTestHelpers.createJsonContent request
         let! response = client |> ApiTestHelpers.patch $"/api/projects/{project.Id}/status" content
         
-        ApiTestHelpers.shouldBeBadRequest response
+        ApiTestHelpers.shouldBeNoContent response
         
-        let errorContent = ApiTestHelpers.getResponseContent response
-        errorContent |> should haveSubstring "Cannot transition directly from Idea to Completed"
+        // Verify the update
+        let! getResponse = client |> ApiTestHelpers.get $"/api/projects/{project.Id}"
+        let getContent = ApiTestHelpers.getResponseContent getResponse
+        let updatedProject = getContent |> ApiTestHelpers.fromJson<Project>
+        
+        updatedProject.Status |> should equal Completed
       } |> TestHelpers.runAsync
   
   module DeleteProject =
     
     [<Fact>]
-    let ``DELETE /api/projects/{id} should return 204 NoContent for abandoned project`` () =
+    let ``DELETE /api/projects/{id} should return 204 NoContent for any project`` () =
       async {
         use factory = new TestWebApplicationFactory()
-        let abandonedProject = Generators.Bogus.projectWithStatus Abandoned
+        let project = TestDataGenerators.Bogus.Default.project()
         let mockRepo = Fixtures.Mocks.ConfigurableMockRepository()
-        mockRepo.SetProjects([abandonedProject])
+        mockRepo.SetProjects([project])
         use client = ApiTestHelpers.createClientWithMockRepo mockRepo factory
         
-        let! response = client |> ApiTestHelpers.delete $"/api/projects/{abandonedProject.Id}"
+        let! response = client |> ApiTestHelpers.delete $"/api/projects/{project.Id}"
         
         ApiTestHelpers.shouldBeNoContent response
         
         // Verify deletion
-        let! getResponse = client |> ApiTestHelpers.get $"/api/projects/{abandonedProject.Id}"
+        let! getResponse = client |> ApiTestHelpers.get $"/api/projects/{project.Id}"
         ApiTestHelpers.shouldBeNotFound getResponse
       } |> TestHelpers.runAsync
     
     [<Fact>]
-    let ``DELETE /api/projects/{id} should return 400 BadRequest for non-abandoned project`` () =
+    let ``DELETE /api/projects/{id} should work for any status`` () =
       async {
         use factory = new TestWebApplicationFactory()
-        let activeProject = Generators.Bogus.projectWithStatus InProgress
+        let activeProject = TestDataGenerators.Bogus.Default.projectWithStatus InProgress
         let mockRepo = Fixtures.Mocks.ConfigurableMockRepository()
         mockRepo.SetProjects([activeProject])
         use client = ApiTestHelpers.createClientWithMockRepo mockRepo factory
         
         let! response = client |> ApiTestHelpers.delete $"/api/projects/{activeProject.Id}"
         
-        ApiTestHelpers.shouldBeBadRequest response
-        
-        let errorContent = ApiTestHelpers.getResponseContent response
-        errorContent |> should haveSubstring "Can only delete projects in Abandoned status"
+        ApiTestHelpers.shouldBeNoContent response
       } |> TestHelpers.runAsync
     
     [<Fact>]
