@@ -7,6 +7,9 @@
   
   <!-- Test files -->
   <ItemGroup>
+    <Compile Include="Helpers/TestData.fs" />
+    <Compile Include="Helpers/TestHelpers.fs" />
+    <Compile Include="State/TypesTests.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   
