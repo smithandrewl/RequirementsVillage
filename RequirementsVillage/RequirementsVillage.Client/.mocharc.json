@@ -1,10 +1,5 @@
 {
-  "require": [
-    "jsdom-global/register",
-    "./tests/setup.js"
-  ],
-  "spec": "tests-js/**/*.js",
-  "recursive": true,
+  "spec": "tests/Main.fs.js",
   "reporter": "spec",
   "timeout": 5000,
   "colors": true,

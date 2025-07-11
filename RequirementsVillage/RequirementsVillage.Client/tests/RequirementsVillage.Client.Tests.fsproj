@@ -5,61 +5,31 @@
     <NoWarn>893</NoWarn>
   </PropertyGroup>
   
-  <!-- Import sources from main project -->
-  <ItemGroup>
-    <Compile Include="../src/Configuration/Constants.fs" />
-    <Compile Include="../src/Domain/Project.fs" />
-    <Compile Include="../src/Infrastructure/Api/Types.fs" />
-    <Compile Include="../src/Infrastructure/Api/Codecs.fs" />
-    <Compile Include="../src/Infrastructure/Api/Project.fs" />
-    <Compile Include="../src/Infrastructure/Storage/ThemeStorage.fs" />
-    <Compile Include="../src/Presentation/State/Types.fs" />
-    <Compile Include="../src/Presentation/State/Update.fs" />
-    <Compile Include="../src/Presentation/Components/Common.fs" />
-    <Compile Include="../src/Presentation/Components/ThemeSelector.fs" />
-    <Compile Include="../src/Presentation/Components/ProjectCard.fs" />
-    <Compile Include="../src/Presentation/Components/Layout.fs" />
-    <Compile Include="../src/Presentation/Pages/Landing.fs" />
-    <Compile Include="../src/Presentation/Pages/Dashboard.fs" />
-  </ItemGroup>
-  
   <!-- Test files -->
   <ItemGroup>
-    <Compile Include="Helpers/TestData.fs" />
-    <Compile Include="Helpers/TestHelpers.fs" />
-    <Compile Include="Helpers/ApiMock.fs" />
-    <Compile Include="State/TypesTests.fs" />
-    <Compile Include="State/UpdateTests.fs" />
-    <Compile Include="State/StatePropertyTests.fs" />
-    <Compile Include="State/CommandTests.fs" />
-    <Compile Include="Components/ProjectCardTests.fs" />
-    <Compile Include="Components/ThemeSelectorTests.fs" />
-    <Compile Include="Components/CommonTests.fs" />
-    <Compile Include="Components/LayoutTests.fs" />
-    <Compile Include="Api/ProjectApiTests.fs" />
-    <Compile Include="Api/CodecsTests.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   
   <!-- Dependencies -->
   <ItemGroup>
+    <ProjectReference Include="../../RequirementsVillage.Shared/RequirementsVillage.Shared.fsproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="Fable.Core" Version="4.3.0">
       <ExcludeAssets>contentFiles</ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="Fable.Elmish" Version="4.1.0" />
-    <PackageReference Include="Fable.Elmish.React" Version="4.0.0" />
-    <PackageReference Include="Fable.Elmish.Debugger" Version="4.0.0" />
-    <PackageReference Include="Fable.Elmish.HMR" Version="7.0.0" />
-    <PackageReference Include="Feliz" Version="2.9.0" />
-    <PackageReference Include="Feliz.Bulma" Version="3.0.0" />
-    <PackageReference Include="Fable.Promise" Version="3.2.0" />
-    <PackageReference Include="Fable.Fetch" Version="2.6.0" />
-    <PackageReference Include="Thoth.Json" Version="10.4.1" />
     
     <!-- Testing packages -->
     <PackageReference Include="Fable.Mocha" Version="2.17.0" />
-    <PackageReference Include="Fable.Jester" Version="0.33.0" />
+    
+    <!-- Dependencies for tests -->
+    <PackageReference Include="Fable.Elmish" Version="4.1.0" />
+    <PackageReference Include="Fable.Promise" Version="3.2.0" />
+    <PackageReference Include="Fable.Fetch" Version="2.6.0" />
+    <PackageReference Include="Thoth.Json" Version="10.4.1" />
     <PackageReference Include="Bogus" Version="35.0.1" />
+    <PackageReference Include="Fable.Browser.Dom" Version="2.16.0" />
   </ItemGroup>
   
 </Project>
