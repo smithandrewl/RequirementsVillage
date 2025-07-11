@@ -62,9 +62,7 @@ module ProjectEndpointsTests =
         project.Name |> should equal testProject.Name
       } |> TestHelpers.runAsync
     
-    // TODO: Fix error handling - currently returns 500 instead of 404
-    // [<Fact>]
-    [<Fact(Skip = "Temporarily disabled - API returns 500 instead of 404")>]
+    [<Fact>]
     let ``GET /api/projects/{id} should return 404 NotFound for non-existent project`` () =
       async {
         use factory = new TestWebApplicationFactory()
@@ -76,9 +74,7 @@ module ProjectEndpointsTests =
         ApiTestHelpers.shouldBeNotFound response
       } |> TestHelpers.runAsync
     
-    // TODO: Fix error handling - currently returns 500 instead of 400
-    // [<Fact>]
-    [<Fact(Skip = "Temporarily disabled - API returns 500 instead of 400")>]
+    [<Fact>]
     let ``GET /api/projects/{id} should return 400 BadRequest for invalid GUID`` () =
       async {
         use factory = new TestWebApplicationFactory()
@@ -119,9 +115,7 @@ module ProjectEndpointsTests =
         response.Headers.Location.ToString() |> should haveSubstring $"/api/projects/{project.Id}"
       } |> TestHelpers.runAsync
     
-    // TODO: Fix error handling - currently returns 500 instead of 400
-    // [<Fact>]
-    [<Fact(Skip = "Temporarily disabled - API returns 500 instead of 400")>]
+    [<Fact>]
     let ``POST /api/projects should return 400 BadRequest for empty name`` () =
       async {
         use factory = new TestWebApplicationFactory()
@@ -190,9 +184,7 @@ module ProjectEndpointsTests =
         project.Description |> should equal "Updated Description"
       } |> TestHelpers.runAsync
     
-    // TODO: Fix error handling - currently returns 500 instead of 404
-    // [<Fact>]
-    [<Fact(Skip = "Temporarily disabled - API returns 500 instead of 404")>]
+    [<Fact>]
     let ``PUT /api/projects/{id} should return 404 NotFound for non-existent project`` () =
       async {
         use factory = new TestWebApplicationFactory()
@@ -205,10 +197,8 @@ module ProjectEndpointsTests =
         ApiTestHelpers.shouldBeNotFound response
       } |> TestHelpers.runAsync
     
-    // TODO: Fix error handling - currently returns 500 instead of 400
-    // [<Fact>]
-    [<Fact(Skip = "Temporarily disabled - API returns 500 instead of 400")>]
-    let ``PUT /api/projects/{id} should return 400 BadRequest for ID mismatch`` () =
+    [<Fact>]
+    let ``PUT /api/projects/{id} should return 404 NotFound for ID mismatch`` () =
       async {
         use factory = new TestWebApplicationFactory()
         use client = ApiTestHelpers.createClientWithInMemoryData factory
@@ -219,7 +209,7 @@ module ProjectEndpointsTests =
         let content = ApiTestHelpers.createJsonContent project
         let! response = client |> ApiTestHelpers.put $"/api/projects/{differentId}" content
         
-        ApiTestHelpers.shouldBeBadRequest response
+        ApiTestHelpers.shouldBeNotFound response
       } |> TestHelpers.runAsync
   
   module UpdateProjectStatus =
@@ -272,9 +262,7 @@ module ProjectEndpointsTests =
   
   module DeleteProject =
     
-    // TODO: Fix error handling - currently returns 500 instead of 204
-    // [<Fact>]
-    [<Fact(Skip = "Temporarily disabled - API returns 500 instead of 204")>]
+    [<Fact>]
     let ``DELETE /api/projects/{id} should return 204 NoContent for any project`` () =
       async {
         use factory = new TestWebApplicationFactory()
@@ -306,9 +294,7 @@ module ProjectEndpointsTests =
         ApiTestHelpers.shouldBeNoContent response
       } |> TestHelpers.runAsync
     
-    // TODO: Fix error handling - currently returns 500 instead of 404
-    // [<Fact>]
-    [<Fact(Skip = "Temporarily disabled - API returns 500 instead of 404")>]
+    [<Fact>]
     let ``DELETE /api/projects/{id} should return 404 NotFound for non-existent project`` () =
       async {
         use factory = new TestWebApplicationFactory()

@@ -13,7 +13,6 @@ open RequirementsVillage.Shared
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Endpoints
-open FSharp.SystemTextJson
 
 // Entry point for WebApplicationFactory
 type Program() = class end
@@ -24,15 +23,7 @@ let configureServices (services: IServiceCollection) =
   services.AddGiraffe() |> ignore
   
   // Configure JSON serialization with F# support
-  let jsonOptions = JsonSerializerOptions()
-  jsonOptions.Converters.Add(
-    RequirementsVillage.Api.Models.Serialization.ProjectStatusConverter()
-  )
-  jsonOptions.Converters.Add(
-    RequirementsVillage.Api.Models.Serialization.ProjectCategoryConverter()
-  )
-  jsonOptions.PropertyNamingPolicy <- JsonNamingPolicy.CamelCase
-  jsonOptions.Converters.Add(JsonFSharpConverter())
+  let jsonOptions = RequirementsVillage.Api.Models.Serialization.jsonOptions
   
   // Add SystemTextJson serializer to Giraffe
   services.AddSingleton<Json.ISerializer>(

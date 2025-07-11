@@ -34,6 +34,19 @@ type TestWebApplicationFactory() =
       
       // Add in-memory repository
       services.AddSingleton<IProjectRepository>(InMemoryProjectRepository()) |> ignore
+      
+      // Also remove and re-add the service to ensure it uses the new repository
+      services
+      |> Seq.filter (fun descriptor ->
+        descriptor.ServiceType = typeof<IProjectService>)
+      |> Seq.toList
+      |> List.iter (fun descriptor ->
+        services.Remove(descriptor) |> ignore)
+      
+      services.AddScoped<IProjectService>(fun provider ->
+        let repository = provider.GetRequiredService<IProjectRepository>()
+        ProjectService(repository) :> IProjectService
+      ) |> ignore
     )
   
   member this.WithMockRepository(repository: IProjectRepository) =
@@ -48,14 +61,30 @@ type TestWebApplicationFactory() =
       
       // Add mock repository
       services.AddSingleton<IProjectRepository>(repository) |> ignore
+      
+      // Also remove and re-add the service to ensure it uses the new repository
+      services
+      |> Seq.filter (fun descriptor ->
+        descriptor.ServiceType = typeof<IProjectService>)
+      |> Seq.toList
+      |> List.iter (fun descriptor ->
+        services.Remove(descriptor) |> ignore)
+      
+      services.AddScoped<IProjectService>(fun provider ->
+        let repository = provider.GetRequiredService<IProjectRepository>()
+        ProjectService(repository) :> IProjectService
+      ) |> ignore
     )
   
   override _.ConfigureWebHost(builder: IWebHostBuilder) =
-    builder.ConfigureServices(fun services ->
-      match configureTestServices with
-      | Some configure -> configure services
-      | None -> ()
-    ) |> ignore
+    builder
+      .UseEnvironment("Test")
+      .ConfigureServices(fun services ->
+        // This runs AFTER the main app's ConfigureServices
+        match configureTestServices with
+        | Some configure -> configure services
+        | None -> ()
+      ) |> ignore
 
 module ApiTestHelpers =
   

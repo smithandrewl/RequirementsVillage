@@ -30,28 +30,17 @@ module ErrorHandlers =
   let handleProjectError (error: ProjectError) : HttpHandler =
     match error with
     | NotFound (id, context) ->
-      RequestErrors.NOT_FOUND (
-        json {|
-          error = sprintf "Project %A not found in %s" id context
-        |}
-      )
+      setStatusCode 404 
+      >=> text (sprintf "Project %O not found in %s" id context)
     | ValidationFailed (field, reason, value) ->
-      RequestErrors.BAD_REQUEST (
-        json {|
-          error = sprintf "%s validation failed: %s" field reason
-          field = field
-          value = value
-        |}
-      )
+      setStatusCode 400
+      >=> text (sprintf "%s validation failed: %s" field reason)
     | DatabaseError (operation, table, ex) ->
-      ServerErrors.INTERNAL_ERROR (
-        json {|
-          error = sprintf "Database error in %s on %s"
-            operation table
-        |}
-      )
+      setStatusCode 500
+      >=> text (sprintf "Database error in %s on %s" operation table)
     | UnknownError message ->
-      ServerErrors.INTERNAL_ERROR (json {| error = message |})
+      setStatusCode 500
+      >=> text message
 
 // Project endpoints
 module ProjectEndpoints =
@@ -104,14 +93,16 @@ module ProjectEndpoints =
           | Ok (Some project) ->
             return! json project next ctx
           | Ok None ->
-            return! RequestErrors.NOT_FOUND (
-              json {| error = sprintf "Project %s not found" id |}
+            return! (
+              setStatusCode 404 
+              >=> text (sprintf "Project %s not found" id)
             ) next ctx
           | Error error ->
             return! handleProjectError error next ctx
         | false, _ ->
-          return! RequestErrors.BAD_REQUEST (
-            json {| error = "Invalid project ID format" |}
+          return! (
+            setStatusCode 400
+            >=> text "Invalid project ID format"
           ) next ctx
       }
 
@@ -136,24 +127,27 @@ module ProjectEndpoints =
           match result with
           | Ok project ->
             ctx.SetStatusCode 201
-            ctx.SetHttpHeader("Location", sprintf "/api/projects/%A" project.Id)
+            ctx.SetHttpHeader("Location", sprintf "/api/projects/%O" project.Id)
             return! json project next ctx
           | Error error ->
             return! handleProjectError error next ctx
         with
         | :? System.Text.Json.JsonException ->
-          return! RequestErrors.BAD_REQUEST (
-            json {| error = "Invalid JSON format" |}
+          return! (
+            setStatusCode 400
+            >=> text "Invalid JSON format"
           ) next ctx
         | :? System.NullReferenceException ->
-          return! RequestErrors.BAD_REQUEST (
-            json {| error = "Missing required fields" |}
+          return! (
+            setStatusCode 400
+            >=> text "Missing required fields"
           ) next ctx
         | ex ->
           // Log the actual exception for debugging
           printfn "Unexpected error in createProject: %A" ex
-          return! ServerErrors.INTERNAL_ERROR (
-            json {| error = "An unexpected error occurred" |}
+          return! (
+            setStatusCode 500
+            >=> text "An unexpected error occurred"
           ) next ctx
       }
 
@@ -194,12 +188,14 @@ module ProjectEndpoints =
             | Error error ->
               return! handleProjectError error next ctx
           | Error msg ->
-            return! RequestErrors.BAD_REQUEST (
-              json {| error = msg |}
+            return! (
+              setStatusCode 400
+              >=> text msg
             ) next ctx
         | false, _ ->
-          return! RequestErrors.BAD_REQUEST (
-            json {| error = "Invalid project ID format" |}
+          return! (
+            setStatusCode 400
+            >=> text "Invalid project ID format"
           ) next ctx
       }
 
@@ -227,12 +223,14 @@ module ProjectEndpoints =
             | Error error ->
               return! handleProjectError error next ctx
           | Error msg ->
-            return! RequestErrors.BAD_REQUEST (
-              json {| error = msg |}
+            return! (
+              setStatusCode 400
+              >=> text msg
             ) next ctx
         | false, _ ->
-          return! RequestErrors.BAD_REQUEST (
-            json {| error = "Invalid project ID format" |}
+          return! (
+            setStatusCode 400
+            >=> text "Invalid project ID format"
           ) next ctx
       }
 
@@ -251,8 +249,9 @@ module ProjectEndpoints =
           | Error error ->
             return! handleProjectError error next ctx
         | false, _ ->
-          return! RequestErrors.BAD_REQUEST (
-            json {| error = "Invalid project ID format" |}
+          return! (
+            setStatusCode 400
+            >=> text "Invalid project ID format"
           ) next ctx
       }
 

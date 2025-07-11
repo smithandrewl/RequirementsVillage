@@ -2,6 +2,7 @@ module RequirementsVillage.Api.Models.Serialization
 
 open System.Text.Json
 open System.Text.Json.Serialization
+open FSharp.SystemTextJson
 open RequirementsVillage.Shared
 
 // Custom converters for discriminated unions
@@ -30,5 +31,6 @@ let jsonOptions =
   let options = JsonSerializerOptions()
   options.Converters.Add(ProjectStatusConverter())
   options.Converters.Add(ProjectCategoryConverter())
+  options.Converters.Add(JsonFSharpConverter())
   options.PropertyNamingPolicy <- JsonNamingPolicy.CamelCase
   options
