@@ -1,0 +1,7 @@
+{
+  "name": "requirements-village-shared",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Shared models and utilities for Requirements Village",
+  "private": true
+}
