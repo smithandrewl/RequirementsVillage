@@ -82,7 +82,7 @@ module ProjectCategory =
     | Library   -> "library"
     | Tool      -> "tool"
     | Game      -> "game"
-    | Other s   -> s
+    | Other s   -> if System.String.IsNullOrEmpty(s) then "other" else s
     
   let fromString = function
     | "webApp"    -> WebApp
@@ -90,4 +90,5 @@ module ProjectCategory =
     | "library"   -> Library
     | "tool"      -> Tool
     | "game"      -> Game
+    | "other"     -> Other ""
     | s           -> Other s

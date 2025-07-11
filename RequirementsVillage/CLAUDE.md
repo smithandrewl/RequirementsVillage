@@ -394,6 +394,53 @@ Requirements Village is a full-stack F# application with comprehensive test cove
 - **Test Runner**: Unified F# script (TestRunner.fsx) for all tests
 - **Coverage**: Integrated coverage reporting for both backend and frontend
 
+### Complete Feature Testing Example: Create Project
+
+This project demonstrates comprehensive testing for the "Create Project" feature across all layers:
+
+#### 1. Backend Unit Tests (ProjectServiceTests.fs)
+- Tests business logic for creating projects
+- Validates that new projects start with "Idea" status
+- Ensures timestamps are set correctly
+- Tests validation rules (empty names, long descriptions)
+
+#### 2. Backend Integration Tests (ProjectEndpointsTests.fs)
+- Tests the full HTTP request/response cycle
+- Validates HTTP status codes (201 Created)
+- Checks response headers (Location)
+- Tests error scenarios (400 Bad Request)
+
+#### 3. Repository Tests (InMemoryProjectRepositoryTests.fs)
+- Tests data persistence layer
+- Validates CRUD operations
+- Tests concurrent access scenarios
+
+#### 4. Property-Based Tests (PropertyTests.fs)
+- Tests with randomly generated valid/invalid data
+- Ensures invariants hold across all inputs
+- Tests edge cases automatically
+
+#### 5. Frontend State Tests (UpdateTests.fs)
+- Tests Elmish update functions
+- Validates state transitions
+- Tests command generation
+
+#### 6. Frontend Component Tests (ProjectCardTests.fs)
+- Tests UI component rendering
+- Validates user interactions
+- Tests component props
+
+#### 7. Frontend API Tests (ProjectApiTests.fs)
+- Tests API client functions
+- Validates request/response encoding
+- Tests error handling
+
+#### Test Data Generation
+- Shared test data generators in TestGenerators.fs
+- Bogus for realistic test data
+- FsCheck generators for property tests
+- Consistent test data across all test suites
+
 ### Running Tests
 ```bash
 # Run all tests
