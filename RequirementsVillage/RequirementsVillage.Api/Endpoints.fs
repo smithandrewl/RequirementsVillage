@@ -118,22 +118,43 @@ module ProjectEndpoints =
   let createProject : HttpHandler =
     fun (next: HttpFunc) (ctx: HttpContext) ->
       task {
-        let! request = ctx.BindJsonAsync<CreateProjectRequest>()
+        try
+          let! request = ctx.BindJsonAsync<CreateProjectRequest>()
 
-        let service  = ctx.GetService<IProjectService>()
-        let category = parseCategory request.Category
+          // Handle null values from JSON deserialization
+          let name = if isNull request.Name then "" else request.Name
+          let description = if isNull request.Description then "" else request.Description
+          let categoryStr = if isNull request.Category then "" else request.Category
 
-        let! result =
-          service.CreateProjectAsync(
-            request.Name, request.Description, category
-          ) |> Async.StartAsTask
+          let service  = ctx.GetService<IProjectService>()
+          let category = parseCategory categoryStr
 
-        match result with
-        | Ok project ->
-          ctx.SetStatusCode 201
-          return! json project next ctx
-        | Error error ->
-          return! handleProjectError error next ctx
+          let! result =
+            service.CreateProjectAsync(name, description, category)
+            |> Async.StartAsTask
+
+          match result with
+          | Ok project ->
+            ctx.SetStatusCode 201
+            ctx.SetHttpHeader("Location", sprintf "/api/projects/%A" project.Id)
+            return! json project next ctx
+          | Error error ->
+            return! handleProjectError error next ctx
+        with
+        | :? System.Text.Json.JsonException ->
+          return! RequestErrors.BAD_REQUEST (
+            json {| error = "Invalid JSON format" |}
+          ) next ctx
+        | :? System.NullReferenceException ->
+          return! RequestErrors.BAD_REQUEST (
+            json {| error = "Missing required fields" |}
+          ) next ctx
+        | ex ->
+          // Log the actual exception for debugging
+          printfn "Unexpected error in createProject: %A" ex
+          return! ServerErrors.INTERNAL_ERROR (
+            json {| error = "An unexpected error occurred" |}
+          ) next ctx
       }
 
   let updateProject (id: string) : HttpHandler =
@@ -143,15 +164,21 @@ module ProjectEndpoints =
         | true, guid ->
           let! request = ctx.BindJsonAsync<UpdateProjectRequest>()
 
+          // Handle null values from JSON deserialization
+          let name = if isNull request.Name then "" else request.Name
+          let description = if isNull request.Description then "" else request.Description
+          let categoryStr = if isNull request.Category then "" else request.Category
+          let statusStr = if isNull request.Status then "" else request.Status
+
           let service = ctx.GetService<IProjectService>()
 
-          match parseStatus request.Status with
+          match parseStatus statusStr with
           | Ok status ->
             let project = {
               Id          = guid
-              Name        = request.Name
-              Description = request.Description
-              Category    = parseCategory request.Category
+              Name        = name
+              Description = description
+              Category    = parseCategory categoryStr
               Status      = status
               CreatedAt   = DateTime.MinValue // Ignored by service
               UpdatedAt   = DateTime.UtcNow
@@ -183,9 +210,12 @@ module ProjectEndpoints =
         | true, guid ->
           let! request = ctx.BindJsonAsync<UpdateStatusRequest>()
 
+          // Handle null values from JSON deserialization
+          let statusStr = if isNull request.Status then "" else request.Status
+
           let service = ctx.GetService<IProjectService>()
 
-          match parseStatus request.Status with
+          match parseStatus statusStr with
           | Ok status ->
             let! result =
               service.UpdateProjectStatusAsync(guid, status)
@@ -238,7 +268,7 @@ let healthCheck : HttpHandler =
 // Main router
 let apiRouter : HttpHandler =
   choose [
-    GET >=> route "/api/health" >=> healthCheck
+    GET_HEAD >=> route "/api/health" >=> healthCheck
     subRoute "/api/projects" (
       choose [
         GET >=> choose [

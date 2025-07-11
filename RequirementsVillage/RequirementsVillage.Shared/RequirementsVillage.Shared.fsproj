@@ -7,15 +7,11 @@
 
   <ItemGroup>
     <Compile Include="Models.fs" />
-    <Compile Include="Serialization.fs" />
     <Compile Include="Codecs.fs" />
-    <Compile Include="TestGenerators.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Thoth.Json.Net" Version="11.0.0" />
-    <PackageReference Include="Bogus" Version="35.0.1" />
-    <PackageReference Include="FsCheck" Version="2.16.6" />
   </ItemGroup>
 
 </Project>

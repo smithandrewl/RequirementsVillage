@@ -1,15 +1,34 @@
-namespace RequirementsVillage.Api.Models
+module RequirementsVillage.Api.Models.Serialization
 
-module Serialization =
-  
-  open System.Text.Json
-  open System.Text.Json.Serialization
-  open RequirementsVillage.Shared
-  
-  let jsonOptions =
-    let options = JsonSerializerOptions()
-    options.Converters.Add(Serialization.ProjectStatusConverter())
-    options.Converters.Add(Serialization.ProjectCategoryConverter())
-    options.PropertyNamingPolicy <- JsonNamingPolicy.CamelCase
-    options.Converters.Add(JsonFSharpConverter())
-    options
+open System.Text.Json
+open System.Text.Json.Serialization
+open RequirementsVillage.Shared
+
+// Custom converters for discriminated unions
+type ProjectStatusConverter() =
+  inherit JsonConverter<ProjectStatus>()
+
+  override _.Read(reader, typeToConvert, options) =
+    match ProjectStatus.fromString (reader.GetString()) with
+    | Ok status -> status
+    | Error msg -> failwith msg
+
+  override _.Write(writer, value, options) =
+    writer.WriteStringValue(ProjectStatus.toString value)
+
+type ProjectCategoryConverter() =
+  inherit JsonConverter<ProjectCategory>()
+
+  override _.Read(reader, typeToConvert, options) =
+    reader.GetString() |> ProjectCategory.fromString
+
+  override _.Write(writer, value, options) =
+    writer.WriteStringValue(ProjectCategory.toString value)
+
+// JSON options for serialization
+let jsonOptions =
+  let options = JsonSerializerOptions()
+  options.Converters.Add(ProjectStatusConverter())
+  options.Converters.Add(ProjectCategoryConverter())
+  options.PropertyNamingPolicy <- JsonNamingPolicy.CamelCase
+  options

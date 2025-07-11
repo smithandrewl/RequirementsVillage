@@ -26,10 +26,10 @@ let configureServices (services: IServiceCollection) =
   // Configure JSON serialization with F# support
   let jsonOptions = JsonSerializerOptions()
   jsonOptions.Converters.Add(
-    Serialization.ProjectStatusConverter()
+    RequirementsVillage.Api.Models.Serialization.ProjectStatusConverter()
   )
   jsonOptions.Converters.Add(
-    Serialization.ProjectCategoryConverter()
+    RequirementsVillage.Api.Models.Serialization.ProjectCategoryConverter()
   )
   jsonOptions.PropertyNamingPolicy <- JsonNamingPolicy.CamelCase
   jsonOptions.Converters.Add(JsonFSharpConverter())

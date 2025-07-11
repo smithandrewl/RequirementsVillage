@@ -9,7 +9,7 @@ open Thoth.Json.Net
 open RequirementsVillage.Shared
 open RequirementsVillage.Shared.Codecs
 open RequirementsVillage.Shared.Tests.Helpers
-open RequirementsVillage.Shared.TestGenerators
+open RequirementsVillage.Shared.Tests.TestGenerators
 
 module CodecsTests =
   

@@ -98,7 +98,7 @@ module ModelConversionTests =
         | Library   -> "library"
         | Tool      -> "tool"
         | Game      -> "game"
-        | Other s   -> s
+        | Other s   -> if System.String.IsNullOrEmpty(s) then "other" else s
       
       let testCases = [
         (WebApp,          "webApp")
@@ -107,7 +107,7 @@ module ModelConversionTests =
         (Tool,            "tool")
         (Game,            "game")
         (Other "Custom",  "Custom")
-        (Other "",        "")
+        (Other "",        "other")
       ]
       
       testCases
@@ -124,6 +124,7 @@ module ModelConversionTests =
         | "library"   -> Library
         | "tool"      -> Tool
         | "game"      -> Game
+        | "other"     -> Other ""
         | other       -> Other other
       
       let testCases = [
@@ -133,6 +134,7 @@ module ModelConversionTests =
         ("tool",      Tool)
         ("game",      Game)
         ("Custom",    Other "Custom")
+        ("other",     Other "")
         ("",          Other "")
         ("anything",  Other "anything")
       ]
@@ -151,7 +153,10 @@ module ModelConversionTests =
         | Library   -> "library"
         | Tool      -> "tool"
         | Game      -> "game"
-        | Other s   -> s
+        | Other s   -> 
+            match s with
+            | null | "" -> "other"
+            | _ -> s
       
       let parseCategory s =
         match s with
@@ -160,12 +165,19 @@ module ModelConversionTests =
         | "library"   -> Library
         | "tool"      -> Tool
         | "game"      -> Game
+        | "other"     -> Other ""
         | other       -> Other other
       
       let stringValue = categoryToString category
       let parsedValue = parseCategory stringValue
       
-      parsedValue = category
+      // Normalize both values since Other null and Other "" both map to "other"
+      let normalize cat =
+        match cat with
+        | Other null | Other "" -> Other ""
+        | c -> c
+      
+      normalize parsedValue = normalize category
   
   module JsonConverterTests =
     
@@ -204,7 +216,7 @@ module ModelConversionTests =
         (Tool,            "tool")
         (Game,            "game")
         (Other "AI/ML",   "AI/ML")
-        (Other "",        "")
+        (Other "",        "other")
       ]
       
       testCases

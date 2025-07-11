@@ -9,7 +9,7 @@ open FsCheck.Xunit
 open RequirementsVillage.Shared
 open RequirementsVillage.Shared.Tests.Helpers.JsonHelpers
 open RequirementsVillage.Shared.Tests.Helpers
-open RequirementsVillage.Shared.TestGenerators
+open RequirementsVillage.Shared.Tests.TestGenerators
 
 module ProjectTests =
   
@@ -54,35 +54,16 @@ module ProjectTests =
     json |> should haveSubstring "\"createdAt\""
     json |> should haveSubstring "\"updatedAt\""
   
-  [<Property>]
-  let ``Project serialization round trip should preserve all data``
-    (id: Guid)
-    (name: string)
-    (description: string)
-    (category: ProjectCategory)
-    (status: ProjectStatus) =
+  [<Property(Arbitrary = [| typeof<TestDataGenerators.FsCheck.Generators> |])>]
+  let ``Project serialization round trip should preserve all data`` (project: Project) =
+    let json = JsonSerializer.Serialize(project, jsonOptions)
+    let deserialized = JsonSerializer.Deserialize<Project>(json, jsonOptions)
     
-    (name <> null && description <> null && TestHelpers.isValidProjectName name && TestHelpers.isValidProjectDescription description) ==> lazy (
-      
-      let project = {
-        Id          = id
-        Name        = name
-        Description = description
-        Category    = category
-        Status      = status
-        CreatedAt   = DateTime.UtcNow
-        UpdatedAt   = DateTime.UtcNow.AddHours(1.0)
-      }
-      
-      let json = JsonSerializer.Serialize(project, jsonOptions)
-      let deserialized = JsonSerializer.Deserialize<Project>(json, jsonOptions)
-      
-      deserialized.Id          = project.Id &&
-      deserialized.Name        = project.Name &&
-      deserialized.Description = project.Description &&
-      deserialized.Category    = project.Category &&
-      deserialized.Status      = project.Status
-    )
+    deserialized.Id          = project.Id &&
+    deserialized.Name        = project.Name &&
+    deserialized.Description = project.Description &&
+    deserialized.Category    = project.Category &&
+    deserialized.Status      = project.Status
   
   module ProjectValidation =
     
@@ -125,15 +106,10 @@ module ProjectTests =
       
       TestHelpers.isValidProjectDescription project.Description |> should equal false
     
-    [<Property>]
+    [<Property(Arbitrary = [| typeof<TestDataGenerators.FsCheck.Generators> |])>]
     let ``Valid project should pass all validation rules`` (project: Project) =
-      TestDataGenerators.FsCheck.registerGenerators() |> ignore
-      
-      // Filter out projects with null values
-      (project.Name <> null && project.Description <> null) ==> lazy (
-        TestHelpers.isValidProjectName project.Name &&
-        TestHelpers.isValidProjectDescription project.Description
-      )
+      TestHelpers.isValidProjectName project.Name &&
+      TestHelpers.isValidProjectDescription project.Description
   
   module ProjectEquality =
     

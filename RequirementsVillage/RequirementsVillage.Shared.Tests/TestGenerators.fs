@@ -1,6 +1,7 @@
-namespace RequirementsVillage.Shared.TestGenerators
+namespace RequirementsVillage.Shared.Tests.TestGenerators
 
 open System
+open System.Linq
 open Bogus
 open Bogus.DataSets
 open FsCheck
@@ -100,18 +101,19 @@ module TestDataGenerators =
     let nonEmptyString =
       Arb.generate<NonEmptyString>
       |> Gen.map (fun (NonEmptyString s) -> s)
+      |> Gen.filter (fun s -> 
+        s <> null && 
+        not (System.String.IsNullOrWhiteSpace(s)) &&
+        s.All(fun c -> not (System.Char.IsControl(c)))
+      )
     
     let projectName =
-      Gen.sized (fun size ->
-        nonEmptyString
-        |> Gen.filter (fun s -> s.Length > 0 && s.Length <= 100)
-      )
+      nonEmptyString
+      |> Gen.filter (fun s -> s.Length >= 1 && s.Length <= 100)
     
     let projectDescription =
-      Gen.sized (fun size ->
-        nonEmptyString
-        |> Gen.filter (fun s -> s.Length > 0 && s.Length <= 1000)
-      )
+      nonEmptyString
+      |> Gen.filter (fun s -> s.Length >= 1 && s.Length <= 1000)
     
     let projectStatus =
       Gen.elements [
@@ -125,7 +127,7 @@ module TestDataGenerators =
     let projectCategory =
       Gen.frequency [
         (5, Gen.elements [ WebApp; MobileApp; Library; Tool; Game ])
-        (1, Gen.map Other (nonEmptyString |> Gen.filter (fun s -> s <> null)))
+        (1, Gen.map Other nonEmptyString)
       ]
     
     let validProject =

@@ -3,13 +3,13 @@ namespace RequirementsVillage.Api.Tests.Helpers
 open System
 open FsUnit.Xunit
 open RequirementsVillage.Shared
-open RequirementsVillage.Shared.TestGenerators
+open RequirementsVillage.Shared.Tests.TestGenerators
 
 module TestHelpers =
   
   // Use shared test helpers
   let createTestProject = TestDataGenerators.Bogus.Default.project
-  let createProject = TestHelpers.createProject
+  let createProject = RequirementsVillage.Shared.Tests.Helpers.TestHelpers.createProject
   
   // Assert Result is Ok
   let shouldBeOk (result: Result<'a, 'b>) =

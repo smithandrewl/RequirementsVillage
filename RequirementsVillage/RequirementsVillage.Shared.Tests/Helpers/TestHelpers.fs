@@ -3,7 +3,7 @@ namespace RequirementsVillage.Shared.Tests.Helpers
 open System
 open FsUnit.Xunit
 open RequirementsVillage.Shared
-open RequirementsVillage.Shared.TestGenerators
+open RequirementsVillage.Shared.Tests.TestGenerators
 
 module TestHelpers =
   

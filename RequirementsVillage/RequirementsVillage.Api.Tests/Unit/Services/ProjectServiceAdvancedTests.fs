@@ -9,7 +9,7 @@ open RequirementsVillage.Shared
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Tests.Helpers
-open RequirementsVillage.Shared.TestGenerators
+open RequirementsVillage.Shared.Tests.TestGenerators
 open FsCheck
 open NSubstitute
 open NSubstitute.ExceptionExtensions

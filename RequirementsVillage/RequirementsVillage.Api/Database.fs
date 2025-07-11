@@ -277,7 +277,10 @@ type InMemoryProjectRepository() =
 
   interface IProjectRepository with
     member _.GetAllAsync() =
-      async { return Ok projects }
+      async { 
+        // Return projects in the order they were added (newest first)
+        return Ok projects
+      }
 
     member _.GetByIdAsync(id: Guid) =
       async {
@@ -288,8 +291,15 @@ type InMemoryProjectRepository() =
 
     member _.CreateAsync(project: Project) =
       async {
-        projects <- project :: projects
-        return Ok ()
+        // Check if project with same ID already exists
+        match projects |> List.tryFindIndex (fun p -> p.Id = project.Id) with
+        | Some idx ->
+          // Project already exists, replace it
+          projects <- projects |> List.updateAt idx project
+          return Ok ()
+        | None ->
+          projects <- project :: projects
+          return Ok ()
       }
 
     member _.UpdateAsync(project: Project) =

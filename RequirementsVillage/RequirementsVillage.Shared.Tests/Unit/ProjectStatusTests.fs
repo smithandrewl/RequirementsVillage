@@ -6,7 +6,7 @@ open Xunit
 open FsUnit.Xunit
 open FsCheck.Xunit
 open RequirementsVillage.Shared
-open RequirementsVillage.Shared.TestGenerators
+open RequirementsVillage.Shared.Tests.TestGenerators
 open RequirementsVillage.Shared.Tests.Helpers.JsonHelpers
 open RequirementsVillage.Shared.Tests.Helpers
 

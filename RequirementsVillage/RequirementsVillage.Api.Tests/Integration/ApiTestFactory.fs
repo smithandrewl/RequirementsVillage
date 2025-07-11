@@ -11,6 +11,7 @@ open RequirementsVillage.Api
 open RequirementsVillage.Api.Persistence
 open RequirementsVillage.Api.Services
 open RequirementsVillage.Api.Tests.Helpers
+open FSharp.SystemTextJson
 
 type TestWebApplicationFactory() =
   inherit WebApplicationFactory<RequirementsVillage.Api.Program.Program>()
