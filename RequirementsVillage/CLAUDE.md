@@ -68,6 +68,8 @@ RequirementsVillage/
 - Type-safe HTML with Feliz
 - Webpack build with hot reload
 - Bulma CSS + Feliz.Bulma type-safe styling
+- Client-side routing with browser history support
+- Breadcrumb navigation between pages
 
 ### ❌ Not Yet Implemented
 
