@@ -6,7 +6,7 @@ const outputDir = path.join(__dirname, '../RequirementsVillage.Api/wwwroot');
 
 module.exports = {
   mode: 'development',
-  entry: './src/App.fs.js',
+  entry: './build/js/src/App.js',
   output: {
     path: outputDir,
     filename: 'bundle.[contenthash].js',

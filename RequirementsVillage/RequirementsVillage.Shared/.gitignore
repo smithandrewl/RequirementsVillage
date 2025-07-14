@@ -1,0 +1,6 @@
+build/
+node_modules/
+.fable/
+*.fs.js
+*.fs.js.map
+fable_modules/

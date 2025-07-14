@@ -1,0 +1,5 @@
+{
+  "cli": {
+    "outDir": "build/js"
+  }
+}

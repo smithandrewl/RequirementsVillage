@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "dotnet fable watch . --run webpack serve",
-    "build": "dotnet fable . && webpack",
-    "test": "dotnet fable watch tests --run mocha tests --recursive --exit",
-    "test:once": "dotnet fable tests && mocha tests --recursive --exit",
-    "test:watch": "dotnet fable watch tests --run mocha tests --recursive --watch",
-    "test:coverage": "dotnet fable tests && nyc --reporter=json --reporter=text --reporter=lcov mocha tests --recursive --exit",
+    "start": "dotnet fable watch . --config ./fable-config.json --run webpack serve",
+    "build": "dotnet fable . --config ./fable-config.json && webpack",
+    "test": "dotnet fable watch tests --outDir build/js/tests --run mocha build/js/tests --recursive --exit",
+    "test:once": "dotnet fable tests --outDir build/js/tests && mocha build/js/tests --recursive --exit",
+    "test:watch": "dotnet fable watch tests --outDir build/js/tests --run mocha build/js/tests --recursive --watch",
+    "test:coverage": "dotnet fable tests --outDir build/js/tests && nyc --reporter=json --reporter=text --reporter=lcov mocha build/js/tests --recursive --exit",
     "coverage:report": "nyc report --reporter=html",
     "test:ci": "npm run test:coverage"
   },
@@ -27,8 +27,8 @@
   },
   "nyc": {
     "include": [
-      "src/**/*.js",
-      "tests-js/**/*.js"
+      "build/js/src/**/*.js",
+      "build/js/tests/**/*.js"
     ],
     "exclude": [
       "**/node_modules/**",
