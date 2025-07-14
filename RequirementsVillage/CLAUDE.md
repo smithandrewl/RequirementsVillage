@@ -112,65 +112,35 @@ dotnet run --configuration Release
 
 ### Testing Commands
 
-#### Using F# Test Runner (Recommended)
+#### Backend Tests
 ```bash
-# Run all tests
-dotnet fsi TestRunner.fsx All
+# Run all backend tests
+cd RequirementsVillage.Api.Tests
+dotnet test
 
-# Run backend tests only
-dotnet fsi TestRunner.fsx Backend
+# Run with coverage
+dotnet test --collect:"XPlat Code Coverage"
 
-# Run frontend tests only
-dotnet fsi TestRunner.fsx Frontend
-
-# Run all tests with coverage
-dotnet fsi TestRunner.fsx All -c
-
-# Run backend tests with coverage
-dotnet fsi TestRunner.fsx Backend -c
-
-# Run filtered backend tests
-dotnet fsi TestRunner.fsx Backend -f "ProjectService"
-
-# Run tests with custom output directory
-dotnet fsi TestRunner.fsx All -c -o ./my-coverage
+# Run with filter
+dotnet test --filter "FullyQualifiedName~ProjectService"
 ```
 
-#### Using Python Test Runner (Alternative)
+#### Frontend Tests
 ```bash
-# Run all tests
-python test_runner.py all
+# Run all frontend tests
+cd RequirementsVillage.Client
+npm test
 
-# Run backend tests with coverage
-python test_runner.py backend -c
+# Run tests once (no watch)
+npm run test:once
 
-# Run frontend tests only
-python test_runner.py frontend
+# Run with coverage
+npm run test:coverage
 
-# Run all tests with coverage to custom directory
-python test_runner.py all -c -o ./cov
-
-# Run filtered backend tests
-python test_runner.py backend -f "ProjectService"
+# Generate coverage report
+npm run coverage:report
 ```
 
-#### Using Make-style F# Script
-```bash
-# Show available tasks
-dotnet fsi make.fsx help
-
-# Run all tests
-dotnet fsi make.fsx test
-
-# Run tests with coverage
-dotnet fsi make.fsx test:coverage
-
-# Build solution
-dotnet fsi make.fsx build
-
-# Clean build artifacts and coverage
-dotnet fsi make.fsx clean
-```
 
 ### Coverage Reports
 After running tests with coverage, reports are generated in:
@@ -283,6 +253,10 @@ A realistic app icon concept showing a gravestone with a project folder symbol â
   - Use property-based tests with FsCheck for complex logic
   - Use Faker/Bogus for realistic test data generation
   - Aim for high test coverage from the start
+- **No Scripts Policy**:
+  - Avoid creating scripts (.fsx, .py, .sh, .cmd, .bat) whenever possible
+  - Use built-in tooling (dotnet CLI, npm scripts) instead
+  - Keep build and development processes simple and standard
 
 ### Formatting Preferences
 
@@ -391,7 +365,7 @@ member _.CreateProjectAsync(
 Requirements Village is a full-stack F# application with comprehensive test coverage:
 - **Backend Tests**: xUnit, FsUnit, FsCheck, Bogus for API and business logic
 - **Frontend Tests**: Fable.Mocha for Elmish state and components
-- **Test Runner**: Unified F# script (TestRunner.fsx) for all tests
+- **Test Runner**: Standard dotnet test for backend, npm test for frontend
 - **Coverage**: Integrated coverage reporting for both backend and frontend
 
 ### Complete Feature Testing Example: Create Project
@@ -443,20 +417,13 @@ This project demonstrates comprehensive testing for the "Create Project" feature
 
 ### Running Tests
 ```bash
-# Run all tests
-dotnet fsi TestRunner.fsx All
+# Backend tests
+cd RequirementsVillage.Api.Tests
+dotnet test
 
-# Run backend tests only
-dotnet fsi TestRunner.fsx Backend
-
-# Run frontend tests only  
-dotnet fsi TestRunner.fsx Frontend
-
-# Run with coverage
-dotnet fsi TestRunner.fsx All -c
-
-# Filter backend tests
-dotnet fsi TestRunner.fsx Backend -f "ProjectService"
+# Frontend tests
+cd RequirementsVillage.Client
+npm test
 ```
 
 ### Test Organization
