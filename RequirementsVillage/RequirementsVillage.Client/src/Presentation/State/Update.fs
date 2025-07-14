@@ -6,19 +6,37 @@ open RequirementsVillage.Client.Presentation.State.Types
 open RequirementsVillage.Client.Infrastructure.Api.Project
 open RequirementsVillage.Client.Infrastructure.Storage.ThemeStorage
 open RequirementsVillage.Client.Infrastructure.Api.Types
+open RequirementsVillage.Client.Routes
+open Browser.Types
+open Fable.Core.JsInterop
+open Elmish.Navigation
 
-let init () : Model * Cmd<Msg> =
+// Navigation command to update browser URL
+let navigateCmd (route: Route) : Cmd<Msg> =
+  let segments = toUrlSegments route
+  let path = 
+    match segments with
+    | [] -> "/"
+    | _ -> "/" + String.concat "/" segments
+  Navigation.newUrl path
+
+let init (initialRoute: Page option) : Model * Cmd<Msg> =
   let savedTheme = Theme.load()
   
   // Apply the theme to DOM on startup
   Theme.applyToDom savedTheme
+
+  let initialPage = 
+    match initialRoute with
+    | Some page -> page
+    | None -> Landing
 
   let initialModel = {
     Domain = {
       Projects = []
     }
     UI = {
-      CurrentPage       = Landing
+      CurrentPage       = initialPage
       CurrentTheme      = savedTheme
       FilteredStatus    = None
       LoadingOperations = Set.empty
@@ -26,12 +44,19 @@ let init () : Model * Cmd<Msg> =
     }
   }
 
-  initialModel, Cmd.none
+  let loadCmd =
+    match initialPage with
+    | Dashboard -> Cmd.ofMsg LoadProjects
+    | _ -> Cmd.none
+
+  initialModel, loadCmd
 
 let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
   match msg with
   | NavigateTo page ->
-    let cmd =
+    // Update browser URL when navigating
+    let navCmd = navigateCmd page
+    let loadCmd =
       match page with
       | Dashboard when List.isEmpty model.Domain.Projects ->
         Cmd.ofMsg LoadProjects
@@ -41,7 +66,21 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
           model.UI with
             CurrentPage = page
         }
-    }, cmd
+    }, Cmd.batch [ navCmd; loadCmd ]
+
+  | UrlChanged route ->
+    // Handle browser URL changes (back/forward buttons)
+    let loadCmd =
+      match route with
+      | Dashboard when List.isEmpty model.Domain.Projects ->
+        Cmd.ofMsg LoadProjects
+      | _ -> Cmd.none
+    { model with
+        UI = {
+          model.UI with
+            CurrentPage = route
+        }
+    }, loadCmd
 
   | SetTheme theme ->
     { model with

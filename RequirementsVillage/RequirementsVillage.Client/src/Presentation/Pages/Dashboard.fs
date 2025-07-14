@@ -5,6 +5,7 @@ open Feliz.Bulma
 open RequirementsVillage.Shared
 open RequirementsVillage.Client.Presentation.State.Types
 open RequirementsVillage.Client.Presentation.Components
+open RequirementsVillage.Client.Routes
 
 // Private components
 let private StatusFilter (currentFilter: ProjectStatus option) (dispatch: Msg -> unit) =
@@ -101,6 +102,24 @@ let view (model: Model) (dispatch: Msg -> unit) =
       style.maxWidth (length.percent 100)
     ]
     prop.children [
+      // Breadcrumb navigation
+      Bulma.breadcrumb [
+        Html.ul [
+          Html.li [
+            Html.a [
+              prop.text "Home"
+              prop.onClick (fun _ -> dispatch (NavigateTo Landing))
+            ]
+          ]
+          Html.li [
+            prop.className "is-active"
+            prop.children [
+              Html.a [ prop.text "Dashboard" ]
+            ]
+          ]
+        ]
+      ]
+      
       StatusFilter model.UI.FilteredStatus dispatch
 
       if UIState.isLoading LoadingProjects model.UI then

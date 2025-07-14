@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "dotnet fable watch . --config ./fable-config.json --run webpack serve",
-    "build": "dotnet fable . --config ./fable-config.json && webpack",
+    "start": "dotnet fable watch . --outDir build/js --run webpack serve",
+    "build": "dotnet fable . --outDir build/js && webpack",
     "test": "dotnet fable watch tests --outDir build/js/tests --run mocha build/js/tests --recursive --exit",
     "test:once": "dotnet fable tests --outDir build/js/tests && mocha build/js/tests --recursive --exit",
     "test:watch": "dotnet fable watch tests --outDir build/js/tests --run mocha build/js/tests --recursive --watch",

@@ -3,6 +3,7 @@ module RequirementsVillage.Client.Presentation.Pages.Landing
 open Feliz
 open Feliz.Bulma
 open RequirementsVillage.Client.Presentation.State.Types
+open RequirementsVillage.Client.Routes
 
 let view (dispatch: Msg -> unit) =
   Bulma.hero [

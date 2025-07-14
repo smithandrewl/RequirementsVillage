@@ -7,6 +7,8 @@
   
   <!-- Test files -->
   <ItemGroup>
+    <!-- Include source file for testing -->
+    <Compile Include="../src/Presentation/State/Routes.fs" Link="Routes.fs" />
     <Compile Include="Helpers/TestData.fs" />
     <Compile Include="Helpers/TestHelpers.fs" />
     <Compile Include="State/TypesTests.fs" />
@@ -32,7 +34,7 @@
     <PackageReference Include="Fable.Fetch" Version="2.6.0" />
     <PackageReference Include="Thoth.Json" Version="10.4.1" />
     <PackageReference Include="Bogus" Version="35.0.1" />
-    <PackageReference Include="Fable.Browser.Dom" Version="2.16.0" />
+    <PackageReference Include="Fable.Browser.Dom" Version="2.20.0" />
   </ItemGroup>
   
 </Project>

@@ -11,6 +11,7 @@
     <Compile Include="src/Infrastructure/Api/Codecs.fs" />
     <Compile Include="src/Infrastructure/Api/Project.fs" />
     <Compile Include="src/Infrastructure/Storage/ThemeStorage.fs" />
+    <Compile Include="src/Presentation/State/Routes.fs" />
     <Compile Include="src/Presentation/State/Types.fs" />
     <Compile Include="src/Presentation/State/Update.fs" />
     <Compile Include="src/Presentation/Components/Common.fs" />
@@ -34,10 +35,11 @@
     <PackageReference Include="Fable.Elmish.HMR" Version="7.0.0" />
     <PackageReference Include="Feliz" Version="2.9.0" />
     <PackageReference Include="Feliz.Bulma" Version="3.0.0" />
+    <PackageReference Include="Fable.Elmish.Browser" Version="4.0.3" />
     <PackageReference Include="Fable.Promise" Version="3.2.0" />
     <PackageReference Include="Fable.Fetch" Version="2.6.0" />
     <PackageReference Include="Thoth.Json" Version="10.4.1" />
-    <PackageReference Include="Fable.Browser.Dom" Version="2.16.0" />
+    <PackageReference Include="Fable.Browser.Dom" Version="2.20.0" />
     <PackageReference Include="Fable.Browser.WebStorage" Version="1.3.0" />
   </ItemGroup>
   

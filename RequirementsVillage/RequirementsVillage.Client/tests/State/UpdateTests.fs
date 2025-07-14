@@ -8,6 +8,7 @@ open RequirementsVillage.Client.Infrastructure.Api.Types
 open RequirementsVillage.Client.Tests.Helpers.TestHelpers
 open RequirementsVillage.Client.Tests.Helpers.TestData
 open RequirementsVillage.Shared
+open RequirementsVillage.Client.Routes
 
 let tests =
   testList "State.Update Tests" [
@@ -389,6 +390,81 @@ let tests =
         // Commands should be empty
         Assert.isTrue (Elmish.cmdIsEmpty cmd1) "First init should have no commands"
         Assert.isTrue (Elmish.cmdIsEmpty cmd2) "Second init should have no commands"
+      }
+    ]
+    
+    testList "UrlChanged message (Routing)" [
+      
+      test "UrlChanged updates page from browser navigation" {
+        let model = 
+          State.initialModel()
+          |> State.withPage Landing
+        
+        let newModel, _ = update (UrlChanged Dashboard) model
+        
+        Assert.equal Dashboard newModel.UI.CurrentPage "Page should update from URL change"
+      }
+      
+      test "UrlChanged to Dashboard triggers LoadProjects when no projects" {
+        let model = State.initialModel()
+        let _, cmd = update (UrlChanged Dashboard) model
+        
+        Assert.isTrue 
+          (Elmish.cmdContainsMessage LoadProjects cmd)
+          "Should load projects when navigating to Dashboard via URL"
+      }
+      
+      test "UrlChanged preserves existing projects" {
+        let projects = Generate.projects 5
+        let model = 
+          State.initialModel()
+          |> State.withProjects projects
+        
+        let newModel, cmd = update (UrlChanged Dashboard) model
+        
+        Assert.equal projects newModel.Domain.Projects "Projects should be preserved"
+        Assert.isFalse 
+          (Elmish.cmdContainsMessage LoadProjects cmd)
+          "Should not reload projects"
+      }
+    ]
+    
+    testList "Route parsing" [
+      
+      test "parseUrl handles root path" {
+        let route = parseUrl []
+        Assert.equal Landing route "Root should parse to Landing"
+      }
+      
+      test "parseUrl handles dashboard path" {
+        let route = parseUrl ["dashboard"]
+        Assert.equal Dashboard route "dashboard should parse to Dashboard"
+      }
+      
+      test "parseUrl defaults unknown paths to Landing" {
+        let unknownPaths = [
+          ["unknown"]
+          ["admin"]
+          ["foo"; "bar"]
+        ]
+        
+        for path in unknownPaths do
+          let route = parseUrl path
+          Assert.equal Landing route $"Unknown path {path} should default to Landing"
+      }
+    ]
+    
+    testList "URL generation" [
+      
+      test "toUrlSegments generates correct paths" {
+        let cases = [
+          Landing, []
+          Dashboard, ["dashboard"]
+        ]
+        
+        for route, expected in cases do
+          let segments = toUrlSegments route
+          Assert.equal expected segments $"Route {route} should generate {expected}"
       }
     ]
   ]

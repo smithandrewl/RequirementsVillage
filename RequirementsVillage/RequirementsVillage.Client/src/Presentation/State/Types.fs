@@ -3,11 +3,10 @@ module RequirementsVillage.Client.Presentation.State.Types
 open RequirementsVillage.Shared
 open RequirementsVillage.Client.Infrastructure.Api.Types
 open RequirementsVillage.Client.Infrastructure.Storage.ThemeStorage
+open RequirementsVillage.Client.Routes
 
-// UI pages
-type Page =
-  | Landing
-  | Dashboard
+// For backward compatibility, alias Page to Route
+type Page = Route
 
 // Loading operations for granular tracking
 type LoadingOperation =
@@ -40,6 +39,7 @@ type Model = {
 
 type Msg =
   | NavigateTo     of Page
+  | UrlChanged     of Route  // New message for browser URL changes
   | SetTheme       of Theme
   | ProjectsLoaded of Result<Project list, ApiError>
   | FilterByStatus of ProjectStatus option

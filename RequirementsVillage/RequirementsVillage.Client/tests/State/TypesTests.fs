@@ -4,6 +4,7 @@ open Fable.Mocha
 open RequirementsVillage.Client.Tests.Helpers.TestHelpers
 open RequirementsVillage.Client.Tests.Helpers.TestData
 open RequirementsVillage.Shared
+open RequirementsVillage.Client.Routes
 
 let tests = 
   testList "Domain Model Tests" [
@@ -78,6 +79,52 @@ let tests =
             "CreatedAt should be <= UpdatedAt"
           Assert.isTrue (project.CreatedAt < System.DateTime.UtcNow)
             "CreatedAt should be in the past"
+      }
+    ]
+    
+    testList "Routing" [
+      
+      test "parseUrl correctly parses root path" {
+        let route = parseUrl []
+        Assert.equal Landing route "Empty segments should parse to Landing"
+      }
+      
+      test "parseUrl correctly parses dashboard path" {
+        let route = parseUrl ["dashboard"]
+        Assert.equal Dashboard route "dashboard segment should parse to Dashboard"
+      }
+      
+      test "parseUrl defaults unknown paths to Landing" {
+        let unknownPaths = [
+          ["unknown"]
+          ["admin"]
+          ["projects"; "123"]
+          ["dashboard"; "extra"]
+        ]
+        
+        for path in unknownPaths do
+          let route = parseUrl path
+          Assert.equal Landing route $"Unknown path {path} should default to Landing"
+      }
+      
+      test "toUrlSegments generates correct segments" {
+        let cases = [
+          Landing, []
+          Dashboard, ["dashboard"]
+        ]
+        
+        for route, expectedSegments in cases do
+          let segments = toUrlSegments route
+          Assert.equal expectedSegments segments $"Route {route} should generate correct segments"
+      }
+      
+      test "route roundtrip preserves identity" {
+        let routes = [Landing; Dashboard]
+        
+        for route in routes do
+          let segments = toUrlSegments route
+          let parsed = parseUrl segments
+          Assert.equal route parsed $"Route {route} should roundtrip correctly"
       }
     ]
   ]
